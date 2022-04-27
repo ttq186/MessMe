@@ -5,7 +5,7 @@ import MessMeIcon from '../assets/icons/mess-me.png';
 const NotFound = () => {
   return (
     <div className='bg-gray-700'>
-      <div className='container flex flex-col  items-center pt-24 min-h-screen mx-auto text-slate-200'>
+      <div className='container flex flex-col items-center pt-24 min-h-screen mx-auto text-slate-200'>
         <Link to='/' className='mb-44'>
           <img
             src={MessMeIcon}
