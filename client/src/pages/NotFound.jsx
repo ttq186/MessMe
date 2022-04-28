@@ -1,17 +1,13 @@
 import { Link } from 'react-router-dom';
 
-import MessMeIcon from '../assets/icons/mess-me.png';
+import MessMeIcon from '../assets/icons/MessMeIcon';
 
 const NotFound = () => {
   return (
     <div className='bg-gray-700'>
       <div className='container flex flex-col items-center pt-24 min-h-screen mx-auto text-slate-200'>
         <Link to='/' className='mb-44'>
-          <img
-            src={MessMeIcon}
-            alt='MessMe'
-            className='w-7 inline mx-auto align-top'
-          />
+          <MessMeIcon />
           <span className='text-2xl ml-1 font-bold'>MessMe</span>
         </Link>
         <div className='flex flex-col items-center font-bold md:flex-row'>

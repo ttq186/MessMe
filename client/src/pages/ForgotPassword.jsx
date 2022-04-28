@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import MessMeIcon from '../assets/icons/mess-me.png';
+import MessMeIcon from '../assets/icons/MessMeIcon';
 import CoffeeCupIcon from '../assets/icons/coffee-cup.png';
 import EmailInput from '../components/EmailInput';
 
@@ -10,7 +10,7 @@ const ForgotPassword = () => {
       <div className='container flex flex-col pt-[4.25rem] md:pt-[5rem] items-center min-h-screen max-w-md mx-auto text-slate-200'>
         <div className='text-center'>
           <Link to='/' className='mb-10 pt-3.5 flex justify-center'>
-            <img src={MessMeIcon} alt='MessMe' className='w-7 h-7' />
+            <MessMeIcon />
             <span className='text-2xl ml-1 font-bold'>MessMe</span>
           </Link>
           <h4 className='text-2xl mb-2'>Forgot Password</h4>
