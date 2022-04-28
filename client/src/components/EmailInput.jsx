@@ -11,18 +11,14 @@ const EmailInput = () => {
       </label>
       <div className='flex'>
         <span className='bg-gray-700 rounded-l p-[0.54rem] px-[0.8rem]'>
-          <img
-            src={EmailIcon}
-            alt='Email'
-            // className='w-[1.47rem] md:w-[1.7rem]'
-            className='w-6 md:w-7'
-          />
+          <img src={EmailIcon} alt='Email' className='w-6 md:w-7' />
         </span>
         <input
           type='text'
           id='email'
           placeholder='Enter your email'
-          className='w-full p-2 md:p-2.5 px-2 md:px-4 bg-gray-600 rounded-r text-[14px] md:text-[15px] focus:outline-none'
+          className='w-full p-2 md:p-2.5 px-2 md:px-4 bg-gray-600 rounded-r text-sm
+          md:text-[15px] focus:outline-none'
         />
       </div>
     </div>

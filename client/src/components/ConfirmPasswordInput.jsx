@@ -2,7 +2,7 @@ import PasswordIcon from '../assets/icons/password.svg';
 
 const ConfirmPasswordInput = () => {
   return (
-    <div className='mb-4'>
+    <div className=''>
       <label
         className='block mb-1 text-[15px] md:text-lg text-gray-300'
         htmlFor='confirm-password'

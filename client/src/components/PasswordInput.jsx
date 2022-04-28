@@ -1,13 +1,13 @@
 import PasswordIcon from '../assets/icons/password.svg';
 
-const PasswordInput = () => {
+const PasswordInput = ({label, placeholder}) => {
   return (
     <div className='mb-4'>
       <label
         className='block mb-1 text-[15px] md:text-lg text-gray-300'
         htmlFor='password'
       >
-        Password <span className='text-red-700'>*</span>
+        {label ? label : 'Password'} <span className='text-red-700'>*</span>
       </label>
       <div className='flex'>
         <span className='bg-gray-700 rounded-l p-[0.54rem] px-[0.8rem]'>
@@ -16,7 +16,7 @@ const PasswordInput = () => {
         <input
           type='Password'
           id='password'
-          placeholder='Enter your password'
+          placeholder={placeholder ? placeholder : 'Enter your password'}
           className='w-full p-2 md:p-2.5 px-2 md:px-4 bg-gray-600 rounded-r text-sm md:text-[15px] focus:outline-none'
         />
       </div>

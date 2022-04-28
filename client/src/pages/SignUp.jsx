@@ -10,11 +10,11 @@ const SignUp = () => {
   return (
     <div className='bg-gray-700'>
       <div className='container flex flex-col justify-center items-center min-h-screen max-w-md mx-auto text-slate-200'>
-        <Link to='/' className='mb-10'>
+        <Link to='/' className='mb-10 flex'>
           <img
             src={MessMeIcon}
             alt='MessMe'
-            className='w-7 h-7 inline mx-auto align-top'
+            className='w-7 h-7'
           />
           <span className='text-2xl ml-1 font-bold'>MessMe</span>
         </Link>
@@ -28,7 +28,7 @@ const SignUp = () => {
           <PasswordInput />
           <ConfirmPasswordInput />
 
-          <button className='bg-blue-400 w-full p-2 rounded mt-[13px] md:mt-[15px] text-sm md:text-base text-slate-50 font-bold hover:bg-blue-500 hover:text-gray-50'>
+          <button className='bg-blue-400 w-full p-2 rounded mt-[28.3px] md:mt-[29.3px] text-sm md:text-base text-slate-50 font-bold hover:bg-blue-500 hover:text-gray-50'>
             Sign Up
           </button>
           <div className='flex justify-between mt-5 text-sm md:text-base'>
@@ -47,7 +47,7 @@ const SignUp = () => {
           <img
             src={CoffeeCupIcon}
             alt='coffee'
-            className='w-4 md:w-8 h-6 mx-1'
+            className='w-[1.4rem] h-5 md:w-7 mx-1'
           />
           <p>
             by <b>TTQ186</b>
