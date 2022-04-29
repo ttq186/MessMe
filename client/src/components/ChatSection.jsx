@@ -1,18 +1,23 @@
-import AvatarIcon from '../assets/icons/AvatarIcon';
-import SearchIcon from '../assets/icons/search.svg';
-import PhoneIcon from '../assets/icons/phone.svg';
-import VideoCallIcon from '../assets/icons/video-call.svg';
-import ProfileIcon from '../assets/icons/profile.svg';
-import OtherIcon from '../assets/icons/other.svg';
+import {
+  AvatarIcon,
+  SearchIcon,
+  PhoneIcon,
+  VideoCallIcon,
+  ProfileIcon,
+  OtherIcon,
+  EmojiIcon,
+  AttachIcon,
+  GalleryIcon,
+} from '../assets/icons';
 
 const ChatSection = () => {
   return (
     <>
       <div className='flex justify-between border-b-[1.5px] border-slate-500'>
-        <div className='flex items-center p-3'>
+        <div className='flex items-center p-4'>
           <AvatarIcon width='42px' height='42px' />
           <div className='font-bold'>
-            <p className='ml-2 text-slate-100'>Thanh Quang</p>
+            <p className='ml-2 text-slate-100 cursor-pointer'>Thanh Quang</p>
             <p className='ml-2 text-xs text-green-300'>Online</p>
           </div>
         </div>
@@ -36,7 +41,19 @@ const ChatSection = () => {
       </div>
 
       <div></div>
-      <div></div>
+      <div className='fixed bottom-0 flex items-center p-4'>
+        <div className='grow'>
+          <input
+            className='py-3 px-5 bg-slate-700 text-[15px] text-gray-300 rounded-md outline-none'
+            placeholder='Enter Message...'
+          />
+        </div>
+        <div>
+          {/* <div>
+            <img src={} alt=' '/> 
+          </div> */}
+        </div>
+      </div>
     </>
   );
 };

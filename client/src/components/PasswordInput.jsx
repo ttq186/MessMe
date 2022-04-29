@@ -1,4 +1,4 @@
-import PasswordIcon from '../assets/icons/password.svg';
+import { PasswordIcon } from '../assets/icons';
 
 const PasswordInput = ({label, placeholder}) => {
   return (

@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom';
 
-import MessMeIcon from '../assets/icons/MessMeIcon';
-import ChatIcon from '../assets/icons/ChatIcon';
-import AvatarIcon from '../assets/icons/AvatarIcon';
-import ContactIcon from '../assets/icons/ContactIcon';
-import ProfileIcon from '../assets/icons/ProfileIcon';
-import GroupIcon from '../assets/icons/GroupIcon';
-import SettingIcon from '../assets/icons/SettingIcon';
 import SidebarItem from '../components/SidebarItem';
 import ChatSection from '../components/ChatSection';
+import {
+  MessMeIcon,
+  ChatIcon,
+  AvatarIcon,
+  ContactIcon,
+  ProfileIcon,
+  GroupIcon,
+  SettingIcon,
+} from '../assets/icons';
 
 const Dashboard = () => {
   return (
@@ -29,9 +31,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className='w-[380px] bg-gray-700'></div>
+      <div className='w-[385px] bg-slate-700'></div>
 
-      <div className='bg-gray-600 grow'>
+      <div className='bg-slate-600 grow'>
         <ChatSection />
       </div>
     </div>

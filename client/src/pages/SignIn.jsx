@@ -1,21 +1,14 @@
 import { Link } from 'react-router-dom';
 
-import MessMeIcon from '../assets/icons/MessMeIcon';
-import CoffeeCupIcon from '../assets/icons/coffee-cup.png';
-import GoogleIcon from '../assets/icons/google.png';
 import EmailInput from '../components/EmailInput';
 import PasswordInput from '../components/PasswordInput';
+import { MessMeIcon, CoffeeCupIcon, GoogleIcon } from '../assets/icons';
 
 const SignIn = () => {
   return (
     <div className='bg-gray-700'>
       <div className='container flex flex-col justify-center items-center min-h-screen max-w-md mx-auto text-slate-200'>
         <Link to='/' className='mb-10 flex'>
-          {/* <img
-            src={MessMeIcon}
-            alt='MessMe'
-            className='w-7 h-7'
-          /> */}
           <MessMeIcon />
           <span className='text-2xl ml-1 font-bold'>MessMe</span>
         </Link>

@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 
-import MessMeIcon from '../assets/icons/MessMeIcon';
-import CoffeeCupIcon from '../assets/icons/coffee-cup.png';
 import PasswordInput from '../components/PasswordInput';
 import ConfirmPasswordInput from '../components/ConfirmPasswordInput';
+import { MessMeIcon, CoffeeCupIcon } from '../assets/icons';
 
 const ResetPassword = () => {
   return (
@@ -21,7 +20,10 @@ const ResetPassword = () => {
         </div>
 
         <form className='bg-gray-800 font-bold w-[88%] p-6 md:p-8 pb-4 md:pb-7 rounded-md mt-5 text-gray-400'>
-          <PasswordInput label='New Password' placeholder='Enter your new password' />
+          <PasswordInput
+            label='New Password'
+            placeholder='Enter your new password'
+          />
           <ConfirmPasswordInput />
 
           <button className='bg-blue-400 w-full p-2 rounded mt-7 text-sm md:text-base text-slate-50 font-bold hover:bg-blue-500 hover:text-gray-50'>

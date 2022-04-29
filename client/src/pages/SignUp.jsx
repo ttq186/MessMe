@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 
-import MessMeIcon from '../assets/icons/MessMeIcon';
-import CoffeeCupIcon from '../assets/icons/coffee-cup.png';
 import EmailInput from '../components/EmailInput';
 import PasswordInput from '../components/PasswordInput';
 import ConfirmPasswordInput from '../components/ConfirmPasswordInput';
+import { MessMeIcon, CoffeeCupIcon } from '../assets/icons';
 
 const SignUp = () => {
   return (
