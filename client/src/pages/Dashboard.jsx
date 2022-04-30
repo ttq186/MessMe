@@ -11,11 +11,12 @@ import {
   GroupIcon,
   SettingIcon,
 } from '../assets/icons';
+import UsersChatSection from '../components/UsersChatSection';
 
 const Dashboard = () => {
   return (
     <div className='flex min-h-screen'>
-      <div className='flex flex-col justify-between items-center w-[75px] py-5 bg-slate-600'>
+      <div className='flex flex-col justify-between items-center w-[70px] py-5 bg-slate-600'>
         <Link to='/'>
           <MessMeIcon />
         </Link>
@@ -31,7 +32,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className='w-[385px] bg-slate-700'></div>
+      <div className='w-[390px] bg-gray-700 text-slate-200'>
+        <UsersChatSection />
+      </div>
 
       <div className='bg-slate-600 grow'>
         <ChatSection />

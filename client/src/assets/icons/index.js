@@ -17,6 +17,7 @@ import PhoneIcon from './svg/phone.svg';
 import SearchIcon from './svg/search.svg';
 import SendIcon from './svg/send.svg';
 import VideoCallIcon from './svg/video-call.svg';
+import FriendProfileIcon from './svg/friend-profile.svg';
 
 export {
   MessMeIcon,
@@ -38,4 +39,5 @@ export {
   SearchIcon,
   SendIcon,
   VideoCallIcon,
+  FriendProfileIcon,
 };
