@@ -6,7 +6,7 @@ const NotFound = () => {
   return (
     <div className='bg-gray-700'>
       <div className='container flex flex-col items-center pt-24 min-h-screen mx-auto text-slate-200'>
-        <Link to='/' className='mb-44'>
+        <Link to='/' className='mb-44 flex'>
           <MessMeIcon />
           <span className='text-2xl ml-1 font-bold'>MessMe</span>
         </Link>

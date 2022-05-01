@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 import SidebarItem from '../components/SidebarItem';
 import ChatSection from '../components/ChatSection';
@@ -21,11 +23,21 @@ const Dashboard = () => {
           <MessMeIcon />
         </Link>
         <div className='mb-20'>
-          <SidebarItem icon={<ProfileIcon />} isActive={false} />
-          <SidebarItem icon={<ChatIcon fill='#93c5fd' />} isActive={true} />
-          <SidebarItem icon={<GroupIcon />} isActive={false} />
-          <SidebarItem icon={<ContactIcon />} isActive={false} />
-          <SidebarItem icon={<SettingIcon />} isActive={false} />
+          <Tippy content='Profile'>
+            <SidebarItem icon={<ProfileIcon />} isActive={false} />
+          </Tippy>
+          <Tippy content='Chat'>
+            <SidebarItem icon={<ChatIcon fill='#93c5fd' />} isActive={true} />
+          </Tippy>
+          <Tippy content='Group'>
+            <SidebarItem icon={<GroupIcon />} isActive={false} />
+          </Tippy>
+          <Tippy content='Contact'>
+            <SidebarItem icon={<ContactIcon />} isActive={false} />
+          </Tippy>
+          <Tippy content='Setting'>
+            <SidebarItem icon={<SettingIcon />} isActive={false} />
+          </Tippy>
         </div>
         <div className='cursor-pointer'>
           <AvatarIcon />
@@ -36,7 +48,7 @@ const Dashboard = () => {
         <UsersChatSection />
       </div>
 
-      <div className='bg-slate-600 grow'>
+      <div className='flex flex-col justify-between grow bg-slate-600'>
         <ChatSection />
       </div>
     </div>
