@@ -20,6 +20,9 @@ import VideoCallIcon from './svg/video-call.svg';
 import FriendProfileIcon from './svg/friend-profile.svg';
 import AddContactIcon from './svg/add-contact.svg';
 import OptionIcon from './svg/option.svg';
+import ShareIcon from './svg/share.svg';
+import BlockIcon from './svg/block.svg';
+import RemoveIcon from './svg/remove.svg';
 
 export {
   MessMeIcon,
@@ -44,4 +47,7 @@ export {
   FriendProfileIcon,
   AddContactIcon,
   OptionIcon,
+  ShareIcon,
+  BlockIcon,
+  RemoveIcon,
 };
