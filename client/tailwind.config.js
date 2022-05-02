@@ -3,7 +3,7 @@ module.exports = {
   theme: {
     fontFamily: {
       // sans: ['-apple-system', 'Helvetica', 'Arial', 'sans-serif'],
-      sans: ['Inter var', 'sans-serif']
+      sans: ['Inter var', 'sans-serif'],
     },
     extend: {},
   },
