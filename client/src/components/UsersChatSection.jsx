@@ -8,7 +8,7 @@ const UsersChatSection = () => {
         <p className='text-2xl font-bold'>Chat</p>
         <div className='flex my-3'>
           <span className='bg-slate-600 rounded-l'>
-            <img src={SearchIcon} className='w-12 p-1' />
+            <img src={SearchIcon} alt='Search' className='w-12 p-1' />
           </span>
           <input
             placeholder='Search users'

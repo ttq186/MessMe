@@ -18,11 +18,14 @@ import SearchIcon from './svg/search.svg';
 import SendIcon from './svg/send.svg';
 import VideoCallIcon from './svg/video-call.svg';
 import FriendProfileIcon from './svg/friend-profile.svg';
-import AddContactIcon from './svg/add-contact.svg';
+import AddIcon from './svg/add-contact.svg';
 import OptionIcon from './svg/option.svg';
 import ShareIcon from './svg/share.svg';
 import BlockIcon from './svg/block.svg';
 import RemoveIcon from './svg/remove.svg';
+import ArchiveIcon from './svg/archive.svg';
+import MutedIcon from './svg/muted.svg';
+import UnmuteIcon from './svg/unmute.svg';
 
 export {
   MessMeIcon,
@@ -45,9 +48,12 @@ export {
   SendIcon,
   VideoCallIcon,
   FriendProfileIcon,
-  AddContactIcon,
+  AddIcon,
   OptionIcon,
   ShareIcon,
   BlockIcon,
   RemoveIcon,
+  ArchiveIcon,
+  MutedIcon,
+  UnmuteIcon,
 };

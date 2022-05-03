@@ -15,6 +15,7 @@ import {
 } from '../assets/icons';
 import UsersChatSection from '../components/UsersChatSection';
 import ContactSection from '../components/ContactSection';
+import GroupSection from '../components/GroupSection';
 
 const Dashboard = () => {
   return (
@@ -47,7 +48,8 @@ const Dashboard = () => {
 
       <div className='w-[390px] bg-gray-700 text-slate-200'>
         {/* <UsersChatSection /> */}
-        <ContactSection />
+        {/* <ContactSection /> */}
+        <GroupSection />
       </div>
 
       <div className='flex flex-col justify-between grow bg-slate-600'>

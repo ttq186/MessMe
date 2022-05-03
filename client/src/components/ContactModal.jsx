@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 
-const Modal = (props) => {
+const ContactModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -108,4 +108,4 @@ const Modal = (props) => {
   );
 };
 
-export default Modal;
+export default ContactModal;

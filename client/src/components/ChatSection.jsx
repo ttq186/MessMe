@@ -14,6 +14,7 @@ import {
   SendIcon,
 } from '../assets/icons';
 import Message from './Message';
+import OthersDropdown from './OthersDropdown';
 
 const ChatSection = () => {
   return (
@@ -47,11 +48,13 @@ const ChatSection = () => {
               <img src={FriendProfileIcon} alt='Profile' className='w-6 h-6' />
             </div>
           </Tippy>
-          <Tippy content='Others'>
-            <div className='cursor-pointer'>
-              <img src={OtherIcon} alt='Other' className='w-7 h-7' />
-            </div>
-          </Tippy>
+          <OthersDropdown>
+            <Tippy content='Others'>
+              <div className='cursor-pointer'>
+                <img src={OtherIcon} alt='Other' className='w-7 h-7' />
+              </div>
+            </Tippy>
+          </OthersDropdown>
         </div>
       </div>
 

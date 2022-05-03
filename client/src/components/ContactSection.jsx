@@ -1,21 +1,21 @@
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { AddContactIcon, SearchIcon } from '../assets/icons';
+import { AddIcon, SearchIcon } from '../assets/icons';
 import ContactsByFirstLetter from './ContactsByFirstLetter';
-import Modal from './Modal';
+import ContactModal from './ContactModal';
 
 const ContactSection = () => {
   return (
     <>
       <div className='p-6 pb-2 mb-10'>
         <div className='flex justify-between'>
-          <p className='text-2xl font-bold'>Contact</p>
-          <Modal>
+          <p className='text-2xl font-bold'>Contacts</p>
+          <ContactModal>
             <Tippy content='Add Contact'>
-              <img src={AddContactIcon} alt='Add Contact' className='w-7' />
+              <img src={AddIcon} alt='Add Contact' className='w-7' />
             </Tippy>
-          </Modal>
+          </ContactModal>
         </div>
         <div className='flex my-3'>
           <span className='bg-slate-600 rounded-l'>
