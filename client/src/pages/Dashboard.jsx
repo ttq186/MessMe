@@ -17,6 +17,7 @@ import UsersChatSection from '../components/UsersChatSection';
 import ContactSection from '../components/ContactSection';
 import GroupSection from '../components/GroupSection';
 import ProfileSection from '../components/ProfileSection';
+import SettingSection from '../components/SettingSection';
 
 const Dashboard = () => {
   return (
@@ -51,7 +52,8 @@ const Dashboard = () => {
         {/* <UsersChatSection /> */}
         {/* <ContactSection /> */}
         {/* <GroupSection /> */}
-        <ProfileSection />
+        {/* <ProfileSection /> */}
+        <SettingSection />
       </div>
 
       <div className='flex flex-col justify-between grow bg-slate-600'>

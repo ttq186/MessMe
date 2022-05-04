@@ -27,7 +27,7 @@ const AttachFile = () => {
         <img
           src={OtherIcon}
           alt='Download'
-          className='cursor-pointer w-5 h-5'
+          className='cursor-pointer w-4 h-4'
         />
       </div>
     </div>

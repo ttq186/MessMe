@@ -17,7 +17,7 @@ const ProfileDisclosure = () => {
             <>
               <Disclosure.Button className='flex w-full justify-between items-center rounded bg-slate-600 px-4 py-3 mb-2 text-left text-sm font-semibold text-slate-200'>
                 <div className='flex items-center'>
-                  <AttachIcon fill='#a6b0cf' width='23px' height='23px' />
+                  <ProfileIcon width='23px' height='23px' />
                   <span className='mx-1'>About</span>
                 </div>
                 <img
@@ -52,7 +52,7 @@ const ProfileDisclosure = () => {
             <>
               <Disclosure.Button className='flex w-full justify-between items-center rounded bg-slate-600 px-4 py-3 my-2 text-left text-sm font-semibold text-slate-200'>
                 <div className='flex items-center'>
-                  <ProfileIcon width='23px' height='23px' />
+                  <AttachIcon fill='#a6b0cf' width='23px' height='23px' />
                   <span className='mx-1'>Attached Files</span>
                 </div>
                 <img

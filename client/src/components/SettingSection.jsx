@@ -1,22 +1,13 @@
 import 'tippy.js/dist/tippy.css';
 
-import { OptionIcon } from '../assets/icons';
-import ProfileDropdown from './ProfileDropdown';
-import ProfileDisclosure from './ProfileDisclosure';
+import SettingDisclosure from './SettingDisclosure';
 
-const ProfileSection = () => {
+const SettingSection = () => {
   return (
     <>
       <div className='p-6 pb-2 border-b-[1px] border-slate-600'>
         <div className='flex justify-between'>
-          <p className='text-2xl font-bold'>My Profile</p>
-          <ProfileDropdown>
-            <img
-              src={OptionIcon}
-              alt='Option'
-              className='w-7 h-7 cursor-pointer'
-            />
-          </ProfileDropdown>
+          <p className='text-2xl font-bold'>Settings</p>
         </div>
         <div className='flex flex-col items-center mt-10 mb-4'>
           <img
@@ -28,9 +19,9 @@ const ProfileSection = () => {
         </div>
       </div>
 
-      <ProfileDisclosure />
+      <SettingDisclosure />
     </>
   );
 };
 
-export default ProfileSection;
+export default SettingSection;

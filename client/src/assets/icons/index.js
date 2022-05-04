@@ -32,6 +32,8 @@ import ArrowForwardIcon from './svg/arrow-forward.svg';
 import ArrowDownIcon from './svg/arrow-down.svg';
 import FileIcon from './jsx/FileIcon';
 import DownloadIcon from './svg/download.svg';
+import HelpIcon from './jsx/HelpIcon';
+import PrivacyIcon from './jsx/PrivacyIcon';
 
 export {
   MessMeIcon,
@@ -68,4 +70,6 @@ export {
   ArrowDownIcon,
   FileIcon,
   DownloadIcon,
+  HelpIcon,
+  PrivacyIcon,
 };
