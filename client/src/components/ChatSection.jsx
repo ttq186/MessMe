@@ -50,8 +50,8 @@ const ChatSection = () => {
           </Tippy>
           <OthersDropdown>
             <Tippy content='Others'>
-              <div className='cursor-pointer'>
-                <img src={OtherIcon} alt='Other' className='w-7 h-7' />
+              <div className='cursor-pointer -ml-1'>
+                <img src={OtherIcon} alt='Other' className='w-6 h-6' />
               </div>
             </Tippy>
           </OthersDropdown>
@@ -82,12 +82,12 @@ const ChatSection = () => {
         <div className='flex items-center'>
           <Tippy content='Attach File'>
             <div className='mx-4 cursor-pointer'>
-              <img src={AttachIcon} alt='Attach' className='w-7 h-7' />
+              <AttachIcon width='28px' height='28px' />
             </div>
           </Tippy>
           <Tippy content='Images'>
             <div className='mr-4 cursor-pointer'>
-              <img src={GalleryIcon} alt='Gallery' className='w-6 h-6' />
+              <GalleryIcon />
             </div>
           </Tippy>
           <Tippy content='Emoji'>

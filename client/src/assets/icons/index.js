@@ -7,10 +7,10 @@ import GroupIcon from './jsx/GroupIcon';
 import SettingIcon from './jsx/SettingIcon';
 import CoffeeCupIcon from './png/coffee-cup.png';
 import GoogleIcon from './png/google.png';
-import AttachIcon from './svg/attach.svg';
+import AttachIcon from './jsx/AttachIcon';
 import EmailIcon from './svg/email.svg';
 import EmojiIcon from './svg/emoji.svg';
-import GalleryIcon from './svg/gallery.svg';
+import GalleryIcon from './jsx/GalleryIcon';
 import OtherIcon from './svg/other.svg';
 import PasswordIcon from './svg/password.svg';
 import PhoneIcon from './svg/phone.svg';
@@ -26,6 +26,12 @@ import RemoveIcon from './svg/remove.svg';
 import ArchiveIcon from './svg/archive.svg';
 import MutedIcon from './svg/muted.svg';
 import UnmuteIcon from './svg/unmute.svg';
+import EditIcon from './svg/edit.svg';
+import ActionIcon from './svg/action.svg';
+import ArrowForwardIcon from './svg/arrow-forward.svg';
+import ArrowDownIcon from './svg/arrow-down.svg';
+import FileIcon from './jsx/FileIcon';
+import DownloadIcon from './svg/download.svg';
 
 export {
   MessMeIcon,
@@ -56,4 +62,10 @@ export {
   ArchiveIcon,
   MutedIcon,
   UnmuteIcon,
+  ActionIcon,
+  EditIcon,
+  ArrowForwardIcon,
+  ArrowDownIcon,
+  FileIcon,
+  DownloadIcon,
 };
