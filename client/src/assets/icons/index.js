@@ -13,10 +13,9 @@ import EmojiIcon from './svg/emoji.svg';
 import GalleryIcon from './jsx/GalleryIcon';
 import OtherIcon from './svg/other.svg';
 import PasswordIcon from './svg/password.svg';
-import PhoneIcon from './svg/phone.svg';
+import PhoneIcon from './jsx/PhoneIcon';
 import SearchIcon from './svg/search.svg';
 import SendIcon from './svg/send.svg';
-import VideoCallIcon from './svg/video-call.svg';
 import FriendProfileIcon from './svg/friend-profile.svg';
 import AddIcon from './svg/add-contact.svg';
 import OptionIcon from './svg/option.svg';
@@ -34,6 +33,10 @@ import FileIcon from './jsx/FileIcon';
 import DownloadIcon from './svg/download.svg';
 import HelpIcon from './jsx/HelpIcon';
 import PrivacyIcon from './jsx/PrivacyIcon';
+import PencilIcon from './svg/pencil.svg';
+import LogoutIcon from './svg/logout.svg';
+import CancelIcon from './jsx/CancelIcon';
+import VideoCallIcon from './jsx/VideoCallIcon';
 
 export {
   MessMeIcon,
@@ -72,4 +75,7 @@ export {
   DownloadIcon,
   HelpIcon,
   PrivacyIcon,
+  PencilIcon,
+  LogoutIcon,
+  CancelIcon,
 };

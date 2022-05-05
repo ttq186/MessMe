@@ -85,13 +85,13 @@ const ContactModal = (props) => {
                     </div>
                     <div className='my-5'>
                       <button
-                        className='float-right bg-blue-300 font-semibold text-gray-800 rounded-[3px] py-1.5 px-3 text-[15px] hover:bg-blue-400'
+                        className='float-right bg-blue-300 font-semibold text-gray-800 rounded-[3px] py-1.5 px-3 text-[15px] hover:opacity-90'
                         onClick={closeModal}
                       >
                         Add Contact
                       </button>
                       <button
-                        className='float-right text-blue-300 font-semibold rounded py-1.5 px-3 mr-3 text-[15px] hover:text-blue-400'
+                        className='float-right text-blue-300 font-semibold rounded py-1.5 px-3 mr-3 text-[15px] hover:opacity-90'
                         onClick={closeModal}
                       >
                         Cancel

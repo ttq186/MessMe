@@ -13,8 +13,11 @@ import {
   GalleryIcon,
   SendIcon,
 } from '../assets/icons';
+import AudioCallModal from './AudioCallModal';
 import Message from './Message';
 import OthersDropdown from './OthersDropdown';
+import SearchDropdown from './SearchDropdown';
+import VideoCallModal from './VideoCallModal';
 
 const ChatSection = () => {
   return (
@@ -28,21 +31,27 @@ const ChatSection = () => {
           </div>
         </div>
         <div className='flex justify-evenly w-80 items-center'>
-          <Tippy content='Search Message'>
-            <div className='cursor-pointer'>
-              <img src={SearchIcon} alt='Search' className='w-9 h-9' />
-            </div>
-          </Tippy>
-          <Tippy content='Call'>
-            <div className='cursor-pointer'>
-              <img src={PhoneIcon} alt='Phone' className='w-6 h-6' />
-            </div>
-          </Tippy>
-          <Tippy content='Video Call'>
-            <div className='cursor-pointer'>
-              <img src={VideoCallIcon} alt='Video Call' className='w-8 h-8' />
-            </div>
-          </Tippy>
+          <SearchDropdown>
+            <Tippy content='Search Message'>
+              <div className='cursor-pointer'>
+                <img src={SearchIcon} alt='Search' className='w-9 h-9' />
+              </div>
+            </Tippy>
+          </SearchDropdown>
+          <AudioCallModal>
+            <Tippy content='Call'>
+              <div className='cursor-pointer'>
+                <PhoneIcon />
+              </div>
+            </Tippy>
+          </AudioCallModal>
+          <VideoCallModal>
+            <Tippy content='Video Call'>
+              <div className='cursor-pointer'>
+                <VideoCallIcon />
+              </div>
+            </Tippy>
+          </VideoCallModal>
           <Tippy content="Friend's Profile">
             <div className='cursor-pointer'>
               <img src={FriendProfileIcon} alt='Profile' className='w-6 h-6' />
@@ -82,12 +91,12 @@ const ChatSection = () => {
         <div className='flex items-center'>
           <Tippy content='Attach File'>
             <div className='mx-4 cursor-pointer'>
-              <AttachIcon width='28px' height='28px' />
+              <AttachIcon width='28px' height='28px' fill='#cbd5e1' />
             </div>
           </Tippy>
           <Tippy content='Images'>
             <div className='mr-4 cursor-pointer'>
-              <GalleryIcon />
+              <GalleryIcon fill='#cbd5e1' />
             </div>
           </Tippy>
           <Tippy content='Emoji'>

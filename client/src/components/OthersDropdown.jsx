@@ -21,7 +21,7 @@ const OthersDropdown = (props) => {
           leaveFrom='transform opacity-100 scale-100'
           leaveTo='transform opacity-0 scale-95'
         >
-          <Menu.Items className='absolute right-8 top-2 p-3 w-40 z-10 rounded bg-slate-700 shadow-lg'>
+          <Menu.Items className='absolute right-8 top-2 p-3 w-40 z-10 rounded bg-slate-700 shadow-lg border border-slate-600'>
             <div className='text-gray-300'>
               <Menu.Item>
                 <button className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-600'>

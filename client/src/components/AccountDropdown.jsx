@@ -1,8 +1,14 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { ShareIcon, BlockIcon, RemoveIcon } from '../assets/icons';
+import {
+  ShareIcon,
+  BlockIcon,
+  RemoveIcon,
+  ProfileIcon,
+  LogoutIcon,
+} from '../assets/icons';
 
-const ContactDropdown = (props) => {
+const AccountDropdown = (props) => {
   return (
     <div>
       <Menu as='div' className='relative inline-block text-left'>
@@ -16,24 +22,22 @@ const ContactDropdown = (props) => {
           leaveFrom='transform opacity-100 scale-100'
           leaveTo='transform opacity-0 scale-95'
         >
-          <Menu.Items className='absolute right-8 top-2 p-3 w-40 z-10 rounded bg-slate-600 shadow-lg border border-slate-500'>
+          <Menu.Items className='absolute left-10 bottom-4 p-3 w-40 z-10 rounded border border-slate-500 bg-slate-600 shadow-lg'>
             <div className='text-gray-300'>
               <Menu.Item>
                 <button className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-500'>
-                  <img src={ShareIcon} alt='Share' className='w-4 h-4 mr-3' />
-                  Share
+                  <ProfileIcon width='23px' height='23px' />
+                  <p className='ml-1.5'>My Profile</p>
                 </button>
               </Menu.Item>
               <Menu.Item>
                 <button className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-500'>
-                  <img src={BlockIcon} alt='Block' className='w-4 h-4 mr-3' />
-                  Block
-                </button>
-              </Menu.Item>
-              <Menu.Item>
-                <button className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-500'>
-                  <img src={RemoveIcon} alt='Remove' className='w-4 h-4 mr-3' />
-                  Remove
+                  <img
+                    src={LogoutIcon}
+                    alt='Logout'
+                    className='w-6 h-6 mr-1.5'
+                  />
+                  Logout
                 </button>
               </Menu.Item>
             </div>
@@ -44,4 +48,4 @@ const ContactDropdown = (props) => {
   );
 };
 
-export default ContactDropdown;
+export default AccountDropdown;

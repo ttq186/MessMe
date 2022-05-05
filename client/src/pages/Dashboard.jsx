@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import SidebarItem from '../components/SidebarItem';
 import ChatSection from '../components/ChatSection';
 import {
   MessMeIcon,
@@ -18,8 +18,35 @@ import ContactSection from '../components/ContactSection';
 import GroupSection from '../components/GroupSection';
 import ProfileSection from '../components/ProfileSection';
 import SettingSection from '../components/SettingSection';
+import AccountDropdown from '../components/AccountDropdown';
+
+const PROFILE_MODE = 'PROFILE_MODE';
+const CHAT_MODE = 'CHAT_MODE';
+const GROUP_MODE = 'GROUP_MODE';
+const CONTACT_MODE = 'CONTACT_MODE';
+const SETTING_MODE = 'SETTING_MODE';
+
+const renderedModeComponent = (tabMode) => {
+  switch (tabMode) {
+    case PROFILE_MODE:
+      return <ProfileSection />;
+    case CHAT_MODE:
+      return <UsersChatSection />;
+    case GROUP_MODE:
+      return <GroupSection />;
+    case CONTACT_MODE:
+      return <ContactSection />;
+    case SETTING_MODE:
+      return <SettingSection />;
+  }
+};
 
 const Dashboard = () => {
+  const [tabMode, setTabMode] = useState(CHAT_MODE);
+  const changeTabMode = (tabMode) => {
+    setTabMode(tabMode);
+  };
+
   return (
     <div className='flex min-h-screen'>
       <div className='flex flex-col justify-between items-center w-[70px] py-5 bg-slate-600'>
@@ -28,32 +55,73 @@ const Dashboard = () => {
         </Link>
         <div className='mb-20'>
           <Tippy content='Profile'>
-            <SidebarItem icon={<ProfileIcon />} isActive={false} />
+            <div
+              className={`${
+                tabMode === PROFILE_MODE ? 'bg-slate-500' : ''
+              } p-2 my-5 rounded cursor-pointer`}
+              onClick={() => changeTabMode(PROFILE_MODE)}
+            >
+              <ProfileIcon
+                fill={tabMode === PROFILE_MODE ? '#93c5fd' : '#a6b0cf'}
+              />
+            </div>
           </Tippy>
           <Tippy content='Chat'>
-            <SidebarItem icon={<ChatIcon fill='#93c5fd' />} isActive={true} />
+            <div
+              className={`${
+                tabMode === CHAT_MODE ? 'bg-slate-500' : ''
+              } p-2 my-5 rounded cursor-pointer`}
+              onClick={() => changeTabMode(CHAT_MODE)}
+            >
+              <ChatIcon fill={tabMode === CHAT_MODE ? '#93c5fd' : '#a6b0cf'} />
+            </div>
           </Tippy>
           <Tippy content='Group'>
-            <SidebarItem icon={<GroupIcon />} isActive={false} />
+            <div
+              className={`${
+                tabMode === GROUP_MODE ? 'bg-slate-500' : ''
+              } p-2 my-5 rounded cursor-pointer`}
+              onClick={() => changeTabMode(GROUP_MODE)}
+            >
+              <GroupIcon
+                fill={tabMode === GROUP_MODE ? '#93c5fd' : '#a6b0cf'}
+              />
+            </div>
           </Tippy>
           <Tippy content='Contact'>
-            <SidebarItem icon={<ContactIcon />} isActive={false} />
+            <div
+              className={`${
+                tabMode === CONTACT_MODE ? 'bg-slate-500' : ''
+              } p-2 my-5 rounded cursor-pointer`}
+              onClick={() => changeTabMode(CONTACT_MODE)}
+            >
+              <ContactIcon
+                fill={tabMode === CONTACT_MODE ? '#93c5fd' : '#a6b0cf'}
+              />
+            </div>
           </Tippy>
           <Tippy content='Setting'>
-            <SidebarItem icon={<SettingIcon />} isActive={false} />
+            <div
+              className={`${
+                tabMode === SETTING_MODE ? 'bg-slate-500' : ''
+              } p-2 my-5 rounded cursor-pointer`}
+              onClick={() => changeTabMode(SETTING_MODE)}
+            >
+              <SettingIcon
+                fill={tabMode === SETTING_MODE ? '#93c5fd' : '#a6b0cf'}
+              />
+            </div>
           </Tippy>
         </div>
-        <div className='cursor-pointer'>
-          <AvatarIcon />
-        </div>
+        <AccountDropdown>
+          <div className='cursor-pointer'>
+            <AvatarIcon />
+          </div>
+        </AccountDropdown>
       </div>
 
       <div className='w-[390px] bg-gray-700 text-slate-200'>
-        {/* <UsersChatSection /> */}
-        {/* <ContactSection /> */}
-        {/* <GroupSection /> */}
-        {/* <ProfileSection /> */}
-        <SettingSection />
+        {renderedModeComponent(tabMode)}
       </div>
 
       <div className='flex flex-col justify-between grow bg-slate-600'>

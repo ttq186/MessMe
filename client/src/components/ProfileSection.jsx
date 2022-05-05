@@ -18,11 +18,11 @@ const ProfileSection = () => {
             />
           </ProfileDropdown>
         </div>
-        <div className='flex flex-col items-center mt-10 mb-4'>
+        <div className='flex flex-col items-center mt-9 mb-3'>
           <img
             src='https://avatars.githubusercontent.com/u/73225256'
             alt='Avatar'
-            className='w-24 h-24 rounded-full'
+            className='w-28 h-28 rounded-full border-4 border-slate-600'
           />
           <p className='font-semibold mt-4'>Thanh Quang</p>
         </div>

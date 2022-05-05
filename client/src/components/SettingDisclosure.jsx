@@ -69,28 +69,28 @@ const SettingDisclosure = () => {
                 />
               </Disclosure.Button>
               <Disclosure.Panel className='bg-slate-500 rounded px-5 py-3 mb-2 text-sm text-slate-200'>
-                <div className='flex justify-between items-center mb-3 py-2 border-b border-slate-400'>
+                <div className='flex justify-between items-center py-3 border-b border-slate-400'>
                   <h2 className='font-bold'>Profile Photo</h2>
                   <SettingDropdown>
-                    <div className='flex items-center bg-slate-600 px-3 py-[5px] text-[13px] rounded-[3px] font-semibold'>
+                    <div className='flex items-center bg-slate-600 px-3 py-[5px] text-[13px] rounded-[3px] font-semibold hover:bg-slate-700'>
                       Everyone
                       <img src={ArrowDownIcon} className='w-3.5 h-3.5 ml-1' />
                     </div>
                   </SettingDropdown>
                 </div>
-                <div className='flex justify-between items-center mb-3 py-2 border-b border-slate-400'>
+                <div className='flex justify-between items-center py-3 border-b border-slate-400'>
                   <h2 className='font-bold'>Status</h2>
                   <SettingDropdown>
-                    <div className='flex items-center bg-slate-600 px-3 py-[5px] text-[13px] rounded-[3px] font-semibold'>
+                    <div className='flex items-center bg-slate-600 px-3 py-[5px] text-[13px] rounded-[3px] font-semibold hover:bg-slate-700'>
                       Everyone
                       <img src={ArrowDownIcon} className='w-3.5 h-3.5 ml-1' />
                     </div>
                   </SettingDropdown>
                 </div>
-                <div className='flex justify-between items-center py-2'>
+                <div className='flex justify-between items-center py-3'>
                   <h2 className='font-bold'>Group</h2>
                   <SettingDropdown>
-                    <div className='flex items-center bg-slate-600 px-3 py-[5px] text-[13px] rounded-[3px] font-semibold'>
+                    <div className='flex items-center bg-slate-600 px-3 py-[5px] text-[13px] rounded-[3px] font-semibold hover:bg-slate-700'>
                       Everyone
                       <img src={ArrowDownIcon} className='w-3.5 h-3.5 ml-1' />
                     </div>
@@ -115,12 +115,15 @@ const SettingDisclosure = () => {
                 />
               </Disclosure.Button>
               <Disclosure.Panel className='bg-slate-500 rounded px-5 py-3 text-[13px] text-slate-300'>
-                <div className='mb-3 py-2 border-b border-slate-400 cursor-pointer'>FAQs</div>
+                <div className='mb-3 py-2 border-b border-slate-400 cursor-pointer'>
+                  FAQs
+                </div>
                 <div className='mb-3 py-2 border-b border-slate-400 cursor-pointer'>
                   Contact
                 </div>
-                <div className='mb-3 pt-2 cursor-pointer'>Terms & Privacy policy</div>
-                <div></div>
+                <div className='mb-3 pt-2 cursor-pointer'>
+                  Terms & Privacy policy
+                </div>
               </Disclosure.Panel>
             </>
           )}
