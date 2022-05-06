@@ -1,9 +1,11 @@
+import { Fragment, useState, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+
 import { CancelIcon, VideoCallIcon } from '../assets/icons';
 
 const VideoCallModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const cancelButtonRef = useRef(null);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -20,7 +22,12 @@ const VideoCallModal = (props) => {
       </button>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as='div' className='relative z-10' onClose={closeModal}>
+        <Dialog
+          as='div'
+          className='relative z-10'
+          onClose={closeModal}
+          initialFocus={cancelButtonRef}
+        >
           <Transition.Child
             as={Fragment}
             enter='ease-out duration-300'
@@ -30,7 +37,7 @@ const VideoCallModal = (props) => {
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
           >
-            <div className='fixed inset-0 bg-gray-600 bg-opacity-60' />
+            <div className='fixed inset-0 bg-gray-600 bg-opacity-80' />
           </Transition.Child>
 
           <div className='fixed inset-0 overflow-y-auto'>
@@ -44,7 +51,7 @@ const VideoCallModal = (props) => {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-w-lg transform overflow-hidden rounded-md bg-slate-700 p-6 text-left shadow-xl transition-all'>
+                <Dialog.Panel className='w-full max-w-lg transform overflow-hidden rounded-md bg-slate-700 border-2 border-slate-600 p-6 text-left shadow-xl transition-all'>
                   <div className='flex flex-col items-center mt-9 mb-3 font-semibold'>
                     <div className='flex flex-row-reverse items-end'>
                       <img
@@ -56,11 +63,19 @@ const VideoCallModal = (props) => {
                     <p className='mt-4 text-slate-200 text-xl'>Thanh Quang</p>
                     <p className='text-slate-400 text-sm'>Start Video Call</p>
                     <div className='flex mt-12 mb-3'>
-                      <div className='bg-rose-500 p-3 mr-3 rounded-full cursor-pointer hover:opacity-90'>
+                      <div
+                        className='bg-rose-500 p-3 mr-3 rounded-full cursor-pointer hover:opacity-90'
+                        ref={cancelButtonRef}
+                        onClick={closeModal}
+                      >
                         <CancelIcon fill='#e2e8f0' />
                       </div>
                       <div className='bg-emerald-500 p-3 ml-3 rounded-full cursor-pointer hover:opacity-90'>
-                        <VideoCallIcon width='25px' height='25px' fill='#e2e8f0' />
+                        <VideoCallIcon
+                          width='25px'
+                          height='25px'
+                          fill='#e2e8f0'
+                        />
                       </div>
                     </div>
                   </div>

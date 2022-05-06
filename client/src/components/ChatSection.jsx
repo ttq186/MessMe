@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
@@ -18,11 +19,18 @@ import Message from './Message';
 import OthersDropdown from './OthersDropdown';
 import SearchDropdown from './SearchDropdown';
 import VideoCallModal from './VideoCallModal';
+import 'emoji-mart/css/emoji-mart.css';
+import data from 'emoji-mart/data/facebook.json';
+import { NimblePicker } from 'emoji-mart';
 
 const ChatSection = () => {
+  const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
+  const toggleEmojiPicker = () => {
+    setOpenEmojiPicker(!isOpenEmojiPicker);
+  };
   return (
     <>
-      <div className='flex justify-between border-b-[1.5px] border-slate-500'>
+      <div className='flex justify-between border-b-2 border-slate-500'>
         <div className='flex items-center p-4'>
           <AvatarIcon width='45px' height='45px' />
           <div className='font-bold'>
@@ -70,7 +78,7 @@ const ChatSection = () => {
       <div className='h-[81vh] p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
         <div className='flex items-center p-4 px-8'>
           <div className='grow border-t-[1px] border-slate-500'></div>
-          <div className='mx-3 bg-slate-500 text-slate-300 text-sm px-2.5 py-0.5 rounded'>
+          <div className='mx-3 bg-slate-500 text-slate-300 font-medium text-sm px-2.5 py-0.5 rounded'>
             Today
           </div>
           <div className='grow border-t-[1px] border-slate-500'></div>
@@ -87,27 +95,48 @@ const ChatSection = () => {
         </div>
       </div>
 
-      <div className='relative bottom-0 w-full flex justify-between items-center px-5 py-3.5 pr-32 border-t-[1.5px] border-slate-500'>
+      <div className='relative bottom-0 w-full flex justify-between items-center px-5 py-3.5 pr-32 border-t-2 border-slate-500'>
         <div className='flex items-center'>
           <Tippy content='Attach File'>
             <div className='mx-4 cursor-pointer'>
-              <AttachIcon width='28px' height='28px' fill='#cbd5e1' />
+              <label htmlFor='file-input' className='cursor-pointer'>
+                <AttachIcon width='28px' height='28px' fill='#cbd5e1' />
+              </label>
+              <input id='file-input' type='file' className='hidden' />
             </div>
           </Tippy>
           <Tippy content='Images'>
             <div className='mr-4 cursor-pointer'>
-              <GalleryIcon fill='#cbd5e1' />
+              <label htmlFor='image-input' className='cursor-pointer'>
+                <GalleryIcon fill='#cbd5e1' />
+              </label>
+              <input id='image-input' type='file' className='hidden' />
             </div>
           </Tippy>
           <Tippy content='Emoji'>
-            <div className='mr-4 cursor-pointer'>
-              <img src={EmojiIcon} alt='Emoji' className='w-9 h-9' />
+            <div className='mr-4 cursor-pointer' onClick={toggleEmojiPicker}>
+              <img src={EmojiIcon} alt='Emoji' className='w-[30px] h-[30px]' />
+              <div className='relative bg-slate-500'>
+                {!isOpenEmojiPicker && (
+                  <div className='absolute left-8 bottom-8'>
+                    <NimblePicker
+                      set='facebook'
+                      data={data}
+                      showPreview={false}
+                      showSkinTones={false}
+                      color='#64748b'
+                      theme='light'
+                      style={{ width: '320px' }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </Tippy>
         </div>
         <div className='grow ml-2'>
           <input
-            className='py-2.5 px-5 w-full bg-slate-700 text-[15px] text-gray-300 rounded-md outline-none'
+            className='py-2.5 px-5 w-full bg-slate-700 text-[15px] text-slate-300 font-medium rounded-md outline-none'
             placeholder='Enter Message...'
           />
         </div>

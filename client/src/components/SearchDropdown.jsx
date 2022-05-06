@@ -15,7 +15,7 @@ const SearchDropdown = (props) => {
         leaveTo='transform opacity-0 scale-95'
       >
         <Menu.Items className='absolute right-0 top-9 p-2.5 w-56 z-10 rounded bg-slate-700 outline-none shadow-lg'>
-          <div className='text-gray-300'>
+          <div className='text-gray-200'>
             <Menu.Item
               onKeyDown={(e) => {
                 if (e.code === 'Space') {

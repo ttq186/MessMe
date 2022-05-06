@@ -26,18 +26,18 @@ const GROUP_MODE = 'GROUP_MODE';
 const CONTACT_MODE = 'CONTACT_MODE';
 const SETTING_MODE = 'SETTING_MODE';
 
-const renderedModeComponent = (tabMode) => {
+const getComponentByTabMode = (tabMode) => {
   switch (tabMode) {
     case PROFILE_MODE:
       return <ProfileSection />;
-    case CHAT_MODE:
-      return <UsersChatSection />;
     case GROUP_MODE:
       return <GroupSection />;
     case CONTACT_MODE:
       return <ContactSection />;
     case SETTING_MODE:
       return <SettingSection />;
+    default:
+      return <UsersChatSection />;
   }
 };
 
@@ -49,7 +49,7 @@ const Dashboard = () => {
 
   return (
     <div className='flex min-h-screen'>
-      <div className='flex flex-col justify-between items-center w-[70px] py-5 bg-slate-600'>
+      <div className='flex flex-col justify-between items-center w-[70px] pt-5 pb-2 bg-slate-600'>
         <Link to='/'>
           <MessMeIcon />
         </Link>
@@ -114,14 +114,14 @@ const Dashboard = () => {
           </Tippy>
         </div>
         <AccountDropdown>
-          <div className='cursor-pointer'>
+          <div className='cursor-pointer p-2 rounded hover:bg-slate-500'>
             <AvatarIcon />
           </div>
         </AccountDropdown>
       </div>
 
       <div className='w-[390px] bg-gray-700 text-slate-200'>
-        {renderedModeComponent(tabMode)}
+        {getComponentByTabMode(tabMode)}
       </div>
 
       <div className='flex flex-col justify-between grow bg-slate-600'>

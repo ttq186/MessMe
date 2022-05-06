@@ -35,7 +35,7 @@ const GroupModal = (props) => {
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
           >
-            <div className='fixed inset-0 bg-gray-600 bg-opacity-60' />
+            <div className='fixed inset-0 bg-gray-600 bg-opacity-90' />
           </Transition.Child>
 
           <div className='fixed inset-0 overflow-y-auto'>
@@ -49,7 +49,7 @@ const GroupModal = (props) => {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-w-lg transform overflow-hidden rounded-md bg-slate-800 p-6 text-left shadow-xl transition-all'>
+                <Dialog.Panel className='w-full max-w-lg transform overflow-hidden rounded-md bg-slate-700 p-6 border-2 border-gray-600 text-left shadow-xl transition-all'>
                   <div>
                     <Dialog.Title
                       as='h3'
@@ -72,7 +72,7 @@ const GroupModal = (props) => {
                           type='text'
                           id='group-name'
                           placeholder='Enter Group Name'
-                          className='w-full p-2.5 md:px-4 bg-gray-600 rounded text-sm outline-none border-none'
+                          className='w-full p-2.5 md:px-4 bg-gray-600 rounded font-medium text-sm outline-none border-none'
                         />
                       </div>
                     </div>
@@ -86,7 +86,7 @@ const GroupModal = (props) => {
                       </label>
                       <div className='my-1'>
                         <button
-                          className='bg-slate-600 text-[13px] text-slate-200 font-medium px-2.5 py-1.5 rounded hover:bg-slate-700'
+                          className='bg-slate-500 text-[13px] text-slate-200 font-semibold px-2.5 py-1.5 rounded hover:bg-slate-600'
                           onClick={toggleContactList}
                         >
                           Select Members
@@ -94,13 +94,13 @@ const GroupModal = (props) => {
                         <div
                           className={`${
                             isOpenContactList ? 'block' : 'hidden'
-                          } my-3 bg-gray-700 rounded-md`}
+                          } my-3 bg-gray-600 rounded-md`}
                         >
-                          <div className='flex justify-between items-center bg-gray-600 text-slate-200 font-semibold px-4 py-2 rounded-t'>
+                          <div className='flex justify-between items-center bg-gray-600 text-slate-200 font-semibold px-4 py-2 rounded-t border-b-2 border-slate-700'>
                             <p>Contacts</p>
                             <input
                               placeholder='Search Contacts'
-                              className='text-slate-300 px-4 py-2.5 text-[13px] bg-slate-700 rounded outline-none'
+                              className='text-slate-300 px-4 py-2.5 text-[13px] font-medium bg-slate-700 rounded outline-none'
                             />
                           </div>
                           <div className='h-[25vh] overflow-y-scroll px-8 my-3 mr-1 font-semibold scrollbar-transparent hover:scrollbar'>
@@ -123,7 +123,7 @@ const GroupModal = (props) => {
                       <div className='my-1'>
                         <textarea
                           id='description'
-                          className='w-full bg-gray-600 text-sm p-2 px-4 focus:outline-none rounded'
+                          className='w-full bg-gray-600 text-sm font-medium p-2 px-4 focus:outline-none rounded'
                           placeholder='Enter Description'
                           rows={4}
                         />
@@ -131,13 +131,13 @@ const GroupModal = (props) => {
                     </div>
                     <div className='my-5'>
                       <button
-                        className='float-right bg-blue-300 font-semibold text-gray-800 rounded-[3px] py-1.5 px-3 text-[15px] hover:bg-blue-400'
+                        className='float-right bg-blue-300 font-semibold text-gray-700 rounded-[3px] py-1.5 px-3 text-[15px] hover:opacity-90'
                         onClick={closeModal}
                       >
                         Create Group
                       </button>
                       <button
-                        className='float-right text-blue-300 font-semibold rounded py-1.5 px-3 mr-3 text-[15px] hover:text-blue-400'
+                        className='float-right text-blue-300 font-semibold rounded py-1.5 px-3 mr-3 text-[15px] hover:opacity-90'
                         onClick={closeModal}
                       >
                         Cancel

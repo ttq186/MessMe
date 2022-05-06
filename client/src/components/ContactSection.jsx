@@ -23,7 +23,7 @@ const ContactSection = () => {
           </span>
           <input
             placeholder='Search users'
-            className='text-slate-300 pr-4 py-3 text-sm bg-slate-600 rounded-r w-full outline-none border-none'
+            className='text-slate-300 pr-4 py-3 text-sm font-medium bg-slate-600 rounded-r w-full outline-none border-none'
           />
         </div>
       </div>

@@ -7,11 +7,9 @@ const SettingSection = () => {
   return (
     <>
       <div className='p-6 pb-2 border-b-[1px] border-slate-600'>
-        <div className='flex justify-between'>
-          <p className='text-2xl font-bold'>Settings</p>
-        </div>
-        <div className='flex flex-col items-center mt-9 mb-3'>
-          <div className='flex flex-row-reverse items-end'>
+        <p className='text-2xl font-bold'>Settings</p>
+        <div className='flex flex-col items-center mb-3'>
+          <div className='flex flex-row-reverse items-end mt-[39.6px]'>
             <img
               src='https://avatars.githubusercontent.com/u/73225256'
               alt='Avatar'

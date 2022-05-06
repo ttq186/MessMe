@@ -3,7 +3,7 @@ const Conversation = ({ isActive = false, isChose = false }) => {
     <div
       className={`flex p-3 mx-3 mb-2.5 ${
         isChose ? 'bg-slate-500' : 'opacity-60 bg-slate-600 hover:bg-slate-500'
-      } rounded cursor-pointer`}
+      } rounded cursor-pointer transition duration-300 ease-out hover:ease-in`}
     >
       <div className={`flex items-end p-1 ${isActive ? 'mr-1' : 'mr-2'} `}>
         <img
@@ -17,7 +17,7 @@ const Conversation = ({ isActive = false, isChose = false }) => {
       </div>
       <div className='grow'>
         <p className='font-bold'>Duy Dâm</p>
-        <p className='text-sm text-slate-300'>Tao lạy m, đừng học nữa :))</p>
+        <p className='text-sm text-slate-300 font-medium'>Tao lạy m, đừng học nữa :))</p>
       </div>
       <p className='text-sm font-bold text-gray-400'>14:2</p>
     </div>

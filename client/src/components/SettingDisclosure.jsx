@@ -74,7 +74,7 @@ const SettingDisclosure = () => {
                   <SettingDropdown>
                     <div className='flex items-center bg-slate-600 px-3 py-[5px] text-[13px] rounded-[3px] font-semibold hover:bg-slate-700'>
                       Everyone
-                      <img src={ArrowDownIcon} className='w-3.5 h-3.5 ml-1' />
+                      <img src={ArrowDownIcon} alt='Arrow Down' className='w-3.5 h-3.5 ml-1' />
                     </div>
                   </SettingDropdown>
                 </div>
@@ -83,7 +83,7 @@ const SettingDisclosure = () => {
                   <SettingDropdown>
                     <div className='flex items-center bg-slate-600 px-3 py-[5px] text-[13px] rounded-[3px] font-semibold hover:bg-slate-700'>
                       Everyone
-                      <img src={ArrowDownIcon} className='w-3.5 h-3.5 ml-1' />
+                      <img src={ArrowDownIcon} alt='Arrow Down' className='w-3.5 h-3.5 ml-1' />
                     </div>
                   </SettingDropdown>
                 </div>
@@ -92,7 +92,7 @@ const SettingDisclosure = () => {
                   <SettingDropdown>
                     <div className='flex items-center bg-slate-600 px-3 py-[5px] text-[13px] rounded-[3px] font-semibold hover:bg-slate-700'>
                       Everyone
-                      <img src={ArrowDownIcon} className='w-3.5 h-3.5 ml-1' />
+                      <img src={ArrowDownIcon} alt='Arrow Down' className='w-3.5 h-3.5 ml-1' />
                     </div>
                   </SettingDropdown>
                 </div>
