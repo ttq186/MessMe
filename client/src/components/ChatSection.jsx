@@ -114,25 +114,31 @@ const ChatSection = () => {
             </div>
           </Tippy>
           <Tippy content='Emoji'>
-            <div className='mr-4 cursor-pointer' onClick={toggleEmojiPicker}>
-              <img src={EmojiIcon} alt='Emoji' className='w-[30px] h-[30px]' />
-              <div className='relative bg-slate-500'>
-                {!isOpenEmojiPicker && (
-                  <div className='absolute left-8 bottom-8'>
-                    <NimblePicker
-                      set='facebook'
-                      data={data}
-                      showPreview={false}
-                      showSkinTones={false}
-                      color='#64748b'
-                      theme='light'
-                      style={{ width: '320px' }}
-                    />
-                  </div>
-                )}
-              </div>
+            <div className='mr-4 cursor-pointer'>
+              <img
+                src={EmojiIcon}
+                alt='Emoji'
+                className='w-[30px] h-[30px]'
+                onClick={toggleEmojiPicker}
+              />
             </div>
           </Tippy>
+          <div className='relative bg-slate-500'>
+            {isOpenEmojiPicker && (
+              <div className='absolute -left-1 bottom-6 p-1 bg-slate-800 border border-slate-700 rounded'>
+                <NimblePicker
+                  set='facebook'
+                  data={data}
+                  title='MessMe Emoji'
+                  showPreview={false}
+                  showSkinTones={false}
+                  color='#64748b'
+                  theme='dark'
+                  defaultSkin={5}
+                />
+              </div>
+            )}
+          </div>
         </div>
         <div className='grow ml-2'>
           <input
