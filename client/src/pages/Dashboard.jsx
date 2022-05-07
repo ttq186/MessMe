@@ -42,6 +42,7 @@ const getComponentByTabMode = (tabMode) => {
 };
 
 const Dashboard = () => {
+  const [isOpenFriendProfile, setOpenFriendProfile] = useState(false);
   const [tabMode, setTabMode] = useState(CHAT_MODE);
   const changeTabMode = (tabMode) => {
     setTabMode(tabMode);
@@ -120,13 +121,22 @@ const Dashboard = () => {
         </AccountDropdown>
       </div>
 
-      <div className='w-[390px] bg-gray-700 text-slate-200'>
+      <div className='w-[390px] bg-gray-700 text-slate-200 border-l-2 border-slate-500'>
         {getComponentByTabMode(tabMode)}
       </div>
 
       <div className='flex flex-col justify-between grow bg-slate-600'>
-        <ChatSection />
+        <ChatSection setOpenFriendProfile={setOpenFriendProfile} />
       </div>
+
+      {isOpenFriendProfile && (
+        <div className='w-[380px] bg-gray-700 text-slate-200 border-l-2 border-slate-500'>
+          <ProfileSection
+            isOpenFriendProfile={isOpenFriendProfile}
+            setOpenFriendProfile={setOpenFriendProfile}
+          />
+        </div>
+      )}
     </div>
   );
 };

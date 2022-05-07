@@ -1,23 +1,32 @@
 import 'tippy.js/dist/tippy.css';
 
-import { OptionIcon } from '../assets/icons';
+import { CancelIcon, OptionIcon } from '../assets/icons';
 import ProfileDropdown from './ProfileDropdown';
 import ProfileDisclosure from './ProfileDisclosure';
 
-const ProfileSection = () => {
+const ProfileSection = ({ isOpenFriendProfile, setOpenFriendProfile }) => {
   return (
     <>
       <div className='p-6 pb-2 border-b-[1px] border-slate-600'>
-        <div className='flex justify-between'>
-          <p className='text-2xl font-bold'>My Profile</p>
-          <ProfileDropdown>
-            <img
-              src={OptionIcon}
-              alt='Option'
-              className='w-7 h-7 cursor-pointer'
-            />
-          </ProfileDropdown>
-        </div>
+        {!isOpenFriendProfile ? (
+          <div className='flex justify-between'>
+            <p className='text-2xl font-bold'>My Profile</p>
+            <ProfileDropdown>
+              <img
+                src={OptionIcon}
+                alt='Option'
+                className='w-7 h-7 cursor-pointer'
+              />
+            </ProfileDropdown>
+          </div>
+        ) : (
+          <div
+            className='flex justify-end cursor-pointer my-3'
+            onClick={() => setOpenFriendProfile(false)}
+          >
+            <CancelIcon width='22px' height='22px' />
+          </div>
+        )}
         <div className='flex flex-col items-center mt-9 mb-3'>
           <img
             src='https://avatars.githubusercontent.com/u/73225256'

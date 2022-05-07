@@ -26,7 +26,6 @@ import ArchiveIcon from './svg/archive.svg';
 import MutedIcon from './svg/muted.svg';
 import UnmuteIcon from './svg/unmute.svg';
 import EditIcon from './svg/edit.svg';
-import ActionIcon from './svg/action.svg';
 import ArrowForwardIcon from './svg/arrow-forward.svg';
 import ArrowDownIcon from './svg/arrow-down.svg';
 import FileIcon from './jsx/FileIcon';
@@ -37,6 +36,7 @@ import PencilIcon from './svg/pencil.svg';
 import LogoutIcon from './svg/logout.svg';
 import CancelIcon from './jsx/CancelIcon';
 import VideoCallIcon from './jsx/VideoCallIcon';
+import ForwardIcon from './svg/forward.svg';
 
 export {
   MessMeIcon,
@@ -67,7 +67,6 @@ export {
   ArchiveIcon,
   MutedIcon,
   UnmuteIcon,
-  ActionIcon,
   EditIcon,
   ArrowForwardIcon,
   ArrowDownIcon,
@@ -78,4 +77,5 @@ export {
   PencilIcon,
   LogoutIcon,
   CancelIcon,
+  ForwardIcon,
 };

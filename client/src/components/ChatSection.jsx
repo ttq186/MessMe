@@ -23,7 +23,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import data from 'emoji-mart/data/facebook.json';
 import { NimblePicker } from 'emoji-mart';
 
-const ChatSection = () => {
+const ChatSection = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
@@ -61,7 +61,10 @@ const ChatSection = () => {
             </Tippy>
           </VideoCallModal>
           <Tippy content="Friend's Profile">
-            <div className='cursor-pointer'>
+            <div
+              className='cursor-pointer'
+              onClick={() => setOpenFriendProfile(true)}
+            >
               <img src={FriendProfileIcon} alt='Profile' className='w-6 h-6' />
             </div>
           </Tippy>
@@ -75,7 +78,7 @@ const ChatSection = () => {
         </div>
       </div>
 
-      <div className='h-[81vh] p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
+      <div className='h-[81vh] p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
         <div className='flex items-center p-4 px-8'>
           <div className='grow border-t-[1px] border-slate-500'></div>
           <div className='mx-3 bg-slate-500 text-slate-300 font-medium text-sm px-2.5 py-0.5 rounded'>

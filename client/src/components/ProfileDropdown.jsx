@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 
-import { ActionIcon, EditIcon } from '../assets/icons';
+import { OtherIcon, EditIcon } from '../assets/icons';
 
 const ProfileDropdown = (props) => {
   return (
@@ -26,7 +26,7 @@ const ProfileDropdown = (props) => {
             </Menu.Item>
             <Menu.Item>
               <button className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-500'>
-                <img src={ActionIcon} alt='Action' className='w-4 h-4 mr-3' />
+                <img src={OtherIcon} alt='Action' className='w-4 h-4 mr-3' />
                 Action
               </button>
             </Menu.Item>

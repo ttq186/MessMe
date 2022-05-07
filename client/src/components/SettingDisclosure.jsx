@@ -114,7 +114,7 @@ const SettingDisclosure = () => {
                   className='w-5 h-5'
                 />
               </Disclosure.Button>
-              <Disclosure.Panel className='bg-slate-500 rounded px-5 py-3 text-[13px] text-slate-300'>
+              <Disclosure.Panel className='bg-slate-500 rounded px-5 py-3 text-[13px] text-slate-200'>
                 <div className='mb-3 py-2 border-b border-slate-400 cursor-pointer'>
                   FAQs
                 </div>
