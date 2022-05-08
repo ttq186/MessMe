@@ -38,7 +38,7 @@
 }
 
 .emoji-mart-scroll::-webkit-scrollbar-thumb {
-  background-color: #64748b;
+  background-color: #475569;
   border-radius: 1.5px;
   height: 45px;
 }
@@ -50,4 +50,9 @@
 .emoji-mart {
   border: none !important;
   background: #1e293b !important;
+}
+
+[contentEditable='true']:empty:before {
+  content: attr(placeholder);
+  opacity: 0.7;
 }

@@ -3,11 +3,11 @@ import MessageDropdown from './MessageDropdown';
 
 const Message = ({ isSender = true }) => {
   return (
-    <div className={`flex items-end ${isSender ? 'flex-row-reverse' : ''}`}>
-      <div className='p-2 pb-0'>
+    <div className={`flex items-end ${isSender && 'flex-row-reverse'}`}>
+      <div className='py-2 px-1 pb-0'>
         <img src={FriendProfileIcon} alt='Profile' className='w-8 h-8' />
       </div>
-      <div className={`flex ${isSender ? 'flex-row-reverse' : ''}`}>
+      <div className={`flex ${isSender && 'flex-row-reverse'}`}>
         <div
           className={`${
             isSender
@@ -20,7 +20,7 @@ const Message = ({ isSender = true }) => {
           rerum!
         </div>
         <MessageDropdown>
-          <img src={OptionIcon} alt='Option' className='w-8 cursor-pointer' />
+          <OptionIcon fill={`${isSender ? '#94a3b8' : '#1f2937'}`} />
         </MessageDropdown>
       </div>
     </div>

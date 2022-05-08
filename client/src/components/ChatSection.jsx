@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
@@ -21,13 +21,28 @@ import SearchDropdown from './SearchDropdown';
 import VideoCallModal from './VideoCallModal';
 import 'emoji-mart/css/emoji-mart.css';
 import data from 'emoji-mart/data/facebook.json';
-import { NimblePicker } from 'emoji-mart';
+import { NimblePicker, Emoji } from 'emoji-mart';
 
 const ChatSection = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
+  const inputRef = useRef();
+
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
   };
+  const handleChooseIcon = (e) => {
+    // console.log(inputRef)
+    // inputRef.current.innerHTML += `<span contentEditable='true'>${Emoji({
+    //   html: true,
+    //   set: 'facebook',
+    //   emoji: e.id,
+    //   size: 21,
+    // })}</span>`;
+
+    // temporary solution
+    inputRef.current.innerText += e.native;
+  };
+
   return (
     <>
       <div className='flex justify-between border-b-2 border-slate-500'>
@@ -78,7 +93,7 @@ const ChatSection = ({ setOpenFriendProfile }) => {
         </div>
       </div>
 
-      <div className='h-[81vh] p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
+      <div className='p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
         <div className='flex items-center p-4 px-8'>
           <div className='grow border-t-[1px] border-slate-500'></div>
           <div className='mx-3 bg-slate-500 text-slate-300 font-medium text-sm px-2.5 py-0.5 rounded'>
@@ -98,7 +113,7 @@ const ChatSection = ({ setOpenFriendProfile }) => {
         </div>
       </div>
 
-      <div className='relative bottom-0 w-full flex justify-between items-center px-5 py-3.5 pr-32 border-t-2 border-slate-500'>
+      <div className='relative bottom-0 w-full flex justify-between items-center px-5 py-3.5 border-t-2 border-slate-500'>
         <div className='flex items-center'>
           <Tippy content='Attach File'>
             <div className='mx-4 cursor-pointer'>
@@ -128,7 +143,7 @@ const ChatSection = ({ setOpenFriendProfile }) => {
           </Tippy>
           <div className='relative bg-slate-500'>
             {isOpenEmojiPicker && (
-              <div className='absolute -left-1 bottom-6 p-1 bg-slate-800 border border-slate-700 rounded'>
+              <div className='absolute -left-1 bottom-6 p-1 bg-slate-800 z-10 border border-slate-700 rounded'>
                 <NimblePicker
                   set='facebook'
                   data={data}
@@ -138,19 +153,30 @@ const ChatSection = ({ setOpenFriendProfile }) => {
                   color='#64748b'
                   theme='dark'
                   defaultSkin={5}
+                  onSelect={(e) => handleChooseIcon(e)}
                 />
               </div>
             )}
           </div>
         </div>
-        <div className='grow ml-2'>
-          <input
+
+        <div className='relative max-w-[78.5%] grow max-h-[110px] ml-2 bg-slate-700 py-2.5 pl-5 text-[15px] text-slate-200 font-medium rounded-md'>
+          {/* <input
             className='py-2.5 px-5 w-full bg-slate-700 text-[15px] text-slate-300 font-medium rounded-md outline-none'
             placeholder='Enter Message...'
+            ref={inputRef}
+          /> */}
+
+          <div
+            role='textbox'
+            contentEditable='true'
+            placeholder='Aa'
+            className='outline-none pr-3 mr-2 max-h-[90px] overflow-y-scroll scrollbar-transparent hover:scrollbar'
+            ref={inputRef}
           />
         </div>
         <Tippy content='Send Message'>
-          <div className='bg-blue-300 mx-4 px-3.5  py-2 rounded cursor-pointer'>
+          <div className='bg-blue-300 mx-5 px-3.5 py-2 rounded cursor-pointer'>
             <img src={SendIcon} alt='Send' className='w-5 h-5' />
           </div>
         </Tippy>

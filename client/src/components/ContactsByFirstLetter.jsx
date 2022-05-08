@@ -9,13 +9,13 @@ const ContactsByFirstLetter = () => {
         <div className='flex justify-between items-center'>
           <p className='my-3'>Albert Rodarte</p>
           <ContactDropdown>
-            <img src={OptionIcon} alt='Option' className='w-8 cursor-pointer' />
+            <OptionIcon />
           </ContactDropdown>
         </div>
         <div className='flex justify-between items-center'>
           <p className='my-3'>Albert Rodarte</p>
           <ContactDropdown>
-            <img src={OptionIcon} alt='Option' className='w-8 cursor-pointer' />
+            <OptionIcon />
           </ContactDropdown>
         </div>
       </div>

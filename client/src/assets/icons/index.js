@@ -18,7 +18,7 @@ import SearchIcon from './svg/search.svg';
 import SendIcon from './svg/send.svg';
 import FriendProfileIcon from './svg/friend-profile.svg';
 import AddIcon from './svg/add-contact.svg';
-import OptionIcon from './svg/option.svg';
+import OptionIcon from './jsx/OptionIcon';
 import ShareIcon from './svg/share.svg';
 import BlockIcon from './svg/block.svg';
 import RemoveIcon from './svg/remove.svg';

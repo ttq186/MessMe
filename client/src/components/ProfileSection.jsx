@@ -12,11 +12,7 @@ const ProfileSection = ({ isOpenFriendProfile, setOpenFriendProfile }) => {
           <div className='flex justify-between'>
             <p className='text-2xl font-bold'>My Profile</p>
             <ProfileDropdown>
-              <img
-                src={OptionIcon}
-                alt='Option'
-                className='w-7 h-7 cursor-pointer'
-              />
+              <OptionIcon width='32px' />
             </ProfileDropdown>
           </div>
         ) : (

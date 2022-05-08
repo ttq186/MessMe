@@ -11,7 +11,7 @@ const UsersChatSection = () => {
             <img src={SearchIcon} alt='Search' className='w-12 p-1' />
           </span>
           <input
-            placeholder='Search users'
+            placeholder='Search Users'
             className='text-slate-300 pr-4 py-3 text-sm font-medium bg-slate-600 rounded-r w-full outline-none border-none'
           />
         </div>

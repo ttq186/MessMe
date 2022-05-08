@@ -125,7 +125,7 @@ const Dashboard = () => {
         {getComponentByTabMode(tabMode)}
       </div>
 
-      <div className='flex flex-col justify-between grow bg-slate-600'>
+      <div className='flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600'>
         <ChatSection setOpenFriendProfile={setOpenFriendProfile} />
       </div>
 

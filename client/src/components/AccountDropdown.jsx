@@ -22,7 +22,7 @@ const AccountDropdown = (props) => {
           leaveFrom='transform opacity-100 scale-100'
           leaveTo='transform opacity-0 scale-95'
         >
-          <Menu.Items className='absolute left-10 bottom-4 p-3 w-40 z-10 rounded border border-slate-500 bg-slate-600 shadow-lg'>
+          <Menu.Items className='absolute left-0 bottom-[66px] p-3 w-40 z-10 rounded border-2 border-slate-500 bg-slate-600 shadow-lg'>
             <div className='text-gray-200'>
               <Menu.Item>
                 <button className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-500'>
