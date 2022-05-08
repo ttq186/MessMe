@@ -1,10 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import EmailInput from '../components/EmailInput';
 import PasswordInput from '../components/PasswordInput';
 import { MessMeIcon, CoffeeCupIcon, GoogleIcon } from '../assets/icons';
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    navigate('/dashboard');
+  };
+
   return (
     <div className='bg-gray-700'>
       <div className='container flex flex-col justify-center items-center min-h-screen max-w-md mx-auto text-slate-200'>
@@ -17,7 +25,10 @@ const SignIn = () => {
           Sign in to continue to MessMe
         </p>
 
-        <form className='bg-gray-800 font-bold w-[88%] p-6 md:p-8 pb-4 md:pb-6 rounded-md text-gray-400'>
+        <form
+          className='bg-gray-800 font-bold w-[88%] p-6 md:p-8 pb-4 md:pb-6 rounded-md text-gray-400'
+          onSubmit={(e) => handleFormSubmit(e)}
+        >
           <EmailInput />
           <PasswordInput />
 

@@ -23,7 +23,7 @@ const ProfileSection = ({ isOpenFriendProfile, setOpenFriendProfile }) => {
             <CancelIcon width='22px' height='22px' />
           </div>
         )}
-        <div className='flex flex-col items-center mt-9 mb-3'>
+        <div className='flex flex-col items-center mt-6 mb-3'>
           <img
             src='https://avatars.githubusercontent.com/u/73225256'
             alt='Avatar'
@@ -32,6 +32,16 @@ const ProfileSection = ({ isOpenFriendProfile, setOpenFriendProfile }) => {
           <p className='font-semibold mt-4'>Thanh Quang</p>
         </div>
       </div>
+
+      <article className='pt-3 pb-0 px-7 prose'>
+        <h2 className='font-bold text-xl text-slate-300 mb-3'>Intro</h2>
+        <blockquote className='ml-2 pl-3'>
+          <p className='text-slate-400 font-semibold text-sm my-0'>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
+            quaerat sed optio hic aut odio animi nesciunt?
+          </p>
+        </blockquote>
+      </article>
 
       <ProfileDisclosure />
     </>

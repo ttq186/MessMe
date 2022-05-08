@@ -10,7 +10,7 @@ import AttachFile from './AttachFile';
 
 const ProfileDisclosure = () => {
   return (
-    <div className='h-[64vh] overflow-y-scroll p-5 pr-2 pt-0 mt-5 mr-1.5 scrollbar-transparent hover:scrollbar'>
+    <div className='h-[51vh] overflow-y-scroll p-5 pr-2 pt-0 mt-5 mr-1.5 scrollbar-transparent hover:scrollbar'>
       <div className='rounded bg-slate-00 p-2 font-semibold'>
         <Disclosure>
           {({ open }) => (

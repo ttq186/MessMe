@@ -3,7 +3,6 @@ import { Disclosure } from '@headlessui/react';
 import {
   ArrowDownIcon,
   ArrowForwardIcon,
-  AttachIcon,
   HelpIcon,
   PrivacyIcon,
   ProfileIcon,

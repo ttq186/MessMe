@@ -114,14 +114,14 @@ const Dashboard = () => {
             </div>
           </Tippy>
         </div>
-        <AccountDropdown>
+        <AccountDropdown setTabMode={setTabMode}>
           <div className='cursor-pointer p-2 rounded hover:bg-slate-500'>
             <AvatarIcon />
           </div>
         </AccountDropdown>
       </div>
 
-      <div className='w-[390px] bg-gray-700 text-slate-200 border-l-2 border-slate-500'>
+      <div className='w-[390px] bg-gray-700 text-slate-200'>
         {getComponentByTabMode(tabMode)}
       </div>
 

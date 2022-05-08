@@ -1,14 +1,15 @@
 import { Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
-import {
-  ShareIcon,
-  BlockIcon,
-  RemoveIcon,
-  ProfileIcon,
-  LogoutIcon,
-} from '../assets/icons';
+import { ProfileIcon, LogoutIcon } from '../assets/icons';
 
 const AccountDropdown = (props) => {
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    navigate('/');
+  };
+
   return (
     <div>
       <Menu as='div' className='relative inline-block text-left'>
@@ -25,13 +26,19 @@ const AccountDropdown = (props) => {
           <Menu.Items className='absolute left-0 bottom-[66px] p-3 w-40 z-10 rounded border-2 border-slate-500 bg-slate-600 shadow-lg'>
             <div className='text-gray-200'>
               <Menu.Item>
-                <button className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-500'>
+                <button
+                  className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-500'
+                  onClick={() => props.setTabMode('PROFILE_MODE')}
+                >
                   <ProfileIcon width='23px' height='23px' />
                   <p className='ml-1.5'>My Profile</p>
                 </button>
               </Menu.Item>
               <Menu.Item>
-                <button className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-500'>
+                <button
+                  className='font-semibold group flex w-full items-center rounded px-2 py-2 text-sm hover:bg-slate-500'
+                  onClick={handleLogoutClick}
+                >
                   <img
                     src={LogoutIcon}
                     alt='Logout'

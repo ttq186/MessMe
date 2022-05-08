@@ -1,8 +1,6 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 
-import { ActionIcon, EditIcon } from '../assets/icons';
-
 const SettingDropdown = (props) => {
   return (
     <div>
