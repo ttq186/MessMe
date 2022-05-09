@@ -10,7 +10,7 @@ import AttachFile from './AttachFile';
 
 const ProfileDisclosure = () => {
   return (
-    <div className='h-[51vh] overflow-y-scroll p-5 pr-2 pt-0 mt-5 mr-1.5 scrollbar-transparent hover:scrollbar'>
+    <div className='overflow-y-scroll p-5 pr-2 pt-0 mt-5 mr-1.5 scrollbar-transparent hover:scrollbar'>
       <div className='rounded bg-slate-00 p-2 font-semibold'>
         <Disclosure>
           {({ open }) => (
@@ -29,19 +29,19 @@ const ProfileDisclosure = () => {
               <Disclosure.Panel className='bg-slate-500 rounded px-5 py-3 text-sm text-slate-200'>
                 <div className='mb-3'>
                   <h2 className='text-gray-700 font-bold'>Name</h2>
-                  <p>Thanh Quang</p>
+                  <p className='ml-2'>Thanh Quang</p>
                 </div>
                 <div className='mb-3'>
                   <h2 className='text-gray-700 font-bold'>Email</h2>
-                  <p>tt.quang.186@gmail.com</p>
+                  <p className='ml-2'>tt.quang.186@gmail.com</p>
                 </div>
                 <div className='mb-3'>
-                  <h2 className='text-gray-700 font-bold'>Time</h2>
-                  <p>4AM</p>
+                  <h2 className='text-gray-700 font-bold'>Phone Number</h2>
+                  <p className='ml-2'>082-186-2002</p>
                 </div>
                 <div>
                   <h2 className='text-gray-700 font-bold'>Location</h2>
-                  <p>TP.Pleiku, VietNam</p>
+                  <p className='ml-2'>TP.Pleiku, VietNam</p>
                 </div>
               </Disclosure.Panel>
             </>

@@ -4,6 +4,7 @@ import {
   OtherIcon,
   GalleryIcon,
 } from '../assets/icons';
+import AttachedFileDropdown from './AttachedFileDropdown';
 
 const AttachFile = () => {
   return (
@@ -24,11 +25,13 @@ const AttachFile = () => {
           alt='File'
           className='cursor-pointer w-5 h-5 mr-2.5'
         />
-        <img
-          src={OtherIcon}
-          alt='Download'
-          className='cursor-pointer w-4 h-4'
-        />
+        <AttachedFileDropdown>
+          <img
+            src={OtherIcon}
+            alt='Download'
+            className='cursor-pointer w-4 h-4'
+          />
+        </AttachedFileDropdown>
       </div>
     </div>
   );

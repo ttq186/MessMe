@@ -19,7 +19,10 @@ const ProfileDropdown = (props) => {
         <Menu.Items className='absolute right-8 top-2 p-2 w-40 z-10 rounded bg-slate-600 shadow-lg border-2 border-slate-500'>
           <div className='text-gray-200'>
             <Menu.Item>
-              <button className='font-semibold group flex w-full items-center rounded px-3 py-2 text-sm hover:bg-slate-500'>
+              <button
+                className='font-semibold group flex w-full items-center rounded px-3 py-2 text-sm hover:bg-slate-500'
+                onClick={() => props.setEditableIntro(true)}
+              >
                 <img src={EditIcon} alt='Edit' className='w-4 h-4 mr-3' />
                 Edit
               </button>

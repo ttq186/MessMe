@@ -31,13 +31,14 @@ const ChatSection = ({ setOpenFriendProfile }) => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
   };
   const handleChooseIcon = (e) => {
-    // console.log(inputRef)
-    // inputRef.current.innerHTML += `<span contentEditable='true'>${Emoji({
+    // inputRef.current.innerHTML += `<span contentEditable='false' dangerouslySetInnerHTML={
+    // __html: ${Emoji({
     //   html: true,
     //   set: 'facebook',
     //   emoji: e.id,
     //   size: 21,
-    // })}</span>`;
+    // })}
+    // </span>`;
 
     // temporary solution
     inputRef.current.innerText += e.native;
@@ -168,7 +169,6 @@ const ChatSection = ({ setOpenFriendProfile }) => {
           /> */}
 
           <div
-            role='textbox'
             contentEditable='true'
             placeholder='Aa'
             className='outline-none pr-3 mr-2 max-h-[90px] overflow-y-scroll scrollbar-transparent hover:scrollbar'

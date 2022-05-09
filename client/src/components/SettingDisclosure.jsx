@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 
 import {
@@ -11,6 +12,20 @@ import {
 import SettingDropdown from './SettingDropdown';
 
 const SettingDisclosure = () => {
+  const [isEditableInfo, setEditableInfo] = useState(false);
+
+  const handleEditClick = () => {
+    setEditableInfo(true);
+  };
+
+  const handleCancelClick = () => {
+    setEditableInfo(false);
+  };
+
+  const handleSubmitClick = () => {
+    setEditableInfo(false);
+  };
+
   return (
     <div className='h-[65vh] overflow-y-scroll p-5 pr-2 pt-0 mt-5 mr-1.5 scrollbar-transparent hover:scrollbar'>
       <div className='rounded bg-slate-00 p-2 font-semibold'>
@@ -28,27 +43,81 @@ const SettingDisclosure = () => {
                   className='w-5 h-5'
                 />
               </Disclosure.Button>
-              <Disclosure.Panel className='bg-slate-500 rounded px-5 py-4 mb-2 text-sm text-slate-200'>
-                <div className='inline-flex bg-slate-600 py-1.5 px-3 rounded float-right cursor-pointer hover:bg-slate-700'>
-                  <img src={EditIcon} alt='Edit' className='w-5 h-5 mr-1' />
-                  Edit
-                </div>
+              <Disclosure.Panel
+                className={`${
+                  !isEditableInfo ? 'py-4' : 'pt-4'
+                } bg-slate-500 rounded px-5 mb-2 text-sm text-slate-200`}
+              >
+                {!isEditableInfo && (
+                  <div
+                    className='inline-flex bg-slate-600 py-1.5 px-3 rounded float-right cursor-pointer hover:bg-slate-700'
+                    onClick={handleEditClick}
+                  >
+                    <img src={EditIcon} alt='Edit' className='w-5 h-5 mr-1' />
+                    Edit
+                  </div>
+                )}
+
                 <div className='mb-3'>
                   <h2 className='text-gray-700 font-bold'>Name</h2>
-                  <p>Thanh Quang</p>
+                  {!isEditableInfo ? (
+                    <p className='ml-2'>Thanh Quang</p>
+                  ) : (
+                    <input
+                      className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none'
+                      defaultValue='Thanh Quang'
+                    />
+                  )}
                 </div>
                 <div className='mb-3'>
                   <h2 className='text-gray-700 font-bold'>Email</h2>
-                  <p>tt.quang.186@gmail.com</p>
+                  {!isEditableInfo ? (
+                    <p className='ml-2'>tt.quang.186@gmail.com</p>
+                  ) : (
+                    <input
+                      className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none'
+                      defaultValue='tt.quang.186@gmail.com'
+                    />
+                  )}
                 </div>
                 <div className='mb-3'>
-                  <h2 className='text-gray-700 font-bold'>Time</h2>
-                  <p>4AM</p>
+                  <h2 className='text-gray-700 font-bold'>Phone Number</h2>
+                  {!isEditableInfo ? (
+                    <p className='ml-2'>082-253-7505</p>
+                  ) : (
+                    <input
+                      className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none'
+                      defaultValue='082-253-7505'
+                    />
+                  )}
                 </div>
                 <div>
                   <h2 className='text-gray-700 font-bold'>Location</h2>
-                  <p>TP.Pleiku, VietNam</p>
+                  {!isEditableInfo ? (
+                    <p className='ml-2'>TP.Pleiku, VietNam</p>
+                  ) : (
+                    <input
+                      className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none'
+                      defaultValue='TP.Pleiku, VietNam'
+                    />
+                  )}
                 </div>
+                {isEditableInfo && (
+                  <div className='flex justify-end text-[13px] my-3 pb-3'>
+                    <button
+                      className='bg-slate-200 text-slate-700 font-semibold py-[5px] px-2.5 rounded-[3px] hover:opacity-90'
+                      onClick={handleCancelClick}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className='bg-slate-600 text-slate-200 font-semibold py-[5px] px-2.5 rounded-[3px] ml-2 hover:bg-slate-700'
+                      onClick={handleSubmitClick}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                )}
               </Disclosure.Panel>
             </>
           )}

@@ -49,8 +49,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className='flex min-h-screen'>
-      <div className='flex flex-col justify-between items-center w-[70px] pt-5 pb-2 bg-slate-600'>
+    <div className='flex'>
+      <div className='flex flex-col h-screen justify-between items-center w-[70px] pt-5 pb-2 bg-slate-600'>
         <Link to='/'>
           <MessMeIcon />
         </Link>
@@ -121,7 +121,7 @@ const Dashboard = () => {
         </AccountDropdown>
       </div>
 
-      <div className='w-[390px] bg-gray-700 text-slate-200'>
+      <div className='flex flex-col w-[390px] h-screen bg-gray-700 text-slate-200'>
         {getComponentByTabMode(tabMode)}
       </div>
 
@@ -130,7 +130,7 @@ const Dashboard = () => {
       </div>
 
       {isOpenFriendProfile && (
-        <div className='w-[380px] bg-gray-700 text-slate-200 border-l-2 border-slate-500'>
+        <div className='flex flex-col w-[380px] h-screen bg-gray-700 text-slate-200 border-l-2 border-slate-500'>
           <ProfileSection
             isOpenFriendProfile={isOpenFriendProfile}
             setOpenFriendProfile={setOpenFriendProfile}

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import 'tippy.js/dist/tippy.css';
 
 import { CancelIcon, OptionIcon } from '../assets/icons';
@@ -5,13 +6,23 @@ import ProfileDropdown from './ProfileDropdown';
 import ProfileDisclosure from './ProfileDisclosure';
 
 const ProfileSection = ({ isOpenFriendProfile, setOpenFriendProfile }) => {
+  const [isEditableIntro, setEditableIntro] = useState(false);
+
+  const handleCancelClick = () => {
+    setEditableIntro(false);
+  };
+
+  const handleSubmitClick = () => {
+    setEditableIntro(false);
+  };
+
   return (
     <>
       <div className='p-6 pb-2 border-b-[1px] border-slate-600'>
         {!isOpenFriendProfile ? (
           <div className='flex justify-between'>
             <p className='text-2xl font-bold'>My Profile</p>
-            <ProfileDropdown>
+            <ProfileDropdown setEditableIntro={setEditableIntro}>
               <OptionIcon width='32px' />
             </ProfileDropdown>
           </div>
@@ -33,14 +44,37 @@ const ProfileSection = ({ isOpenFriendProfile, setOpenFriendProfile }) => {
         </div>
       </div>
 
-      <article className='pt-3 pb-0 px-7 prose'>
+      <article className='pt-3 pb-0 px-7'>
         <h2 className='font-bold text-xl text-slate-300 mb-3'>Intro</h2>
-        <blockquote className='ml-2 pl-3'>
-          <p className='text-slate-400 font-semibold text-sm my-0'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-            quaerat sed optio hic aut odio animi nesciunt?
-          </p>
-        </blockquote>
+        {!isEditableIntro ? (
+          <div className='ml-2 pl-3 border-l-4 border-slate-400'>
+            <p className='text-slate-300 font-semibold text-sm'>
+              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
+              quaerat sed optio hic aut odio animi nesciunt?"
+            </p>
+          </div>
+        ) : (
+          <div className='flex flex-col items-end text-slate-400 px-4'>
+            <textarea
+              placeholder='Describe something about you'
+              className='text-sm py-3 px-5 w-full font-semibold rounded bg-gray-600 text-slate-200 outline-none h-28'
+            />
+            <div className='text-[13px] mt-3'>
+              <button
+                className='bg-slate-200 text-slate-700 font-semibold py-1 px-2 rounded-[3px] hover:opacity-90'
+                onClick={handleCancelClick}
+              >
+                Cancel
+              </button>
+              <button
+                className='bg-slate-500 text-slate-200 font-semibold py-1 px-2 rounded-[3px] ml-2 hover:opacity-90'
+                onClick={handleSubmitClick}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        )}
       </article>
 
       <ProfileDisclosure />

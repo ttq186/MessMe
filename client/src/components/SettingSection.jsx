@@ -15,9 +15,13 @@ const SettingSection = () => {
               alt='Avatar'
               className='w-28 h-28 rounded-full border-4 border-slate-600'
             />
-            <span className='absolute bg-slate-600 p-1.5 cursor-pointer rounded-full hover:bg-gray-600'>
+            <input type='file' id='update-avatar' className='hidden' />
+            <label
+              htmlFor='update-avatar'
+              className='absolute bg-slate-600 p-1.5 cursor-pointer rounded-full hover:bg-gray-600'
+            >
               <img src={PencilIcon} alt='Pencil' className='w-5 h-5' />
-            </span>
+            </label>
           </div>
           <p className='font-semibold mt-4'>Thanh Quang</p>
         </div>
