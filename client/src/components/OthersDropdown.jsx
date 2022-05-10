@@ -1,11 +1,12 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
+
 import {
   ArchiveIcon,
   MutedIcon,
   UnmuteIcon,
   RemoveIcon,
-} from '../assets/icons';
+} from 'assets/icons';
 
 const OthersDropdown = (props) => {
   return (

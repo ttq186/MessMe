@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import ContactsByFirstLetter2 from './ContactsByFirstLetter2';
+
+import ContactsByFirstLetter2 from 'components/ContactsByFirstLetter2';
 
 const GroupModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);

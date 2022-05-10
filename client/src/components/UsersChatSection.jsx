@@ -1,5 +1,5 @@
-import { SearchIcon } from '../assets/icons';
-import Conversation from './Conversation';
+import { SearchIcon } from 'assets/icons';
+import Conversation from 'components/Conversation';
 
 const UsersChatSection = () => {
   return (

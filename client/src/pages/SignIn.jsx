@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import EmailInput from '../components/EmailInput';
-import PasswordInput from '../components/PasswordInput';
-import { MessMeIcon, CoffeeCupIcon, GoogleIcon } from '../assets/icons';
+import { MessMeIcon, CoffeeCupIcon, GoogleIcon } from 'assets/icons';
+import EmailInput from 'components/EmailInput';
+import PasswordInput from 'components/PasswordInput';
 
 const SignIn = () => {
   const navigate = useNavigate();

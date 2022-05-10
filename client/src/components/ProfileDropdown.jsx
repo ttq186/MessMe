@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 
-import { OtherIcon, EditIcon } from '../assets/icons';
+import { OtherIcon, EditIcon } from 'assets/icons';
 
 const ProfileDropdown = (props) => {
   return (

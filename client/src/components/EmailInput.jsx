@@ -1,4 +1,4 @@
-import { EmailIcon } from '../assets/icons';
+import { EmailIcon } from 'assets/icons';
 
 const EmailInput = () => {
   return (

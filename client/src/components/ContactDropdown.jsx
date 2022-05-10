@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { ShareIcon, BlockIcon, RemoveIcon } from '../assets/icons';
+
+import { ShareIcon, BlockIcon, RemoveIcon } from 'assets/icons';
 
 const ContactDropdown = (props) => {
   return (

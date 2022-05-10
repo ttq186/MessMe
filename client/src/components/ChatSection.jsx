@@ -1,6 +1,9 @@
 import { useState, useRef } from 'react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import 'emoji-mart/css/emoji-mart.css';
+import data from 'emoji-mart/data/facebook.json';
+import { NimblePicker, Emoji } from 'emoji-mart';
 
 import {
   AvatarIcon,
@@ -13,15 +16,12 @@ import {
   AttachIcon,
   GalleryIcon,
   SendIcon,
-} from '../assets/icons';
-import AudioCallModal from './AudioCallModal';
-import Message from './Message';
-import OthersDropdown from './OthersDropdown';
-import SearchDropdown from './SearchDropdown';
-import VideoCallModal from './VideoCallModal';
-import 'emoji-mart/css/emoji-mart.css';
-import data from 'emoji-mart/data/facebook.json';
-import { NimblePicker, Emoji } from 'emoji-mart';
+} from 'assets/icons';
+import Message from 'components/Message';
+import AudioCallModal from 'components/AudioCallModal';
+import OthersDropdown from 'components/OthersDropdown';
+import SearchDropdown from 'components/SearchDropdown';
+import VideoCallModal from 'components/VideoCallModal';
 
 const ChatSection = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
@@ -31,7 +31,7 @@ const ChatSection = ({ setOpenFriendProfile }) => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
   };
   const handleChooseIcon = (e) => {
-    // inputRef.current.innerHTML += `<span contentEditable='false' dangerouslySetInnerHTML={
+    // inputRef.current.innerHTML += `<span dangerouslySetInnerHTML={
     // __html: ${Emoji({
     //   html: true,
     //   set: 'facebook',
@@ -165,6 +165,7 @@ const ChatSection = ({ setOpenFriendProfile }) => {
           {/* <input
             className='py-2.5 px-5 w-full bg-slate-700 text-[15px] text-slate-300 font-medium rounded-md outline-none'
             placeholder='Enter Message...'
+            contentEditable='true'
             ref={inputRef}
           /> */}
 

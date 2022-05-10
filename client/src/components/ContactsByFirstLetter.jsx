@@ -1,5 +1,5 @@
-import { OptionIcon } from '../assets/icons';
-import ContactDropdown from './ContactDropdown';
+import { OptionIcon } from 'assets/icons';
+import ContactDropdown from 'components/ContactDropdown';
 
 const ContactsByFirstLetter = () => {
   return (

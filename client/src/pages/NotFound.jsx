@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { MessMeIcon } from '../assets/icons';
+import { MessMeIcon } from 'assets/icons';
 
 const NotFound = () => {
   return (

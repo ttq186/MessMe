@@ -5,8 +5,8 @@ import {
   ArrowForwardIcon,
   AttachIcon,
   ProfileIcon,
-} from '../assets/icons';
-import AttachFile from './AttachFile';
+} from 'assets/icons';
+import AttachFile from 'components/AttachFile';
 
 const ProfileDisclosure = () => {
   return (

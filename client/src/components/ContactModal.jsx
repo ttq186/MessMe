@@ -1,5 +1,5 @@
-import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 
 const ContactModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,9 +1,9 @@
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { AddIcon, SearchIcon } from '../assets/icons';
-import GroupItem from './GroupItem';
-import GroupModal from './GroupModal';
+import { AddIcon, SearchIcon } from 'assets/icons';
+import GroupItem from 'components/GroupItem';
+import GroupModal from 'components/GroupModal';
 
 const GroupSection = () => {
   return (

@@ -1,7 +1,7 @@
 import { Fragment, useState, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-import { CancelIcon, VideoCallIcon } from '../assets/icons';
+import { CancelIcon, VideoCallIcon } from 'assets/icons';
 
 const VideoCallModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);

@@ -4,7 +4,7 @@ import {
   OtherIcon,
   GalleryIcon,
 } from '../assets/icons';
-import AttachedFileDropdown from './AttachedFileDropdown';
+import AttachedFileDropdown from 'components/AttachedFileDropdown';
 
 const AttachFile = () => {
   return (

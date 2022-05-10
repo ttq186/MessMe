@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import 'tippy.js/dist/tippy.css';
 
-import { CancelIcon, OptionIcon } from '../assets/icons';
-import ProfileDropdown from './ProfileDropdown';
-import ProfileDisclosure from './ProfileDisclosure';
+import { CancelIcon, OptionIcon } from 'assets/icons';
+import ProfileDropdown from 'components/ProfileDropdown';
+import ProfileDisclosure from 'components/ProfileDisclosure';
 
 const ProfileSection = ({ isOpenFriendProfile, setOpenFriendProfile }) => {
   const [isEditableIntro, setEditableIntro] = useState(false);
@@ -45,7 +45,7 @@ const ProfileSection = ({ isOpenFriendProfile, setOpenFriendProfile }) => {
       </div>
 
       <article className='pt-3 pb-0 px-7'>
-        <h2 className='font-bold text-xl text-slate-300 mb-3'>Intro</h2>
+        <h2 className='font-bold text-xl mb-3'>Intro</h2>
         {!isEditableIntro ? (
           <div className='ml-2 pl-3 border-l-4 border-slate-400'>
             <p className='text-slate-300 font-semibold text-sm'>

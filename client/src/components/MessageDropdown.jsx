@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { RemoveIcon, ForwardIcon } from '../assets/icons';
+
+import { RemoveIcon, ForwardIcon } from 'assets/icons';
 
 const MessageDropdown = (props) => {
   return (

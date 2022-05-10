@@ -1,9 +1,9 @@
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { AddIcon, SearchIcon } from '../assets/icons';
-import ContactsByFirstLetter from './ContactsByFirstLetter';
-import ContactModal from './ContactModal';
+import { AddIcon, SearchIcon } from 'assets/icons';
+import ContactsByFirstLetter from 'components/ContactsByFirstLetter';
+import ContactModal from 'components/ContactModal';
 
 const ContactSection = () => {
   return (

@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 
-import PasswordInput from '../components/PasswordInput';
-import ConfirmPasswordInput from '../components/ConfirmPasswordInput';
-import { MessMeIcon, CoffeeCupIcon } from '../assets/icons';
+import { MessMeIcon, CoffeeCupIcon } from 'assets/icons';
+import PasswordInput from 'components/PasswordInput';
+import ConfirmPasswordInput from 'components/ConfirmPasswordInput';
 
 const ResetPassword = () => {
   return (

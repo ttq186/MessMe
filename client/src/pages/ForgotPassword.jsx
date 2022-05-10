@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
-import EmailInput from '../components/EmailInput';
-import { MessMeIcon, CoffeeCupIcon } from '../assets/icons';
+import { MessMeIcon, CoffeeCupIcon } from 'assets/icons';
+import EmailInput from 'components/EmailInput';
 
 const ForgotPassword = () => {
   return (

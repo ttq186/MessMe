@@ -1,4 +1,4 @@
-import { PasswordIcon } from '../assets/icons';
+import { PasswordIcon } from 'assets/icons';
 
 const ConfirmPasswordInput = () => {
   return (

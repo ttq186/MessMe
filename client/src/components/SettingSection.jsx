@@ -1,7 +1,7 @@
 import 'tippy.js/dist/tippy.css';
-import { PencilIcon } from '../assets/icons';
 
-import SettingDisclosure from './SettingDisclosure';
+import { PencilIcon } from 'assets/icons';
+import SettingDisclosure from 'components/SettingDisclosure';
 
 const SettingSection = () => {
   return (

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import ChatSection from '../components/ChatSection';
 import {
   MessMeIcon,
   ChatIcon,
@@ -12,13 +11,14 @@ import {
   ProfileIcon,
   GroupIcon,
   SettingIcon,
-} from '../assets/icons';
-import UsersChatSection from '../components/UsersChatSection';
-import ContactSection from '../components/ContactSection';
-import GroupSection from '../components/GroupSection';
-import ProfileSection from '../components/ProfileSection';
-import SettingSection from '../components/SettingSection';
-import AccountDropdown from '../components/AccountDropdown';
+} from 'assets/icons';
+import ChatSection from 'components/ChatSection';
+import GroupSection from 'components/GroupSection';
+import ContactSection from 'components/ContactSection';
+import ProfileSection from 'components/ProfileSection';
+import SettingSection from 'components/SettingSection';
+import AccountDropdown from 'components/AccountDropdown';
+import UsersChatSection from 'components/UsersChatSection';
 
 const PROFILE_MODE = 'PROFILE_MODE';
 const CHAT_MODE = 'CHAT_MODE';

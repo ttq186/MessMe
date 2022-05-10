@@ -1,7 +1,7 @@
 import { Fragment, useState, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-import { CancelIcon, PhoneIcon } from '../assets/icons';
+import { CancelIcon, PhoneIcon } from 'assets/icons';
 
 const AudioCallModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);

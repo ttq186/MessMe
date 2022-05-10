@@ -1,5 +1,5 @@
-import { FriendProfileIcon, OptionIcon } from '../assets/icons';
-import MessageDropdown from './MessageDropdown';
+import { FriendProfileIcon, OptionIcon } from 'assets/icons';
+import MessageDropdown from 'components/MessageDropdown';
 
 const Message = ({ isSender = true }) => {
   return (

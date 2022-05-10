@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
-import { ProfileIcon, LogoutIcon } from '../assets/icons';
+
+import { ProfileIcon, LogoutIcon } from 'assets/icons';
 
 const AccountDropdown = (props) => {
   const navigate = useNavigate();
