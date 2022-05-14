@@ -1,4 +1,4 @@
-const AttachIcon = ({ width = '38px', height = '38px', fill = '#93c5fd' }) => {
+const AttachIcon = ({ width = '38px', height = '38px', fill = '#a6b0cf' }) => {
   return (
     <svg
       width={width}

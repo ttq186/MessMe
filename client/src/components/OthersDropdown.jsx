@@ -23,7 +23,7 @@ const OthersDropdown = (props) => {
           leaveTo='transform opacity-0 scale-95'
         >
           <Menu.Items className='absolute right-8 top-2 p-3 w-40 z-10 rounded bg-slate-600 shadow-lg border-2 border-slate-500'>
-            <div className='text-gray-200'>
+            <div className='text-slate-200'>
               <Menu.Item>
                 <button className='font-semibold group flex w-full items-center rounded px-3 py-2 text-sm hover:bg-slate-500'>
                   <img
