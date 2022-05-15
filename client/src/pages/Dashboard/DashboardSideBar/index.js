@@ -1,3 +1,3 @@
-import { SideBarAccountDropdown } from './SideBarAccountDropdown/SideBarAccountDropdown';
+import { SideBarAccountDropdown } from './Dropdown/SideBarAccountDropdown';
 
 export { SideBarAccountDropdown };

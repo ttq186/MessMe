@@ -1,5 +1,5 @@
 import { SearchBar } from 'components/SearchBar';
-import { UsersChatConversation } from '../UsersChatConversation/UsersChatConversation';
+import { UsersChatConversation } from './Conversation/UsersChatConversation';
 
 export const DashboardUsersChat = () => {
   return (

@@ -1,3 +1,3 @@
-import { UsersChatConversation } from './UsersChatConversation/UsersChatConversation';
+import { UsersChatConversation } from './Conversation/UsersChatConversation';
 
 export { UsersChatConversation };

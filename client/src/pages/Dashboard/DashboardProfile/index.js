@@ -1,7 +1,7 @@
-import { ProfileDropdown } from './ProfileDropdown/ProfileDropdown';
-import { ProfileDisclosure } from './ProfileDisclosure/ProfileDisclosure';
-import { ProfileAttachFile } from './ProfileAttachFile/ProfileAttachFile';
-import { ProfileAttachFileDropdown } from './ProfileAttatchFileDropdown/ProfileAttachFileDropdown';
+import { ProfileDropdown } from './Dropdown/ProfileDropdown';
+import { ProfileDisclosure } from './Disclosure/ProfileDisclosure';
+import { ProfileAttachFile } from './AttachFile/ProfileAttachFile';
+import { ProfileAttachFileDropdown } from './Dropdown/ProfileAttachFileDropdown';
 
 export {
   ProfileDropdown,

@@ -1,5 +1,5 @@
-import { ContactByFirstLetter } from './GroupUserByFirstLetter/GroupUserByFirstLetter';
-import { GroupModal } from './GroupModal/GroupModal';
-import { GroupItem } from './GroupItem/GroupItem';
+import { ContactByFirstLetter } from './UserByFirstLetter/GroupUserByFirstLetter';
+import { GroupModal } from './Modal/GroupModal';
+import { GroupItem } from './Item/GroupItem';
 
 export { ContactByFirstLetter, GroupModal, GroupItem };

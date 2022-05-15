@@ -17,13 +17,15 @@ import {
   GalleryIcon,
   SendIcon,
 } from 'assets/icons';
-import Message from 'components/Message';
-import AudioCallModal from 'components/AudioCallModal';
-import OthersDropdown from 'components/OthersDropdown';
-import SearchDropdown from 'components/SearchDropdown';
-import VideoCallModal from 'components/VideoCallModal';
+import {
+  MainChatMessage,
+  MainChatAudioCallModal,
+  MainChatVideoCallModal,
+  OthersDropdown,
+  SearchDropdown,
+} from 'pages/Dashboard/DashboardMainChat';
 
-const ChatSection = ({ setOpenFriendProfile }) => {
+export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
   const inputRef = useRef();
 
@@ -45,7 +47,7 @@ const ChatSection = ({ setOpenFriendProfile }) => {
   };
 
   return (
-    <>
+    <div className='flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600'>
       <div className='flex justify-between border-b-2 border-slate-500'>
         <div className='flex items-center p-4'>
           <AvatarIcon width='45px' height='45px' />
@@ -62,20 +64,24 @@ const ChatSection = ({ setOpenFriendProfile }) => {
               </div>
             </Tippy>
           </SearchDropdown>
-          <AudioCallModal>
-            <Tippy content='Call'>
-              <div className='cursor-pointer'>
-                <PhoneIcon />
-              </div>
-            </Tippy>
-          </AudioCallModal>
-          <VideoCallModal>
-            <Tippy content='Video Call'>
-              <div className='cursor-pointer'>
-                <VideoCallIcon />
-              </div>
-            </Tippy>
-          </VideoCallModal>
+          <MainChatAudioCallModal
+            triggerButton={
+              <Tippy content='Call'>
+                <div className='cursor-pointer'>
+                  <PhoneIcon />
+                </div>
+              </Tippy>
+            }
+          />
+          <MainChatVideoCallModal
+            triggerButton={
+              <Tippy content='Video Call'>
+                <div className='cursor-pointer'>
+                  <VideoCallIcon />
+                </div>
+              </Tippy>
+            }
+          />
           <Tippy content="Friend's Profile">
             <div
               className='cursor-pointer'
@@ -103,14 +109,14 @@ const ChatSection = ({ setOpenFriendProfile }) => {
           <div className='grow border-t-[1px] border-slate-500'></div>
         </div>
         <div>
-          <Message />
-          <Message isSender={false} />
-          <Message isSender={false} />
-          <Message />
-          <Message isSender={false} />
-          <Message />
-          <Message isSender={false} />
-          <Message />
+          <MainChatMessage />
+          <MainChatMessage isSender={false} />
+          <MainChatMessage isSender={false} />
+          <MainChatMessage />
+          <MainChatMessage isSender={false} />
+          <MainChatMessage />
+          <MainChatMessage isSender={false} />
+          <MainChatMessage />
         </div>
       </div>
 
@@ -182,8 +188,6 @@ const ChatSection = ({ setOpenFriendProfile }) => {
           </div>
         </Tippy>
       </div>
-    </>
+    </div>
   );
 };
-
-export default ChatSection;

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-import ChatSection from 'components/ChatSection';
 import {
+  DashboardGroup,
+  DashboardSideBar,
   DashboardContact,
   DashboardSetting,
-  DashboardGroup,
   DashboardProfile,
+  DashboardMainChat,
   DashboardUsersChat,
-  DashboardSideBar,
 } from 'pages/Dashboard';
 import {
   CHAT_MODE,
@@ -44,9 +44,7 @@ export const Dashboard = () => {
         {getComponentByTabMode(tabMode)}
       </div>
 
-      <div className='flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600'>
-        <ChatSection setOpenFriendProfile={setOpenFriendProfile} />
-      </div>
+      <DashboardMainChat setOpenFriendProfile={setOpenFriendProfile} />
 
       {isOpenFriendProfile && (
         <div className='flex flex-col w-[380px] h-screen bg-gray-700 text-slate-200 border-l-2 border-slate-500'>

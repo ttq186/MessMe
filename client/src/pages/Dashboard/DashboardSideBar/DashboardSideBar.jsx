@@ -18,7 +18,7 @@ import {
   PROFILE_MODE,
   SETTING_MODE,
 } from 'utils/contants/TabModeContants';
-import { SideBarAccountDropdown } from '../SideBarAccountDropdown/SideBarAccountDropdown';
+import { SideBarAccountDropdown } from './Dropdown/SideBarAccountDropdown';
 
 export const DashboardSideBar = ({ tabMode, setTabMode }) => {
   return (

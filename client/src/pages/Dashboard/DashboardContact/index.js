@@ -1,5 +1,5 @@
-import { ContactModal } from './ContactModal/ContactModal';
-import { ContactDropdown } from './ContactDropdown/ContactDropdown';
-import { ContactByFirstLetter } from './ContactUserByFirstLetter/ContactUserByFirstLetter';
+import { ContactModal } from './Modal/ContactModal';
+import { ContactDropdown } from './Dropdown/ContactDropdown';
+import { ContactByFirstLetter } from './UserByFirstLetter/ContactUserByFirstLetter';
 
 export { ContactModal, ContactDropdown, ContactByFirstLetter };

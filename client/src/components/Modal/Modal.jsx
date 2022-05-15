@@ -1,7 +1,13 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-export const Modal = ({ triggerButton, isOpen, openModal, closeModal, children }) => {
+export const Modal = ({
+  triggerButton,
+  isOpen,
+  openModal,
+  closeModal,
+  children,
+}) => {
   return (
     <>
       <button onClick={openModal}>{triggerButton}</button>

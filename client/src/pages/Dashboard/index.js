@@ -1,9 +1,10 @@
-import { DashboardGroup } from './DashboardGroup/DashboardGroupPage/DashboardGroup';
-import { DashboardSideBar } from './DashboardSideBar/SideBar/DashboardSideBar';
-import { DashboardContact } from './DashboardContact/DashboardContactPage/DashboardContact';
-import { DashboardSetting } from './DashboardSetting/DashboardSettingPage/DashboardSetting';
-import { DashboardProfile } from './DashboardProfile/DashboardProfilePage/DashboardProfile';
-import { DashboardUsersChat } from './DashboardUsersChat/DashboardUserChatPage/DashboardUsersChat';
+import { DashboardGroup } from './DashboardGroup/DashboardGroup';
+import { DashboardSideBar } from './DashboardSideBar/DashboardSideBar';
+import { DashboardContact } from './DashboardContact/DashboardContact';
+import { DashboardSetting } from './DashboardSetting/DashboardSetting';
+import { DashboardProfile } from './DashboardProfile/DashboardProfile';
+import { DashboardMainChat } from './DashboardMainChat/DashboardMainChat';
+import { DashboardUsersChat } from './DashboardUsersChat/DashboardUsersChat';
 
 export {
   DashboardGroup,
@@ -11,5 +12,6 @@ export {
   DashboardContact,
   DashboardSetting,
   DashboardProfile,
+  DashboardMainChat,
   DashboardUsersChat,
 };

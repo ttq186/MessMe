@@ -1,7 +1,7 @@
 import { FriendProfileIcon, OptionIcon } from 'assets/icons';
-import MessageDropdown from 'components/MessageDropdown';
+import { MessageDropdown } from 'pages/Dashboard/DashboardMainChat';
 
-const Message = ({ isSender = true }) => {
+export const MainChatMessage = ({ isSender = true }) => {
   return (
     <div className={`flex items-end ${isSender && 'flex-row-reverse'}`}>
       <div className='py-2 px-1 pb-0'>
@@ -26,5 +26,3 @@ const Message = ({ isSender = true }) => {
     </div>
   );
 };
-
-export default Message;
