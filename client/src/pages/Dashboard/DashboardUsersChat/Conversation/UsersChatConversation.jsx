@@ -10,7 +10,7 @@ export const UsersChatConversation = ({
     >
       <div className={`flex items-end p-1 ${isActive ? 'mr-1' : 'mr-2'} `}>
         <img
-          src='https://scontent.fsgn2-6.fna.fbcdn.net/v/t1.6435-1/105276421_2668844033387053_1941503213707792633_n.jpg?stp=dst-jpg_p100x100&_nc_cat=100&ccb=1-5&_nc_sid=7206a8&_nc_ohc=-mhBYA1X3uYAX-Yxvxh&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.fsgn2-6.fna&oh=00_AT86vNTnQ9QM--TFIFZFtPkG1I7xY1rtIUXImcSS8_2xsw&oe=62922452'
+          src='https://triparis.blob.core.windows.net/triparis-container/images/template.png'
           alt='User'
           className='w-10 rounded-full'
         />
