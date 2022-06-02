@@ -29,6 +29,7 @@ export const SettingAvatar = ({ username }) => {
           />
           <input
             type='file'
+            accept='.gif .jpg .jpeg .png'
             id='update-avatar'
             className='hidden'
             onChange={(e) => handleUploadFile(e.target.files[0])}

@@ -1,8 +1,8 @@
 import { BlobServiceClient } from '@azure/storage-blob';
 
 const containerName = process.env.REACT_APP_CONTAINER_NAME;
-const sasToken = process.env.REACT_APP_STORAGESASTOKEN;
-const storageAccountName = process.env.REACT_APP_STORAGERESOURCENAME;
+const sasToken = process.env.REACT_APP_STORAGE_SAS_TOKEN;
+const storageAccountName = process.env.REACT_APP_STORAGE_RESOURCE_NAME;
 
 const createBlobInContainer = async (containerClient, file) => {
   const fileNameSplit = file.name.split('.');
@@ -20,8 +20,6 @@ const createBlobInContainer = async (containerClient, file) => {
 
 export const uploadFileToBlob = async (file) => {
   if (!file) return [];
-
-  // get BlobService = notice `?` is pulled out of sasToken - if created in Azure portal
   const blobService = new BlobServiceClient(
     `https://${storageAccountName}.blob.core.windows.net/?${sasToken}`
   );
