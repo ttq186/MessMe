@@ -3,7 +3,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { PencilIcon } from 'assets/icons';
-import { uploadFileToBlob } from 'uploadFileToBlob';
+import { uploadFileToBlob } from 'utils/uploadFileToBlob';
 
 export const SettingAvatar = ({ username }) => {
   const [avatarUrl, setAvatarUrl] = useState('');

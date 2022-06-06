@@ -90,13 +90,15 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
               <img src={FriendProfileIcon} alt='Profile' className='w-6 h-6' />
             </div>
           </Tippy>
-          <OthersDropdown>
-            <Tippy content='Others'>
-              <div className='cursor-pointer -ml-1'>
-                <img src={OtherIcon} alt='Other' className='w-6 h-6' />
-              </div>
-            </Tippy>
-          </OthersDropdown>
+          <OthersDropdown
+            triggerButton={
+              <Tippy content='Others'>
+                <div className='cursor-pointer -ml-1'>
+                  <img src={OtherIcon} alt='Other' className='w-6 h-6' />
+                </div>
+              </Tippy>
+            }
+          />
         </div>
       </div>
 

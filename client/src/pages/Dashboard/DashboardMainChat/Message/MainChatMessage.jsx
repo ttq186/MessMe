@@ -19,9 +19,11 @@ export const MainChatMessage = ({ isSender = true }) => {
           tempore similique vero totam neque ullam ducimus cumque voluptatem
           rerum!
         </div>
-        <MessageDropdown>
-          <OptionIcon fill={`${isSender ? '#94a3b8' : '#1f2937'}`} />
-        </MessageDropdown>
+        <MessageDropdown
+          triggerButton={
+            <OptionIcon fill={`${isSender ? '#94a3b8' : '#1f2937'}`} />
+          }
+        />
       </div>
     </div>
   );

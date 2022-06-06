@@ -1,7 +1,8 @@
 import { BlobServiceClient } from '@azure/storage-blob';
 
 const containerName = process.env.REACT_APP_CONTAINER_NAME;
-const sasToken = process.env.REACT_APP_STORAGE_SAS_TOKEN;
+// const sasToken = process.env.REACT_APP_STORAGE_SAS_TOKEN;
+const sasToken = "se=2022-06-04T02%3A08%3A56Z&sp=rwcu&sv=2021-06-08&ss=b&srt=o&sig=aq/6pMjj4TMAX/He%2B/xeBCq87Ztk6k1UUZNCb1aFPkc%3D"
 const storageAccountName = process.env.REACT_APP_STORAGE_RESOURCE_NAME;
 
 const createBlobInContainer = async (containerClient, file) => {
