@@ -9,5 +9,4 @@ app = FastAPI(title="MessMe", version="1.0.0", root_path="")
 
 @app.get("/")
 async def home(session: async_session = Depends(deps.get_session)):
-    print(session)
     return {"detail": "test"}
