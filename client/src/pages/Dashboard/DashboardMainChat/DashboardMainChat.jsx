@@ -152,7 +152,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           </Tippy>
           <div className='relative bg-slate-500'>
             {isOpenEmojiPicker && (
-              <div className='absolute -left-1 bottom-6 p-1 bg-slate-800 z-10 border border-slate-700 rounded'>
+              <div className='absolute -left-2 bottom-6 p-1 bg-slate-800 z-10 border border-slate-700 rounded'>
                 <NimblePicker
                   set='facebook'
                   data={data}
@@ -161,7 +161,6 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
                   showSkinTones={false}
                   color='#64748b'
                   theme='dark'
-                  defaultSkin={5}
                   onSelect={(e) => handleChooseIcon(e)}
                 />
               </div>
