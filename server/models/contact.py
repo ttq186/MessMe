@@ -8,8 +8,8 @@ class Contact(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(
-        String, ForeignKey("user.id", ondelete="CASCADE"), index=True, nullable=False
+        String, ForeignKey("user.id", ondelete="CASCADE"), index=True
     )
     friend_id = Column(
-        String, ForeignKey("user.id", ondelete="CASCADE"), index=True, nullable=False
+        String, ForeignKey("user.id", ondelete="CASCADE"), index=True
     )

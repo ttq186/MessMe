@@ -18,14 +18,11 @@ class Attachment(Base):
     __tablename__ = "attachment"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(
-        String, ForeignKey("user.id", ondelete="CASCADE"), index=True, nullable=False
-    )
+    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), index=True)
     message_id = Column(
         Integer,
         ForeignKey("message.id", ondelete="CASCADE"),
         index=True,
-        nullable=False,
     )
     file_type = Column(
         Enum(FileTypeEnum), nullable=False, default=FileTypeEnum.COMPRESS

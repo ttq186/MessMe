@@ -9,7 +9,7 @@ DB_URL = (
     f"@{settings.DB_HOSTNAME}:{settings.DB_PORT}/{settings.DB_NAME}"
 )
 
-async_engine = create_async_engine(DB_URL)
-async_session = sessionmaker(
-    async_engine, class_=AsyncSession, expire_on_commit=False
+async_engine = create_async_engine(
+    DB_URL, connect_args={"server_settings": {"jit": "off"}}
 )
+async_session = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
