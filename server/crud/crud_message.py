@@ -1,10 +1,10 @@
 from .base import CRUDBase
-from models import Message
-from schemas import MessageCreate, MessageUpdate
+from models import Message as MessageModel
+from schemas import Message as MessageSchema
 
 
-class CRUDMessage(CRUDBase[Message, MessageCreate, MessageUpdate]):
+class CRUDMessage(CRUDBase[MessageModel, MessageSchema]):
     pass
 
 
-message = CRUDMessage(Message)
+message = CRUDMessage(MessageModel)

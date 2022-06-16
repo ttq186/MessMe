@@ -13,7 +13,7 @@ class User(Base):
     username = Column(String(length=20))
     email = Column(String, index=True, nullable=False, unique=True)
     password = Column(String, nullable=False)
-    cover_img_url = Column(String, nullable=False)
+    cover_img_url = Column(String)
     description = Column(Text)
     is_female = Column(Boolean, default=False)
     date_of_birth = Column(Date)
@@ -23,6 +23,6 @@ class User(Base):
     has_confirmed_email = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
 
-    conversations = relationship("Conversation", back_populates="user")
-    messages = relationship("Message", back_populates="user")
-    attachments = relationship("Attachment", back_populates="user")
+    conversations = relationship("Conversation", back_populates="user", lazy="selectin")
+    messages = relationship("Message", back_populates="user", lazy="selectin")
+    attachments = relationship("Attachment", back_populates="user", lazy="selectin")

@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     DB_HOSTNAME: str
     DB_PORT: int
     DB_NAME: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str
 
     class Config:
         env_file = ".env"

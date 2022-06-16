@@ -1,24 +1,17 @@
 from datetime import datetime
-from .base import CamelModel
+
+import strawberry
+from pydantic import BaseModel
 
 
-class MessageBase(CamelModel):
-    user_id: str | None = None
-    conversation_id: str | None = None
-    content: str | None = None
-    created_at: datetime | None = None
+class MessageBase(BaseModel):
+    id: int | None
+    user_id: str | None
+    conversation_id: int | None
+    content: str | None
+    created_at: datetime | None
 
 
-class MessageCreate(MessageBase):
-    content: str
-
-
-class MessageUpdate(MessageBase):
+@strawberry.experimental.pydantic.type(model=MessageBase, all_fields=True)
+class Message:
     pass
-
-
-class MessageOut(MessageBase):
-    id: int
-
-    class Config:
-        orm_mode = True

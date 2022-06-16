@@ -1,21 +1,9 @@
-from .base import CamelModel
+from uuid import UUID
+import strawberry
 
 
-class ContactBase(CamelModel):
-    user_id: str | None = None
-    friend_id: str | None = None
-
-
-class ContactCreate(ContactBase):
-    pass
-
-
-class ContactUpdate(ContactBase):
-    pass
-
-
-class ContactOut(ContactBase):
-    id: int
-
-    class Config:
-        orm_mode = True
+@strawberry.type
+class Contact:
+    id: strawberry.ID
+    user_id: UUID | None
+    friend_id: UUID | None

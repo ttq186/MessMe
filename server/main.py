@@ -1,12 +1,9 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 
-from sqlalchemy.ext.asyncio import async_session
-from api import deps
+from api.app import graphql_app
 
 
 app = FastAPI(title="MessMe", version="1.0.0", root_path="")
 
 
-@app.get("/")
-async def home(session: async_session = Depends(deps.get_session)):
-    return {"detail": "test"}
+app.include_router(graphql_app, prefix="/graphql")

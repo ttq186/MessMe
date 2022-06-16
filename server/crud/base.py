@@ -1,32 +1,30 @@
 from typing import Generic, TypeVar, Dict, Any
 
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql.expression import select
 
 from db.base import Base
+from strawberry.type import StrawberryType
 
 ModelType = TypeVar("ModelType", bound=Base)
-CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
-UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
+SchemaType = TypeVar("SchemaType", bound=StrawberryType)
 
 
-class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+class CRUDBase(Generic[ModelType, SchemaType]):
     def __init__(self, model: ModelType):
         """
         CRUD object with default Create, Read, Update, Delete methods.
 
-
-        **Parameter**
+        **Parameters**
         * `model`: SQLAlchemy model class
-        * `schema`: Pydantic model class
+        * `schema`: Strawberry schema class
         """
         self._model = model
 
     async def get(self, session: AsyncSession, id: str | int) -> ModelType | None:
         result = await session.execute(select(self._model).where(self._model.id == id))
-        return result.scalar_one_or_none()
+        return result.scalars().first()
 
     async def get_multi(
         self, session: AsyncSession, skip: int = 0, limit: str | None = None
@@ -44,9 +42,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     ) -> list[ModelType]:
         pass
 
-    async def create(
-        self, session: AsyncSession, obj_in: CreateSchemaType
-    ) -> ModelType:
+    async def create(self, session: AsyncSession, obj_in: SchemaType) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self._model(**obj_in_data)
         session.add(db_obj)
@@ -58,7 +54,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self,
         session: AsyncSession,
         db_obj: ModelType,
-        obj_in: UpdateSchemaType | Dict[str, Any],
+        obj_in: SchemaType | Dict[str, Any],
     ) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):

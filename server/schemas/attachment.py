@@ -1,9 +1,12 @@
 from datetime import datetime
 from enum import Enum
+from uuid import UUID
 
-from .base import CamelModel
+import strawberry
+from pydantic import BaseModel
 
 
+@strawberry.enum
 class FileTypeEnum(Enum):
     IMAGE = "IMAGE"
     AUDIO = "AUDIO"
@@ -11,23 +14,14 @@ class FileTypeEnum(Enum):
     COMPRESS = "COMPRESS"
 
 
-class AttachmentBase(CamelModel):
-    user_id: str | None = None
-    message_id: int | None = None
-    file_type: FileTypeEnum | None = None
-    created_at: datetime | None = None
-
-
-class AttachmentCreate(AttachmentBase):
-    file_type: FileTypeEnum
-
-
-class AttachmentUpdate(AttachmentBase):
-    pass
-
-
-class AttachmentOut(AttachmentBase):
+class AttachmentBase(BaseModel):
     id: int
+    user_id: UUID | None
+    message_id: int | None
+    file_type: FileTypeEnum | None
+    created_at: datetime | None
 
-    class Config:
-        orm_mode = True
+
+@strawberry.experimental.pydantic.type(model=AttachmentBase, all_fields=True)
+class Attachment:
+    pass

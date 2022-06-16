@@ -1,10 +1,10 @@
 from .base import CRUDBase
-from models import Attachment
-from schemas import AttachmentCreate, AttachmentUpdate
+from models import Attachment as AttachmentModel
+from schemas.attachment import Attachment as AttachmentSchema
 
 
-class CRUDAttachment(CRUDBase[Attachment, AttachmentCreate, AttachmentUpdate]):
+class CRUDAttachment(CRUDBase[AttachmentModel, AttachmentSchema]):
     pass
 
 
-attachment = CRUDAttachment(Attachment)
+attachment = CRUDAttachment(AttachmentModel)

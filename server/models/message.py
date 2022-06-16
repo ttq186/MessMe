@@ -17,3 +17,4 @@ class Message(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User", back_populates="messages")
+    attachments = relationship("Attachment", back_populates="message", lazy="selectin")
