@@ -1,9 +1,8 @@
 import strawberry
 from strawberry.types import Info
 
-from schemas import Message
-
 import crud
+from schemas import Message
 
 
 async def get_messages(info: Info):

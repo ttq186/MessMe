@@ -14,8 +14,8 @@ class LoginSuccess:
 
 
 async def resolver_login(info: Info, email: str, password: str) -> User:
-    session = info.context["session"]
-    user = await crud.user.get_by_email(session, email=email)
+    db_session = info.context["db_session"]
+    user = await crud.user.get_by_email(db_session, email=email)
     if user is None:
         raise Exception("Invalid email or password. Try again!")
     if not security.verify_password(password, user.password):

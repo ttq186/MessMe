@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from api.app import graphql_app
+from api.graphql_app import graphql_app
 
 
 app = FastAPI(title="MessMe", version="1.0.0", root_path="")

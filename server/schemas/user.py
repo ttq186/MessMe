@@ -1,4 +1,3 @@
-from uuid import UUID
 from typing import List
 from datetime import date, datetime
 
@@ -11,7 +10,7 @@ from .conversation import Conversation
 
 
 class UserBase(BaseModel):
-    id: UUID | None
+    id: str | None
     username: str | None
     email: str | None
     cover_img_url: str | None
@@ -24,33 +23,24 @@ class UserBase(BaseModel):
 
 
 class UserCreateBase(UserBase):
-    id: UUID | None
+    id: str | None
     email: str
     password: str
-
-    class Config:
-        fields = {
-            "is_admin": "ignore",
-            "created_at": "ignore",
-        }
 
 
 class UserUpdateBase(UserBase):
     password: str | None
-
-    class Config:
-        fields = {
-            "id": "ignore",
-            "email": "ignore",
-            "is_admin": "ignore",
-            "created_at": "ignore",
-        }
 
 
 class UserOutBase(UserBase):
     conversations: List[Conversation] | None
     messages: List[Message] | None
     attachments: List[Attachment] | None
+
+
+@strawberry.type
+class UserDeleteSuccess:
+    message: str
 
 
 @strawberry.experimental.pydantic.type(model=UserBase, all_fields=True)

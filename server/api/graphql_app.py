@@ -2,13 +2,14 @@ import strawberry
 from strawberry.fastapi import GraphQLRouter
 from strawberry.tools import merge_types
 from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import deps
+from api import deps
 from .graphql import UserQuery, UserMutation, MessageQuery, AuthMutation
 
 
-async def get_context(session=Depends(deps.get_session)):
-    return {"session": session}
+async def get_context(db_session: AsyncSession = Depends(deps.get_db_session)):
+    return {"db_session": db_session}
 
 
 Query = merge_types("Query", (UserQuery, MessageQuery))
