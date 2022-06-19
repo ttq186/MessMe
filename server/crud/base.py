@@ -43,7 +43,9 @@ class CRUDBase(Generic[ModelType, SchemaType]):
         pass
 
     async def create(self, session: AsyncSession, obj_in: SchemaType) -> ModelType:
-        obj_in_data = jsonable_encoder(obj_in)
+        obj_in_data = obj_in.to_pydantic().dict(
+            exclude_unset=True, exclude={"user_id", "is_admin"}
+        )
         db_obj = self._model(**obj_in_data)
         session.add(db_obj)
         await session.commit()
@@ -56,11 +58,14 @@ class CRUDBase(Generic[ModelType, SchemaType]):
         db_obj: ModelType,
         obj_in: SchemaType | Dict[str, Any],
     ) -> ModelType:
+        print(type)
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
-            update_data = obj_in.dict(exclude_unset=True, exclude={"id"})
+            update_data = obj_in.to_pydantic().dict(
+                exclude_unset=True, exclude={"id", "email", "user_id", "is_admin"}
+            )
         for field in obj_data:
             if update_data.get(field):
                 setattr(db_obj, field, update_data[field])

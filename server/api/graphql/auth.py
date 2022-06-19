@@ -2,6 +2,7 @@ import strawberry
 from strawberry.types import Info
 
 import crud
+import exceptions
 from core import security
 from schemas import User
 from core.config import settings
@@ -17,9 +18,9 @@ async def resolver_login(info: Info, email: str, password: str) -> User:
     db_session = info.context["db_session"]
     user = await crud.user.get_by_email(db_session, email=email)
     if user is None:
-        raise Exception("Invalid email or password. Try again!")
+        raise exceptions.InvalidCredentials()
     if not security.verify_password(password, user.password):
-        raise Exception("Invalid email or password. Try again!")
+        raise exceptions.InvalidCredentials()
 
     access_token = security.create_access_token({"user_id": user.id})
     response = info.context["response"]

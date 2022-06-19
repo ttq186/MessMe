@@ -6,7 +6,7 @@ from schemas import Message
 
 
 async def get_messages(info: Info):
-    messages = await crud.message.get_multi(info.context["session"])
+    messages = await crud.message.get_multi(info.context["db_session"])
     return messages
 
 

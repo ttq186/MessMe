@@ -2,11 +2,12 @@ import strawberry
 from strawberry.types import Info
 
 import crud
+import exceptions
 import utils
 import models
 from api import deps
 from core import security
-from schemas import User, UserCreate, UserUpdate, UserOut, UserDeleteSuccess
+from schemas import UserCreate, UserUpdate, UserOut, UserDeleteSuccess
 
 
 async def resolver_get_users(info: Info) -> list[UserOut]:
@@ -16,56 +17,55 @@ async def resolver_get_users(info: Info) -> list[UserOut]:
 
 async def resolver_get_user(info: Info, id: str) -> UserOut | None:
     current_user: models.User = info.context.get("current_user")
-    print(current_user.id != id)
 
     if current_user.id != id and (not current_user.is_admin):
-        raise Exception("You don't have this privilege")
+        raise exceptions.NotAuthorized()
     user = await crud.user.get(session=info.context["db_session"], id=id)
     if user is None:
-        raise Exception(f"User with id {id} does not exist!")
+        raise exceptions.ResourceNotFound(resource_type="User", id=id)
     return UserOut.from_pydantic(user)
 
 
 async def resolver_create_user(info: Info, user_in: UserCreate) -> UserOut:
-    print(user_in)
     db_session = info.context["db_session"]
     user = await crud.user.get_by_email(db_session, email=user_in.email)
     if user is not None:
-        raise Exception("Email already exists!")
+        raise exceptions.EmailAlreadyExists()
 
     user_id = utils.generate_uuid()
     while await crud.user.get(db_session, user_id) is not None:
         user_id = utils.generate_uuid()
     user_in.id = user_id
-    user_in.password = security.get_password_hashed(user_in.password)
-    print(user_in)
-    user = await crud.user.create(db_session, bj_in=user_in)
+    user_in.password = security.get_hashed_password(user_in.password)
+    user = await crud.user.create(db_session, obj_in=user_in)
     return UserOut.from_pydantic(user)
 
 
-async def resolver_update_user(info: Info, user_in: UserUpdate) -> User:
-    current_user = await deps.get_current_user(info)
+async def resolver_update_user(info: Info, user_in: UserUpdate) -> UserOut:
+    current_user = info.context.get("current_user")
 
     if current_user.id != user_in.id and (not current_user.is_admin):
-        raise Exception("You don't have this privilege")
+        raise exceptions.NotAuthorized()
 
-    db_session = info.context["session"]
+    db_session = info.context["db_session"]
     user = await crud.user.get(db_session, id=user_in.id)
     if user is None:
-        raise Exception(f"User with id {user_in.id} does not exist!")
-    user = await crud.user.update(db_session, b_obj=user, obj_in=user_in)
-    return user
+        raise exceptions.ResourceNotFound(resource_type="User", id=user_in.id)
+    if user_in.password is not None:
+        user_in.password = security.get_hashed_password(user_in.password)
+    user = await crud.user.update(db_session, db_obj=user, obj_in=user_in)
+    return UserOut.from_pydantic(user)
 
 
 async def resolver_delete_user(info: Info, id: str) -> UserDeleteSuccess:
     current_user = await deps.get_current_user(info)
 
-    db_session = info.context["session"]
+    db_session = info.context["db_session"]
     if current_user.id != id and (not current_user.is_admin):
-        raise Exception("You don't have this privilege")
+        raise exceptions.NotAuthorized()
     user = await crud.user.get(db_session, id=id)
     if user is None:
-        raise Exception(f"User with id {id} does not exist!")
+        raise exceptions.ResourceNotFound(resource_type="User", id=id)
     await crud.user.delete(db_session, id=id)
     return UserDeleteSuccess(message="Deleted Successfully!")
 
