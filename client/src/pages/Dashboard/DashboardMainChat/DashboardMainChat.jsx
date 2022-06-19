@@ -3,7 +3,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import 'emoji-mart/css/emoji-mart.css';
 import data from 'emoji-mart/data/facebook.json';
-import { NimblePicker, Emoji } from 'emoji-mart';
+import { NimblePicker } from 'emoji-mart';
 
 import {
   AvatarIcon,

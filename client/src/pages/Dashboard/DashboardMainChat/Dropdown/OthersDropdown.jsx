@@ -15,7 +15,11 @@ export const OthersDropdown = ({ triggerButton }) => {
         </Menu.Item>
         <Menu.Item>
           <button className='font-semibold group flex w-full items-center rounded px-3 py-2 text-sm hover:bg-slate-500'>
-            <img src={MutedIcon} alt='Muted' className='w-4 h-4 mr-3' />
+            {1 === 2 ? (
+              <img src={UnmuteIcon} alt='Muted' className='w-4 h-4 mr-3' />
+            ) : (
+              <img src={MutedIcon} alt='Muted' className='w-4 h-4 mr-3' />
+            )}
             Muted
           </button>
         </Menu.Item>
