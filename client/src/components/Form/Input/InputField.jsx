@@ -1,4 +1,16 @@
-export const InputField = ({ label, icon, placeholder }) => {
+export const InputField = ({
+  icon,
+  label,
+  placeholder,
+  validationRules,
+  register,
+  error,
+  type = 'text',
+}) => {
+  const labelSplit = label.split(' ');
+  const inputRegisterName =
+    labelSplit[0].toLowerCase() + labelSplit.slice(1).join('');
+
   return (
     <div className='mb-4'>
       <label
@@ -12,13 +24,19 @@ export const InputField = ({ label, icon, placeholder }) => {
           <img src={icon} alt={label} className='w-6 md:w-7' />
         </span>
         <input
-          type='text'
+          type={type}
           id={label}
           placeholder={placeholder}
           className='w-full p-2 md:p-2.5 px-2 md:px-4 bg-gray-600 rounded-r font-medium text-sm
           md:text-[15px] focus:outline-none'
+          {...register(inputRegisterName, validationRules)}
         />
       </div>
+      {error && (
+        <span className='text-red-500 text-sm font-semibold opacity-80'>
+          {error.message}
+        </span>
+      )}
     </div>
   );
 };

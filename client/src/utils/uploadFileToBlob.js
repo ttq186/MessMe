@@ -20,6 +20,7 @@ const createBlobInContainer = async (containerClient, file) => {
 };
 
 export const uploadFileToBlob = async (file) => {
+  console.log(file)
   if (!file) return [];
   const blobService = new BlobServiceClient(
     `https://${storageAccountName}.blob.core.windows.net/?${sasToken}`

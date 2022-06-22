@@ -1,8 +1,21 @@
+import { useForm, FormProvider } from 'react-hook-form';
+
 import { CoffeeCupIcon } from 'assets/icons';
 import { PasswordInput, ConfirmPasswordInput } from 'components/Form';
 import { MainLayout } from 'components/Layout';
 
 export const ResetPassword = () => {
+  const formMethods = useForm();
+  const {
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = formMethods;
+
+  const handleFormSubmit = () => {
+    const { password, confirmPassword } = getValues();
+  };
+
   return (
     <MainLayout>
       <h4 className='text-2xl mb-2'>Reset Password</h4>
@@ -10,17 +23,23 @@ export const ResetPassword = () => {
         Reset your MessMe password
       </p>
 
-      <form className='bg-gray-800 font-bold w-[88%] p-6 md:p-8 pb-4 md:pb-7 rounded-md mt-5 text-gray-400'>
-        <PasswordInput
-          label='New Password'
-          placeholder='Enter your new password'
-        />
-        <ConfirmPasswordInput />
+      <FormProvider {...formMethods}>
+        <form
+          className='bg-gray-800 font-bold w-[88%] p-6 md:p-8 pb-4 md:pb-7 rounded-md mt-5 text-gray-400'
+          onSubmit={handleSubmit(handleFormSubmit)}
+        >
+          <PasswordInput
+            label='New Password'
+            placeholder='Enter your new password'
+            error={errors.password}
+          />
+          <ConfirmPasswordInput error={errors.confirmPassword} />
 
-        <button className='bg-blue-400 w-full p-2 rounded mt-7 text-sm md:text-base text-slate-50 font-bold hover:bg-blue-500 hover:text-gray-50'>
-          Confirm
-        </button>
-      </form>
+          <button className='bg-blue-400 w-full p-2 rounded mt-3 text-sm md:text-base text-slate-50 font-bold hover:bg-blue-500 hover:text-gray-50'>
+            Confirm
+          </button>
+        </form>
+      </FormProvider>
       <div className='flex items-center text-sm md:text-base text-slate-400 pt-10 pb-2'>
         <p>
           &copy; 2022 <b>MessMe</b>. Made with

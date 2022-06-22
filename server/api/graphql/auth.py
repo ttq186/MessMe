@@ -18,9 +18,9 @@ async def resolver_login(info: Info, email: str, password: str) -> User:
     db_session = info.context["db_session"]
     user = await crud.user.get_by_email(db_session, email=email)
     if user is None:
-        raise exceptions.InvalidCredentials()
+        raise exceptions.InvalidLoginCredentials()
     if not security.verify_password(password, user.password):
-        raise exceptions.InvalidCredentials()
+        raise exceptions.InvalidLoginCredentials()
 
     access_token = security.create_access_token({"user_id": user.id})
     response = info.context["response"]
