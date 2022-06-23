@@ -1,8 +1,10 @@
 import { useForm, FormProvider } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 import { CoffeeCupIcon } from 'assets/icons';
 import { PasswordInput, ConfirmPasswordInput } from 'components/Form';
 import { MainLayout } from 'components/Layout';
+import { TransitionSlide } from 'components/Transition/TransitionSlide';
 
 export const ResetPassword = () => {
   const formMethods = useForm();
@@ -23,23 +25,34 @@ export const ResetPassword = () => {
         Reset your MessMe password
       </p>
 
-      <FormProvider {...formMethods}>
-        <form
-          className='bg-gray-800 font-bold w-[88%] p-6 md:p-8 pb-4 md:pb-7 rounded-md mt-5 text-gray-400'
-          onSubmit={handleSubmit(handleFormSubmit)}
-        >
-          <PasswordInput
-            label='New Password'
-            placeholder='Enter your new password'
-            error={errors.password}
-          />
-          <ConfirmPasswordInput error={errors.confirmPassword} />
+      <TransitionSlide>
+        <FormProvider {...formMethods}>
+          <form
+            className='bg-gray-800 font-bold p-6 md:p-8 pb-4 md:pb-7 rounded-md mt-5 text-gray-400'
+            onSubmit={handleSubmit(handleFormSubmit)}
+          >
+            <PasswordInput
+              label='New Password'
+              placeholder='Enter your new password'
+              error={errors.password}
+            />
+            <ConfirmPasswordInput error={errors.confirmPassword} />
 
-          <button className='bg-blue-400 w-full p-2 rounded mt-3 text-sm md:text-base text-slate-50 font-bold hover:bg-blue-500 hover:text-gray-50'>
-            Confirm
-          </button>
-        </form>
-      </FormProvider>
+            <button className='bg-blue-400 w-full p-2 rounded mt-3 text-sm md:text-base text-slate-50 font-bold hover:bg-blue-500 hover:text-gray-50'>
+              Confirm
+            </button>
+
+            <div className='flex justify-between mt-5 text-sm md:text-base'>
+              <Link to='/sign-in' className='cursor-pointer'>
+                Sign In
+              </Link>
+              <Link to='/sign-up' className='cursor-pointer'>
+                Sign Up
+              </Link>
+            </div>
+          </form>
+        </FormProvider>
+      </TransitionSlide>
       <div className='flex items-center text-sm md:text-base text-slate-400 pt-10 pb-2'>
         <p>
           &copy; 2022 <b>MessMe</b>. Made with

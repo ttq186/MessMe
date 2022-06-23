@@ -33,7 +33,7 @@ export const InputField = ({
         />
       </div>
       {error && (
-        <span className='text-red-500 text-sm font-semibold opacity-80'>
+        <span className='text-red-500 text-sm font-semibold opacity-90'>
           {error.message}
         </span>
       )}

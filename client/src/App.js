@@ -7,16 +7,17 @@ import {
   ResetPassword,
   SignIn,
   SignUp,
+  Home,
 } from 'pages';
 
 export const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<SignIn />} />
+        <Route path='/' element={<Home />} />
         <Route path='dashboard' element={<Dashboard />} />
-        <Route path='signin' element={<SignIn />} />
-        <Route path='signup' element={<SignUp />} />
+        <Route path='sign-in' element={<SignIn />} />
+        <Route path='sign-up' element={<SignUp />} />
         <Route path='forgot-password' element={<ForgotPassword />} />
         <Route path='reset-password' element={<ResetPassword />} />
         <Route path='*' element={<NotFound />} />
