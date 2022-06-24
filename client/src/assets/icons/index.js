@@ -24,6 +24,7 @@ import OptionIcon from 'assets/icons/jsx/OptionIcon';
 import PencilIcon from 'assets/icons/svg/pencil.svg';
 import LogoutIcon from 'assets/icons/svg/logout.svg';
 import CancelIcon from 'assets/icons/jsx/CancelIcon';
+import SuccessIcon from 'assets/icons/svg/success.svg';
 import PrivacyIcon from 'assets/icons/jsx/PrivacyIcon';
 import ForwardIcon from 'assets/icons/svg/forward.svg';
 import ArchiveIcon from 'assets/icons/svg/archive.svg';
@@ -80,4 +81,5 @@ export {
   CancelIcon,
   ForwardIcon,
   AlertIcon,
+  SuccessIcon
 };

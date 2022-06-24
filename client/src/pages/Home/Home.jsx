@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
+import { useNavigate } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 
 import { WelcomeAnimation } from 'assets/animation';
