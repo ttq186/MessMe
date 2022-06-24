@@ -4,6 +4,7 @@ import SendIcon from 'assets/icons/svg/send.svg';
 import EditIcon from 'assets/icons/svg/edit.svg';
 import FileIcon from 'assets/icons/jsx/FileIcon';
 import HelpIcon from 'assets/icons/jsx/HelpIcon';
+import AlertIcon from 'assets/icons/svg/alert.svg';
 import MutedIcon from 'assets/icons/svg/muted.svg';
 import PhoneIcon from 'assets/icons/jsx/PhoneIcon';
 import GroupIcon from 'assets/icons/jsx/GroupIcon';
@@ -78,4 +79,5 @@ export {
   LogoutIcon,
   CancelIcon,
   ForwardIcon,
+  AlertIcon,
 };

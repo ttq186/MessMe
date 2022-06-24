@@ -20,7 +20,7 @@ export const SignUp = () => {
   } = formMethods;
 
   const handleFormSubmit = () => {
-    navigate('/signin');
+    navigate('/sign-in');
     const { email, password, confirmPassword } = getValues();
     signUp(email, password);
   };
