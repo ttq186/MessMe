@@ -1,11 +1,15 @@
 from typing import Any
 from datetime import datetime, timedelta
 
+from fastapi import Response
 from strawberry import BasePermission
 from strawberry.types import Info
 from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
+import exceptions
 from api import deps
 from models import User
 from core.config import settings
@@ -53,6 +57,27 @@ def decode_access_token(token: str, secret_key: str | None = None) -> dict:
         raise Exception("Token has expired!")
     except JWTError:
         raise Exception("Could not validate user credentials!")
+
+
+def decode_oauth2_token_id(token_id: str) -> dict:
+    try:
+        request = requests.Request()
+        token_data = id_token.verify_oauth2_token(
+            token_id, request, settings.GOOGLE_CLIENT_ID
+        )
+        print(token_data)
+        return token_data
+    except Exception:
+        raise exceptions.InvalidGoogleCredentials()
+
+
+def set_access_token_on_http_only_cookie(response: Response, access_token: str) -> None:
+    response.set_cookie(
+        key="Authorization",
+        value=access_token,
+        expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
+        httponly=True,
+    )
 
 
 class IsAuthenticatedUser(BasePermission):

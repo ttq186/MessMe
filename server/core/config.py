@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str
+    GOOGLE_CLIENT_ID: str
 
     class Config:
         env_file = ".env"

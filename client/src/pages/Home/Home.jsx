@@ -24,7 +24,7 @@ export const Home = () => {
   }, [hasLoadWelcomeAnimation]);
 
   return (
-    <div className='bg-slate-700'>
+    <div className='bg-gray-700'>
       <Lottie animationData={WelcomeAnimation} style={{ height: '100vh' }} />
     </div>
   );

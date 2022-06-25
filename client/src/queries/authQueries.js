@@ -17,3 +17,21 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const LOGIN_VIA_GOOGLE = gql`
+  mutation LoginViaGoogle($tokenId: String!) {
+    loginViaGoogle(tokenId: $tokenId) {
+      id
+      username
+      email
+      coverImgUrl
+      description
+      isFemale
+      dateOfBirth
+      createdAt
+      hasConfirmedEmail
+      isAdmin
+      loginType
+    }
+  }
+`;

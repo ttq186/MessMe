@@ -12,7 +12,7 @@ class User(Base):
     id = Column(String, primary_key=True, default=utils.generate_uuid())
     username = Column(String(length=20))
     email = Column(String, index=True, nullable=False, unique=True)
-    password = Column(String, nullable=False)
+    password = Column(String)
     cover_img_url = Column(String)
     description = Column(Text)
     is_female = Column(Boolean, default=False)

@@ -32,7 +32,7 @@ export const ForgotPassword = () => {
             className='bg-gray-800 font-bold p-6 md:p-8 pb-4 md:pb-7 rounded-md mt-5 text-gray-400'
             onSubmit={handleSubmit(handleFormSubmit)}
           >
-            <div className='bg-green-200 text-center text-zinc-700 rounded px-4 py-2 mb-4 text-[15px]'>
+            <div className='bg-green-200 font-semibold text-center text-zinc-700 rounded px-4 py-2 mb-4 text-[14px]'>
               Enter your email to receive your password reset instructions!
             </div>
             <EmailInput error={errors.email} />

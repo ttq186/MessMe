@@ -1,17 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
-import {
-  AlertIcon,
-  CoffeeCupIcon,
-  GoogleIcon,
-  SuccessIcon,
-} from 'assets/icons';
+import { AlertIcon, CoffeeCupIcon, SuccessIcon } from 'assets/icons';
 import { EmailInput, PasswordInput } from 'components/Form';
 import { MainLayout } from 'components/Layout';
-import { LOGIN } from 'queries/authQueries';
+import { LOGIN, LOGIN_VIA_GOOGLE } from 'queries/authQueries';
 import { TransitionSlide } from 'components/Transition/TransitionSlide';
 import { Spinner } from 'components/Spinner/Spinner';
 import { isSignUpSuccessVar } from 'cache';
@@ -19,16 +15,34 @@ import { isSignUpSuccessVar } from 'cache';
 export const SignIn = () => {
   const navigate = useNavigate();
   const formMethods = useForm();
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const [login, { loading: loginLoading, data: loginData }] = useMutation(
+    LOGIN,
+    {
+      onError: (error) => setErrorMessage(error.message),
+    }
+  );
+  const [
+    loginViaGoogle,
+    { loading: loginViaGoogleLoading, data: loginViaGoogleData },
+  ] = useMutation(LOGIN_VIA_GOOGLE, {
+    onError: (error) => setErrorMessage(error.message),
+  });
+
+  const onGoogleLoginSuccess = (res) => {
+    loginViaGoogle({
+      variables: {
+        tokenId: res.credential,
+      },
+    });
+  };
 
   const {
     handleSubmit,
     getValues,
     formState: { errors },
   } = formMethods;
-
-  const [login, { loading, error, data }] = useMutation(LOGIN, {
-    errorPolicy: 'all',
-  });
 
   const handleFormSubmit = () => {
     const { email, password } = getValues();
@@ -41,14 +55,15 @@ export const SignIn = () => {
     if (isSignUpSuccessVar()) {
       isSignUpSuccessVar(false);
     }
-    if (data) {
+    if (loginData || loginViaGoogleData) {
       navigate('/dashboard');
     }
-  }, [data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginData, loginViaGoogleData]);
 
   return (
     <>
-      {loading && <Spinner />}
+      {(loginLoading || loginViaGoogleLoading) && <Spinner />}
       <MainLayout>
         <h4 className='text-2xl mb-2'>Sign In</h4>
         <p className='font-normal text-gray-400 mb-5 text-sm md:text-base'>
@@ -61,10 +76,10 @@ export const SignIn = () => {
               className='bg-gray-800 font-bold p-6 md:p-8 pb-4 md:pb-6 rounded-md text-gray-400'
               onSubmit={handleSubmit(handleFormSubmit)}
             >
-              {error && (
+              {errorMessage && (
                 <div className='flex items-center bg-red-300 py-2.5 px-3 mb-3 font-semibold text-zinc-700 text-[13.8px] text-center rounded'>
                   <img src={AlertIcon} alt='Alert' className='w-7 h-7 mr-1' />
-                  <div>{error.message}</div>
+                  <div>{errorMessage}</div>
                 </div>
               )}
               {isSignUpSuccessVar() && (
@@ -85,14 +100,21 @@ export const SignIn = () => {
                 </span>
                 <div className='flex-grow border-t border-gray-400'></div>
               </div>
-              <button className='flex justify-center items-center bg-slate-100 w-full p-2 rounded text-sm md:text-base text-slate-800'>
-                <img
-                  src={GoogleIcon}
-                  alt='Google'
-                  className='w-4 md:w-5 mr-2'
-                />
-                <p className='font-bold'>Sign In with Google</p>
-              </button>
+
+              {!loginLoading && !loginViaGoogleLoading && (
+                <GoogleOAuthProvider
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                >
+                  <GoogleLogin
+                    onSuccess={onGoogleLoginSuccess}
+                    onError={(err) => console.log(err)}
+                    locale='EN'
+                    cancel_on_tap_outside={false}
+                    useOneTap
+                  />
+                </GoogleOAuthProvider>
+              )}
+
               <div className='flex justify-between mt-5 text-sm md:text-base'>
                 <Link to='/forgot-password' className='cursor-pointer'>
                   Forgot Password?

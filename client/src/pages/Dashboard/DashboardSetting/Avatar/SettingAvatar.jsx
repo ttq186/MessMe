@@ -3,15 +3,9 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { PencilIcon } from 'assets/icons';
-import { uploadFileToBlob } from 'utils/uploadFileToBlob';
 
 export const SettingAvatar = ({ username }) => {
   const [avatarUrl, setAvatarUrl] = useState('');
-  const handleUploadFile = async (file) => {
-    const fileUrl = await uploadFileToBlob(file);
-    console.log(fileUrl);
-    setAvatarUrl(fileUrl);
-  };
 
   return (
     <div className='p-6 pb-2 border-b-[1px] border-slate-600'>
@@ -32,7 +26,7 @@ export const SettingAvatar = ({ username }) => {
             accept='.gif .jpg .jpeg .png'
             id='update-avatar'
             className='hidden'
-            onChange={(e) => handleUploadFile(e.target.files[0])}
+            // onChange={(e) => handleUploadFile(e.target.files[0])}
           />
           <Tippy content='Update Avatar'>
             <label

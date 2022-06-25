@@ -45,7 +45,7 @@ class UserDeleteSuccess:
 
 @strawberry.experimental.pydantic.type(model=UserBase, all_fields=True)
 class User:
-    login_type: str | None
+    login_type: str | None = "Normal"
 
 
 @strawberry.experimental.pydantic.type(model=UserOutBase, all_fields=True)
