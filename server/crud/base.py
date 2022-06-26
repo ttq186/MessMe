@@ -58,7 +58,6 @@ class CRUDBase(Generic[ModelType, SchemaType]):
         db_obj: ModelType,
         obj_in: SchemaType | Dict[str, Any],
     ) -> ModelType:
-        print(type)
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
             update_data = obj_in

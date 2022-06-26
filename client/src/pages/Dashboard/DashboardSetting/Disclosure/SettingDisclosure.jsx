@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 
 import {
   ArrowDownIcon,
@@ -9,9 +10,17 @@ import {
 } from 'assets/icons';
 import { Disclosure } from 'components/Disclosure';
 import { SettingDropdown } from 'pages/Dashboard/DashboardSetting';
+import { GET_CURRENT_USER } from 'queries/userQueries';
+import { UPDATE_USER } from 'mutations/userMutations';
 
 export const SettingDisclosure = () => {
   const [isEditableInfo, setEditableInfo] = useState(false);
+  const {
+    data: { currentUser },
+  } = useQuery(GET_CURRENT_USER);
+  const [updateCurrentUser] = useMutation(UPDATE_USER);
+  const [name, setName] = useState(currentUser.username);
+  const [phoneNumber, setPhoneNumber] = useState(currentUser.phoneNumber);
 
   const handleEditClick = () => {
     setEditableInfo(true);
@@ -23,6 +32,15 @@ export const SettingDisclosure = () => {
 
   const handleSubmitClick = () => {
     setEditableInfo(false);
+    updateCurrentUser({
+      variables: {
+        input: {
+          id: currentUser.id,
+          username: name,
+          phoneNumber,
+        },
+      },
+    });
   };
 
   return (
@@ -44,33 +62,36 @@ export const SettingDisclosure = () => {
         <div className='mb-3 px-1'>
           <h2 className='text-gray-700 font-bold text-[15px]'>Name</h2>
           {!isEditableInfo ? (
-            <p className='ml-2'>Thanh Quang</p>
+            <p className='ml-2'>{name || 'N/A'}</p>
           ) : (
             <input
               className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none'
-              defaultValue='Thanh Quang'
+              defaultValue={name || ''}
+              onChange={(e) => setName(e.target.value)}
             />
           )}
         </div>
         <div className='mb-3 px-1'>
           <h2 className='text-gray-700 font-bold text-[15px]'>Email</h2>
           {!isEditableInfo ? (
-            <p className='ml-2'>tt.quang.186@gmail.com</p>
+            <p className='ml-2'>{currentUser.email}</p>
           ) : (
             <input
-              className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none'
+              className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none opacity-60 cursor-auto'
               defaultValue='tt.quang.186@gmail.com'
+              readOnly
             />
           )}
         </div>
         <div className='mb-3 px-1'>
           <h2 className='text-gray-700 font-bold text-[15px]'>Phone Number</h2>
           {!isEditableInfo ? (
-            <p className='ml-2'>082-253-7505</p>
+            <p className='ml-2'>{phoneNumber || 'N/A'}</p>
           ) : (
             <input
               className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none'
-              defaultValue='082-253-7505'
+              defaultValue={phoneNumber || ''}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
           )}
         </div>

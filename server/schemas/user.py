@@ -2,7 +2,7 @@ from typing import List
 from datetime import date, datetime
 
 import strawberry
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .message import Message
 from .attachment import Attachment
@@ -13,9 +13,10 @@ class UserBase(BaseModel):
     id: str | None
     username: str | None
     email: str | None
-    cover_img_url: str | None
+    avatar_url: str | None
     description: str | None
     is_female: bool | None
+    phone_number: str | None = Field(max_length=15)
     date_of_birth: date | None
     created_at: datetime | None
     has_confirmed_email: bool | None
@@ -29,6 +30,7 @@ class UserCreateBase(UserBase):
 
 
 class UserUpdateBase(UserBase):
+    id: str
     password: str | None
 
 
@@ -36,6 +38,11 @@ class UserOutBase(UserBase):
     conversations: List[Conversation] | None
     messages: List[Message] | None
     attachments: List[Attachment] | None
+
+
+@strawberry.type
+class SignedUrl:
+    url: str
 
 
 @strawberry.type

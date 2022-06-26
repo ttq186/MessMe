@@ -4,15 +4,15 @@ export const CREATE_USER = gql`
   mutation CreateUser($input: UserCreate!) {
     createUser(userIn: $input) {
       id
-      hasConfirmedEmail
+      username
       email
       description
       dateOfBirth
       createdAt
-      coverImgUrl
-      isAdmin
+      avatarUrl
+      hasConfirmedEmail
+      phoneNumber
       isFemale
-      username
     }
   }
 `;
@@ -21,15 +21,15 @@ export const UPDATE_USER = gql`
   mutation UpdateUser($input: UserUpdate!) {
     updateUser(userIn: $input) {
       id
-      hasConfirmedEmail
       email
+      username
       description
       dateOfBirth
       createdAt
-      coverImgUrl
-      isAdmin
+      avatarUrl
+      hasConfirmedEmail
+      phoneNumber
       isFemale
-      username
     }
   }
 `;

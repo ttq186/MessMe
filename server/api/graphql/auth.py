@@ -45,10 +45,10 @@ async def resolver_login_via_google(info: Info, tokenId: str) -> User:
             user_id = utils.generate_uuid()
         user_in.id = user_id
         user = await crud.user.create(session, obj_in=user_in)
-        access_token = security.create_access_token({"user_id": user.id})
-        security.set_access_token_on_http_only_cookie(
-            info.context["response"], access_token
-        )
+    access_token = security.create_access_token({"user_id": user.id})
+    security.set_access_token_on_http_only_cookie(
+        info.context["response"], access_token
+    )
     return User.from_pydantic(user, extra={"login_type": "Google"})
 
 

@@ -6,7 +6,7 @@ export const LOGIN = gql`
       id
       username
       email
-      coverImgUrl
+      avatarUrl
       description
       isFemale
       dateOfBirth
@@ -24,7 +24,7 @@ export const LOGIN_VIA_GOOGLE = gql`
       id
       username
       email
-      coverImgUrl
+      avatarUrl
       description
       isFemale
       dateOfBirth

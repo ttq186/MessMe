@@ -1,8 +1,15 @@
+import { useQuery } from '@apollo/client';
+
 import { AttachIcon, ProfileIcon } from 'assets/icons';
 import { Disclosure } from 'components/Disclosure';
 import { ProfileAttachFile } from 'pages/Dashboard/DashboardProfile';
+import { GET_CURRENT_USER } from 'queries/userQueries';
 
 export const ProfileDisclosure = () => {
+  const {
+    data: { currentUser },
+  } = useQuery(GET_CURRENT_USER);
+
   return (
     <>
       <Disclosure
@@ -12,21 +19,21 @@ export const ProfileDisclosure = () => {
         <div className='px-1'>
           <div className='mb-3'>
             <h2 className='text-gray-700 font-bold text-[15px]'>Name</h2>
-            <p className='ml-2'>Thanh Quang</p>
+            <p className='ml-2'>{currentUser.username || 'N/A'}</p>
           </div>
           <div className='mb-3'>
             <h2 className='text-gray-700 font-bold text-[15px]'>Email</h2>
-            <p className='ml-2'>tt.quang.186@gmail.com</p>
+            <p className='ml-2'>{currentUser.email}</p>
           </div>
           <div className='mb-3'>
             <h2 className='text-gray-700 font-bold text-[15px]'>
               Phone Number
             </h2>
-            <p className='ml-2'>082-186-2002</p>
+            <p className='ml-2'>{currentUser.phoneNumber || 'N/A'}</p>
           </div>
           <div className='mb-1'>
             <h2 className='text-gray-700 font-bold text-[15px]'>Location</h2>
-            <p className='ml-2'>TP.Pleiku, VietNam</p>
+            <p className='ml-2'>{currentUser.location || 'N/A'}</p>
           </div>
         </div>
       </Disclosure>

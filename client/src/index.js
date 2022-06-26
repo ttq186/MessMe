@@ -8,6 +8,7 @@ import { App } from './App';
 const client = new ApolloClient({
   uri: 'http://localhost:8000/graphql',
   cache: new InMemoryCache(),
+  credentials: 'include'
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -4,13 +4,13 @@ import { useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
+import { isSignUpSuccessVar } from 'cache';
 import { AlertIcon, CoffeeCupIcon, SuccessIcon } from 'assets/icons';
 import { EmailInput, PasswordInput } from 'components/Form';
 import { MainLayout } from 'components/Layout';
 import { LOGIN, LOGIN_VIA_GOOGLE } from 'queries/authQueries';
 import { TransitionSlide } from 'components/Transition/TransitionSlide';
 import { Spinner } from 'components/Spinner/Spinner';
-import { isSignUpSuccessVar } from 'cache';
 
 export const SignIn = () => {
   const navigate = useNavigate();
@@ -21,6 +21,12 @@ export const SignIn = () => {
     LOGIN,
     {
       onError: (error) => setErrorMessage(error.message),
+      // update(cache, { data: { login } }) {
+      //   cache.writeQuery({
+      //     query: GET_CURRENT_USER,
+      //     data: { login },
+      //   });
+      // },
     }
   );
   const [

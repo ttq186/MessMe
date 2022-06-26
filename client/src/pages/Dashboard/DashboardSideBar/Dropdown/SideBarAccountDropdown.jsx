@@ -3,12 +3,15 @@ import { Menu } from '@headlessui/react';
 
 import { ProfileIcon, LogoutIcon } from 'assets/icons';
 import { Dropdown } from 'components/Dropdown';
+import { useApolloClient, useQuery } from '@apollo/client';
 
 export const SideBarAccountDropdown = ({ triggerButton, setTabMode }) => {
   const navigate = useNavigate();
+  const client = useApolloClient();
 
-  const handleLogoutClick = () => {
+  const handleLogout = () => {
     navigate('/');
+    client.resetStore();
   };
 
   return (
@@ -30,7 +33,7 @@ export const SideBarAccountDropdown = ({ triggerButton, setTabMode }) => {
       <Menu.Item>
         <button
           className='font-semibold group flex w-full items-center rounded px-2 py-2 text-slate-200 text-sm hover:bg-slate-500'
-          onClick={handleLogoutClick}
+          onClick={handleLogout}
         >
           <img src={LogoutIcon} alt='Logout' className='w-6 h-6 mr-1.5' />
           Logout

@@ -23,7 +23,7 @@ import { SideBarAccountDropdown } from './Dropdown/SideBarAccountDropdown';
 export const DashboardSideBar = ({ tabMode, setTabMode }) => {
   return (
     <div className='flex flex-col h-screen justify-between items-center w-[70px] pt-5 pb-2 bg-slate-600'>
-      <Link to='/'>
+      <Link to='/dashboard'>
         <MessMeIcon />
       </Link>
       <div className='mb-20'>

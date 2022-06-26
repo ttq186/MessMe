@@ -13,8 +13,9 @@ class User(Base):
     username = Column(String(length=20))
     email = Column(String, index=True, nullable=False, unique=True)
     password = Column(String)
-    cover_img_url = Column(String)
+    avatar_url = Column(String)
     description = Column(Text)
+    phone_number = Column(String(15))
     is_female = Column(Boolean, default=False)
     date_of_birth = Column(Date)
     created_at = Column(

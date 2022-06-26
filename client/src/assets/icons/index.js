@@ -81,5 +81,5 @@ export {
   CancelIcon,
   ForwardIcon,
   AlertIcon,
-  SuccessIcon
+  SuccessIcon,
 };

@@ -7,7 +7,7 @@ import utils
 import models
 from api import deps
 from core import security
-from schemas import UserCreate, UserUpdate, UserOut, UserDeleteSuccess
+from schemas import UserCreate, UserUpdate, UserOut, UserDeleteSuccess, SignedUrl
 
 
 async def resolver_get_users(info: Info) -> list[UserOut]:
@@ -24,6 +24,11 @@ async def resolver_get_user(info: Info, id: str) -> UserOut | None:
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=id)
     return UserOut.from_pydantic(user)
+
+
+async def resolver_get_current_user(info: Info) -> UserOut | None:
+    current_user: models.User = info.context.get("current_user")
+    return UserOut.from_pydantic(current_user)
 
 
 async def resolver_create_user(info: Info, user_in: UserCreate) -> UserOut:
@@ -70,6 +75,15 @@ async def resolver_delete_user(info: Info, id: str) -> UserDeleteSuccess:
     return UserDeleteSuccess(message="Deleted Successfully!")
 
 
+async def resolver_get_signed_url(
+    blob_type: str, blob_name: str, info: Info
+) -> SignedUrl:
+    signed_url = security.generate_signed_url(
+        bucket_name="messme", blob_type=blob_type, blob_name=blob_name
+    )
+    return SignedUrl(signed_url)
+
+
 @strawberry.type
 class UserQuery:
     users: list[UserOut] = strawberry.field(
@@ -77,6 +91,14 @@ class UserQuery:
     )
     user: UserOut = strawberry.field(
         resolver=resolver_get_user, permission_classes=[security.IsAuthenticatedUser]
+    )
+    current_user: UserOut = strawberry.field(
+        resolver=resolver_get_current_user,
+        permission_classes=[security.IsAuthenticatedUser],
+    )
+    signed_url: SignedUrl = strawberry.field(
+        resolver=resolver_get_signed_url,
+        permission_classes=[security.IsAuthenticatedUser],
     )
 
 

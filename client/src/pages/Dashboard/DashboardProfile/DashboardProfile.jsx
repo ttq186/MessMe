@@ -1,24 +1,41 @@
 import { useState } from 'react';
 import 'tippy.js/dist/tippy.css';
+import { useMutation, useQuery } from '@apollo/client';
 
-import { CancelIcon, OptionIcon } from 'assets/icons';
+import { CancelIcon, OptionIcon, AvatarIcon } from 'assets/icons';
 import {
   ProfileDropdown,
   ProfileDisclosure,
 } from 'pages/Dashboard/DashboardProfile';
+import { GET_CURRENT_USER } from 'queries/userQueries';
+import { UPDATE_USER } from 'mutations/userMutations';
 
 export const DashboardProfile = ({
   isOpenFriendProfile,
   setOpenFriendProfile,
 }) => {
   const [isEditableIntro, setEditableIntro] = useState(false);
+  const {
+    data: { currentUser },
+  } = useQuery(GET_CURRENT_USER);
+  const [updateCurrentUser] = useMutation(UPDATE_USER);
+  const [description, setDescription] = useState(currentUser.description);
 
   const handleCancelClick = () => {
     setEditableIntro(false);
+    setDescription(currentUser.description);
   };
 
   const handleSubmitClick = () => {
     setEditableIntro(false);
+    updateCurrentUser({
+      variables: {
+        input: {
+          id: currentUser.id,
+          description,
+        },
+      },
+    });
   };
 
   return (
@@ -41,12 +58,18 @@ export const DashboardProfile = ({
           </div>
         )}
         <div className='flex flex-col items-center mt-6 mb-3'>
-          <img
-            src='https://avatars.githubusercontent.com/u/73225256'
-            alt='Avatar'
-            className='w-28 h-28 rounded-full border-4 border-slate-600'
-          />
-          <p className='font-semibold mt-4'>Thanh Quang</p>
+          {!currentUser.avatarUrl ? (
+            <AvatarIcon width='130px' height='112px' />
+          ) : (
+            <img
+              src={currentUser.avatarUrl}
+              alt='Avatar'
+              className='w-28 h-28 rounded-full border-4 border-slate-600'
+            />
+          )}
+          <p className='font-semibold mt-4'>
+            {currentUser.username || currentUser.email.split('@')[0]}
+          </p>
         </div>
       </div>
 
@@ -55,8 +78,7 @@ export const DashboardProfile = ({
         {!isEditableIntro ? (
           <div className='ml-2 pl-3 border-l-4 border-slate-400'>
             <p className='text-slate-300 font-semibold text-sm'>
-              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-              quaerat sed optio hic aut odio animi nesciunt?"
+              {currentUser.description}
             </p>
           </div>
         ) : (
@@ -64,6 +86,10 @@ export const DashboardProfile = ({
             <textarea
               placeholder='Describe something about you'
               className='text-sm py-3 px-5 w-full font-semibold rounded bg-gray-600 text-slate-200 outline-none h-28'
+              defaultValue={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
             />
             <div className='text-[13px] mt-3'>
               <button
