@@ -33,16 +33,6 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
   };
   const handleChooseIcon = (e) => {
-    // inputRef.current.innerHTML += `<span dangerouslySetInnerHTML={
-    // __html: ${Emoji({
-    //   html: true,
-    //   set: 'facebook',
-    //   emoji: e.id,
-    //   size: 21,
-    // })}
-    // </span>`;
-
-    // temporary solution
     inputRef.current.innerText += e.native;
   };
 

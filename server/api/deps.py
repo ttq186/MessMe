@@ -6,12 +6,15 @@ import crud
 import exceptions
 from models import User
 from core import security
-from db.session import async_session
+from db.session import postgres_session
 
 
-async def get_db_session() -> AsyncGenerator:
-    async with async_session() as session:
+async def get_postgres_session() -> AsyncGenerator:
+    async with postgres_session() as session:
         yield session
+
+async def get_mongo_session() -> AsyncGenerator:
+    pass
 
 
 async def get_current_user(info: Info) -> User:

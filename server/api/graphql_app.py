@@ -8,8 +8,10 @@ from api import deps
 from .graphql import UserQuery, UserMutation, MessageQuery, AuthMutation
 
 
-async def get_context(db_session: AsyncSession = Depends(deps.get_db_session)):
-    return {"db_session": db_session}
+async def get_context(
+    postgres_session: AsyncSession = Depends(deps.get_postgres_session),
+):
+    return {"postgres_session": postgres_session}
 
 
 Query = merge_types("Query", (UserQuery, MessageQuery))

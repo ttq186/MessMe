@@ -13,7 +13,7 @@ export const SettingAvatar = () => {
     data: { currentUser },
   } = useQuery(GET_CURRENT_USER);
   const [avatarUrl, setAvatarUrl] = useState(currentUser.avatarUrl);
-  const [getSignedUrl, { error, data }] = useLazyQuery(GET_SIGNED_URL);
+  const [getSignedUrl] = useLazyQuery(GET_SIGNED_URL);
   const [updateCurrentUser] = useMutation(UPDATE_USER);
 
   const handleUploadFile = (file) => {
@@ -27,14 +27,15 @@ export const SettingAvatar = () => {
       onCompleted: async (data) => {
         const res = await uploadFileToGoogleStorage(file, data.signedUrl.url);
         if (res) {
-          setAvatarUrl(`https://storage.googleapis.com/messme/${fileName}`);
+          const newAvatarUrl = `https://storage.googleapis.com/messme/${fileName}`;
           updateCurrentUser({
             variables: {
               input: {
                 id: currentUser.id,
-                avatarUrl: `https://storage.googleapis.com/messme/${fileName}`,
+                avatarUrl: newAvatarUrl,
               },
             },
+            onCompleted: () => setAvatarUrl(newAvatarUrl),
           });
         }
       },

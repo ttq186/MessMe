@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { useQuery } from '@apollo/client';
 
 import {
   MessMeIcon,
@@ -19,10 +20,13 @@ import {
   SETTING_MODE,
 } from 'utils/contants/TabModeContants';
 import { SideBarAccountDropdown } from './Dropdown/SideBarAccountDropdown';
+import { GET_CURRENT_USER } from 'queries/userQueries';
 
 export const DashboardSideBar = ({ tabMode, setTabMode }) => {
+  const { data } = useQuery(GET_CURRENT_USER);
+
   return (
-    <div className='flex flex-col h-screen justify-between items-center w-[70px] pt-5 pb-2 bg-slate-600'>
+    <div className='flex flex-col h-screen justify-between items-center w-[70px] pt-5 pb-3 bg-slate-600'>
       <Link to='/dashboard'>
         <MessMeIcon />
       </Link>
@@ -84,11 +88,20 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
           </div>
         </Tippy>
       </div>
+
       <SideBarAccountDropdown
         setTabMode={setTabMode}
         triggerButton={
           <div className='cursor-pointer p-2 rounded hover:bg-slate-500'>
-            <AvatarIcon />
+            {!data ? (
+              <AvatarIcon width='40px' height='40px' />
+            ) : (
+              <img
+                src={data.currentUser.avatarUrl}
+                alt='Avatar'
+                className='w-10 h-10 rounded-full border-2 border-gray-600'
+              />
+            )}
           </div>
         }
       />
