@@ -19,11 +19,6 @@ class Attachment(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), index=True)
-    message_id = Column(
-        Integer,
-        ForeignKey("message.id", ondelete="CASCADE"),
-        index=True,
-    )
     file_type = Column(
         Enum(FileTypeEnum), nullable=False, default=FileTypeEnum.COMPRESS
     )
@@ -32,4 +27,3 @@ class Attachment(Base):
     )
 
     user = relationship("User", back_populates="attachments")
-    message = relationship("Message", back_populates="attachments")

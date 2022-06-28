@@ -5,13 +5,13 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api import deps
-from .graphql import UserQuery, UserMutation, MessageQuery, AuthMutation
+from .graphql import UserQuery, UserMutation, AuthMutation, MessageQuery
 
 
 async def get_context(
-    postgres_session: AsyncSession = Depends(deps.get_postgres_session),
+    pg_session: AsyncSession = Depends(deps.get_postgres_session),
 ):
-    return {"postgres_session": postgres_session}
+    return {"pg_session": pg_session, "mongo_db": deps.get_mongo_db()}
 
 
 Query = merge_types("Query", (UserQuery, MessageQuery))

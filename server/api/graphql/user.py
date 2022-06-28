@@ -11,7 +11,7 @@ from schemas import UserCreate, UserUpdate, UserOut, UserDeleteSuccess, SignedUr
 
 
 async def resolver_get_users(info: Info) -> list[UserOut]:
-    users = await crud.user.get_multi(session=info.context["db_session"])
+    users = await crud.user.get_multi(session=info.context["pg_session"])
     return [UserOut.from_pydantic(user) for user in users]
 
 
@@ -20,29 +20,31 @@ async def resolver_get_user(info: Info, id: str) -> UserOut | None:
 
     if current_user.id != id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
-    user = await crud.user.get(session=info.context["db_session"], id=id)
+    user = await crud.user.get(session=info.context["pg_session"], id=id)
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=id)
     return UserOut.from_pydantic(user)
 
 
 async def resolver_get_current_user(info: Info) -> UserOut | None:
+    print(info.context.get("mongo_session"))
+    print(info.context.get("pg_session"))
     current_user: models.User = info.context.get("current_user")
     return UserOut.from_pydantic(current_user)
 
 
 async def resolver_create_user(info: Info, user_in: UserCreate) -> UserOut:
-    db_session = info.context["db_session"]
-    user = await crud.user.get_by_email(db_session, email=user_in.email)
+    pg_session = info.context["pg_session"]
+    user = await crud.user.get_by_email(pg_session, email=user_in.email)
     if user is not None:
         raise exceptions.EmailAlreadyExists()
 
     user_id = utils.generate_uuid()
-    while await crud.user.get(db_session, user_id) is not None:
+    while await crud.user.get(pg_session, user_id) is not None:
         user_id = utils.generate_uuid()
     user_in.id = user_id
     user_in.password = security.get_hashed_password(user_in.password)
-    user = await crud.user.create(db_session, obj_in=user_in)
+    user = await crud.user.create(pg_session, obj_in=user_in)
     return UserOut.from_pydantic(user)
 
 
@@ -52,32 +54,30 @@ async def resolver_update_user(info: Info, user_in: UserUpdate) -> UserOut:
     if current_user.id != user_in.id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
 
-    db_session = info.context["db_session"]
-    user = await crud.user.get(db_session, id=user_in.id)
+    pg_session = info.context["pg_session"]
+    user = await crud.user.get(pg_session, id=user_in.id)
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=user_in.id)
     if user_in.password is not None:
         user_in.password = security.get_hashed_password(user_in.password)
-    user = await crud.user.update(db_session, db_obj=user, obj_in=user_in)
+    user = await crud.user.update(pg_session, db_obj=user, obj_in=user_in)
     return UserOut.from_pydantic(user)
 
 
 async def resolver_delete_user(info: Info, id: str) -> UserDeleteSuccess:
     current_user = await deps.get_current_user(info)
 
-    db_session = info.context["db_session"]
+    pg_session = info.context["pg_session"]
     if current_user.id != id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
-    user = await crud.user.get(db_session, id=id)
+    user = await crud.user.get(pg_session, id=id)
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=id)
-    await crud.user.delete(db_session, id=id)
+    await crud.user.delete(pg_session, id=id)
     return UserDeleteSuccess(message="Deleted Successfully!")
 
 
-async def resolver_get_signed_url(
-    blob_type: str, blob_name: str, info: Info
-) -> SignedUrl:
+async def resolver_get_signed_url(blob_type: str, blob_name: str) -> SignedUrl:
     signed_url = security.generate_signed_url(
         bucket_name="messme", blob_type=blob_type, blob_name=blob_name
     )

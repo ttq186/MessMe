@@ -2,9 +2,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.graphql_app import graphql_app
+from api import deps
 
 
 app = FastAPI(title="MessMe", version="1.0.0", root_path="")
+
+
+@app.on_event("startup")
+async def startup_event():
+    await deps.get_mongo_db().messages.find().to_list(None)
 
 
 allowed_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]

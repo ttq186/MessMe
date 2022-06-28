@@ -15,8 +15,8 @@ class LoginSuccess:
 
 
 async def resolver_login(info: Info, email: str, password: str) -> User:
-    db_session = info.context["db_session"]
-    user = await crud.user.get_by_email(db_session, email=email)
+    pg_session = info.context["pg_session"]
+    user = await crud.user.get_by_email(pg_session, email=email)
     if user is None:
         raise exceptions.InvalidLoginCredentials()
     if not security.verify_password(password, user.password):
@@ -33,7 +33,7 @@ async def resolver_login_via_google(info: Info, tokenId: str) -> User:
     token_data = security.decode_oauth2_token_id(tokenId)
     email = token_data.get("email")
 
-    session = info.context["db_session"]
+    session = info.context["pg_session"]
     user = await crud.user.get_by_email(session, email=email)
     if user is not None and user.password is not None:
         raise exceptions.AccountCreatedWithoutGoogle()

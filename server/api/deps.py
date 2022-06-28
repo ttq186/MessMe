@@ -6,15 +6,19 @@ import crud
 import exceptions
 from models import User
 from core import security
-from db.session import postgres_session
+from db.session import postgres_session, mongo_client
 
 
 async def get_postgres_session() -> AsyncGenerator:
     async with postgres_session() as session:
         yield session
 
-async def get_mongo_session() -> AsyncGenerator:
-    pass
+
+# async def get_mongo_db():
+#     # await init_beanie(database=mongo_client.messme, document_models=[MessageModel])
+#     return mongo_client.messme
+def get_mongo_db():
+    return mongo_client.messme
 
 
 async def get_current_user(info: Info) -> User:
@@ -24,8 +28,8 @@ async def get_current_user(info: Info) -> User:
         raise exceptions.NotAuthenticated()
 
     token_data = security.decode_access_token(access_token)
-    db_session = info.context["db_session"]
-    user = await crud.user.get(db_session, id=token_data["user_id"])
+    pg_session = info.context["pg_session"]
+    user = await crud.user.get(pg_session, id=token_data["user_id"])
     return user
 
 

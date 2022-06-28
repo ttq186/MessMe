@@ -33,15 +33,6 @@ class CRUDBase(Generic[ModelType, SchemaType]):
         result = await session.execute(stmt)
         return result.scalars().all()
 
-    async def get_multi_by_owner(
-        self,
-        session: AsyncSession,
-        owner_id: str,
-        skip: int = 0,
-        limit: str | None = None,
-    ) -> list[ModelType]:
-        pass
-
     async def create(self, session: AsyncSession, obj_in: SchemaType) -> ModelType:
         obj_in_data = obj_in.to_pydantic().dict(
             exclude_unset=True, exclude={"user_id", "is_admin"}

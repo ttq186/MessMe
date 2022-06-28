@@ -4,7 +4,6 @@ from datetime import date, datetime
 import strawberry
 from pydantic import BaseModel, Field
 
-from .message import Message
 from .attachment import Attachment
 from .conversation import Conversation
 
@@ -36,7 +35,6 @@ class UserUpdateBase(UserBase):
 
 class UserOutBase(UserBase):
     conversations: List[Conversation] | None
-    messages: List[Message] | None
     attachments: List[Attachment] | None
 
 

@@ -22,4 +22,3 @@ MONGO_URL = (
     f"@{settings.MONGODB_URL}/?retryWrites=true&w=majority"
 )
 mongo_client = AsyncIOMotorClient(MONGO_URL)
-mongo_session = mongo_client.college

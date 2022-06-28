@@ -17,7 +17,6 @@ class FileTypeEnum(Enum):
 class AttachmentBase(BaseModel):
     id: int
     user_id: UUID | None
-    message_id: int | None
     file_type: FileTypeEnum | None
     created_at: datetime | None
 
