@@ -2,66 +2,41 @@ from datetime import datetime
 from bson.objectid import ObjectId
 
 import strawberry
-from pydantic import BaseModel, Field
+from strawberry.schema_directive import Location
 
 
-class PyObjectId(ObjectId):
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validata
-
-    @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid ObjectId")
-        return ObjectId(v)
-
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type="string")
+ObjectIdType = strawberry.scalar(ObjectId, serialize=str)
 
 
-class MessageBase(BaseModel):
-    _id: PyObjectId = Field(default_factory=PyObjectId)
-    user_id: str | None
-    conversation_id: int | None
-    content: str | None
-    created_at: datetime | None
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
+@strawberry.schema_directive(locations=[Location.OBJECT])
+@strawberry.type
+class MessageBase:
+    _id: ObjectIdType = strawberry.field(name="_id")
+    user_id: str
+    conversation_id: int
+    content: str
+    created_at: datetime
 
 
-class MessageUpdateBase(MessageBase):
-    pass
-
-
-class MessageCreateBase(MessageBase):
-    pass
-
-
-class MessageOutBase(MessageBase):
-    class Config:
-        orm_mode = True
-
-
-@strawberry.experimental.pydantic.type(model=MessageBase, all_fields=True)
-class Message:
-    pass
-
-
-@strawberry.experimental.pydantic.type(model=MessageOutBase, all_fields=True)
-class MessageOut:
-    pass
-
-
-@strawberry.experimental.pydantic.input(model=MessageUpdateBase, all_fields=True)
-class MessageUpdate:
-    pass
-
-
-@strawberry.experimental.pydantic.input(model=MessageCreateBase, all_fields=True)
+@strawberry.input
 class MessageCreate:
+    user_id: str
+    conversation_id: int
+    content: str
+    created_at: datetime
+
+
+@strawberry.schema_directive(locations=[Location.OBJECT])
+@strawberry.input
+class MessageUpdate:
+    _id: ObjectIdType = strawberry.field(name="_id")
+    content: str
+
+
+class MessageOut(MessageBase):
     pass
+
+
+@strawberry.type
+class MessageDeleteSuccess:
+    message: str

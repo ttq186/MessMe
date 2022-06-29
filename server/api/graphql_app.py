@@ -5,7 +5,13 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api import deps
-from .graphql import UserQuery, UserMutation, AuthMutation, MessageQuery
+from .graphql import (
+    UserQuery,
+    UserMutation,
+    AuthMutation,
+    MessageQuery,
+    MessageMutation,
+)
 
 
 async def get_context(
@@ -15,7 +21,10 @@ async def get_context(
 
 
 Query = merge_types("Query", (UserQuery, MessageQuery))
-Mutation = merge_types("Mutation", (UserMutation, AuthMutation))
+Mutation = merge_types("Mutation", (UserMutation, AuthMutation, MessageMutation))
 
-schema = strawberry.Schema(query=Query, mutation=Mutation)
+schema = strawberry.Schema(
+    query=Query,
+    mutation=Mutation,
+)
 graphql_app = GraphQLRouter(schema, context_getter=get_context)

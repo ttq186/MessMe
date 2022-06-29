@@ -4,37 +4,50 @@ from strawberry.types import Info
 import crud
 import exceptions
 from core import security
-from schemas import MessageOut, MessageCreate, MessageUpdate
+from schemas import (
+    MessageOut,
+    MessageCreate,
+    MessageUpdate,
+    ObjectIdType,
+    MessageDeleteSuccess,
+)
 
 
 async def resolver_get_messages(info: Info) -> list[MessageOut]:
-    messsages = await crud.message.get_multi(info.context["mongo_db"])
-    return messsages
+    messages = await crud.message.get_multi(info.context["mongo_db"])
+    return [MessageOut(**message) for message in messages]
 
 
-async def resolver_get_message(info: Info, id: int) -> MessageOut:
+async def resolver_get_message(info: Info, id: ObjectIdType) -> MessageOut:
     message = await crud.message.get(info.context["mongo_db"], id=id)
     if message is None:
         raise exceptions.ResourceNotFound(resource_type="Message", id=id)
-    return message
+    return MessageOut(**message)
 
 
 async def resolver_create_message(info: Info, message_in: MessageCreate) -> MessageOut:
-    message = await crud.message.get(info.context["mongo_db"], id=id)
-    if message is None:
-        raise exceptions.ResourceNotFound(resource_type="Message", id=id)
+    message = await crud.message.create(info.context["mongo_db"], message_in)
+    return MessageOut(**message)
 
 
 async def resolver_update_message(info: Info, message_in: MessageUpdate) -> MessageOut:
-    message = await crud.message.get(info.context["mongo_db"], id=id)
+    mongo_db = info.context["mongo_db"]
+    message = await crud.message.get(mongo_db, id=message_in._id)
     if message is None:
-        raise exceptions.ResourceNotFound(resource_type="Message", id=id)
+        raise exceptions.ResourceNotFound(resource_type="Message", id=message_in._id)
+    message = await crud.message.update(mongo_db, message_in=message_in)
+    return MessageOut(**message)
 
 
-async def resolver_delete_message(info: Info, id: int) -> MessageOut:
-    message = await crud.message.get(info.context["mongo_db"], id=id)
+async def resolver_delete_message(info: Info, id: ObjectIdType) -> MessageDeleteSuccess:
+    mongo_db = info.context["mongo_db"]
+    message = await crud.message.get(mongo_db, id=id)
     if message is None:
         raise exceptions.ResourceNotFound(resource_type="Message", id=id)
+    message_delete_result = await crud.message.delete(mongo_db, id=id)
+    if message_delete_result:
+        return MessageDeleteSuccess(message="Deleted message successfully!")
+    raise exceptions.DeleteFailed(resource_type="Message", id=id)
 
 
 @strawberry.type
@@ -43,7 +56,7 @@ class MessageQuery:
         resolver=resolver_get_messages,
         permission_classes=[security.IsAuthenticatedUser],
     )
-    message = strawberry.field(
+    message: MessageOut = strawberry.field(
         resolver=resolver_get_message, permission_classes=[security.IsAuthenticatedUser]
     )
 
@@ -58,7 +71,7 @@ class MessageMutation:
         resolver=resolver_update_message,
         permission_classes=[security.IsAuthenticatedUser],
     )
-    delete_message: MessageOut = strawberry.field(
+    delete_message: MessageDeleteSuccess = strawberry.field(
         resolver=resolver_delete_message,
         permission_classes=[security.IsAuthenticatedUser],
     )

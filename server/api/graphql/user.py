@@ -27,8 +27,6 @@ async def resolver_get_user(info: Info, id: str) -> UserOut | None:
 
 
 async def resolver_get_current_user(info: Info) -> UserOut | None:
-    print(info.context.get("mongo_session"))
-    print(info.context.get("pg_session"))
     current_user: models.User = info.context.get("current_user")
     return UserOut.from_pydantic(current_user)
 

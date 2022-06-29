@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class NotAuthorized(Exception):
     def __init__(self) -> None:
         self.message = "You don't have this privilege!"
@@ -55,4 +58,10 @@ class EmailAlreadyExists(Exception):
 class EmailDoesNotExist(Exception):
     def __init__(self) -> None:
         self.message = "This email does not exists!"
+        super().__init__(self.message)
+
+
+class DeleteFailed(Exception):
+    def __init__(self, resource_type: str, id: Any) -> None:
+        self.message = f"Delete {resource_type} with id {id} failed!"
         super().__init__(self.message)

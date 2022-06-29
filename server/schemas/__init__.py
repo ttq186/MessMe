@@ -11,4 +11,11 @@ from .auth import Login, TokenOut, TokenOutBase
 from .contact import Contact
 from .attachment import Attachment
 from .conversation import Conversation
-from .message import Message, MessageBase, MessageOut, MessageCreate, MessageUpdate
+from .message import (
+    ObjectIdType,
+    MessageOut,
+    MessageBase,
+    MessageCreate,
+    MessageUpdate,
+    MessageDeleteSuccess,
+)
