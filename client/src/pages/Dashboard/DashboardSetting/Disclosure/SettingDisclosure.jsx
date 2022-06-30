@@ -8,6 +8,7 @@ import {
   ProfileIcon,
   EditIcon,
 } from 'assets/icons';
+import { Heading } from 'components/Heading/Heading';
 import { Disclosure } from 'components/Disclosure';
 import { SettingDropdown } from 'pages/Dashboard/DashboardSetting';
 import { GET_CURRENT_USER } from 'queries/userQueries';
@@ -21,6 +22,7 @@ export const SettingDisclosure = () => {
   const [updateCurrentUser] = useMutation(UPDATE_USER);
   const [name, setName] = useState(currentUser.username);
   const [phoneNumber, setPhoneNumber] = useState(currentUser.phoneNumber);
+  const [isFemale, setFemale] = useState(currentUser.isFemale);
 
   const handleEditClick = () => {
     setEditableInfo(true);
@@ -38,6 +40,7 @@ export const SettingDisclosure = () => {
           id: currentUser.id,
           username: name,
           phoneNumber,
+          isFemale,
         },
       },
     });
@@ -51,7 +54,7 @@ export const SettingDisclosure = () => {
       >
         {!isEditableInfo && (
           <div
-            className='inline-flex bg-slate-600 py-1.5 px-3 rounded float-right cursor-pointer hover:bg-slate-700'
+            className='inline-flex bg-slate-600 py-1.5 px-3 mt-1 rounded float-right cursor-pointer hover:bg-slate-700'
             onClick={handleEditClick}
           >
             <img src={EditIcon} alt='Edit' className='w-5 h-5 mr-1' />
@@ -59,8 +62,8 @@ export const SettingDisclosure = () => {
           </div>
         )}
 
-        <div className='mb-3 px-1'>
-          <h2 className='text-gray-700 font-bold text-[15px]'>Name</h2>
+        <div className='mb-3 px-1 pt-2'>
+          <Heading>Name</Heading>
           {!isEditableInfo ? (
             <p className='ml-2'>{name || 'N/A'}</p>
           ) : (
@@ -72,7 +75,7 @@ export const SettingDisclosure = () => {
           )}
         </div>
         <div className='mb-3 px-1'>
-          <h2 className='text-gray-700 font-bold text-[15px]'>Email</h2>
+          <Heading>Email</Heading>
           {!isEditableInfo ? (
             <p className='ml-2'>{currentUser.email}</p>
           ) : (
@@ -84,7 +87,9 @@ export const SettingDisclosure = () => {
           )}
         </div>
         <div className='mb-3 px-1'>
-          <h2 className='text-gray-700 font-bold text-[15px]'>Phone Number</h2>
+          <h2 className='text-gray-800 font-bold text-[15px] opacity-90'>
+            Phone Number
+          </h2>
           {!isEditableInfo ? (
             <p className='ml-2'>{phoneNumber || 'N/A'}</p>
           ) : (
@@ -95,19 +100,41 @@ export const SettingDisclosure = () => {
             />
           )}
         </div>
-        <div className='px-1 mb-1'>
-          <h2 className='text-gray-700 font-bold text-[15px]'>Location</h2>
+        <div className='px-1 mb-2'>
+          <Heading>Gender</Heading>
           {!isEditableInfo ? (
-            <p className='ml-2'>TP.Pleiku, VietNam</p>
+            <p className='ml-2'>
+              {isFemale == null ? 'N/A' : isFemale ? 'Female' : 'Male'}
+            </p>
           ) : (
-            <input
-              className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none'
-              defaultValue='TP.Pleiku, VietNam'
-            />
+            <div className='px-2 py-1'>
+              <label className='inline-flex items-center mr-3'>
+                <input
+                  type='radio'
+                  name='gender'
+                  value='male'
+                  defaultChecked={isFemale == false}
+                  onChange={(e) => setFemale(false)}
+                />
+                <span className='ml-2 text-slate-200 text-[13.5px]'>Male</span>
+              </label>
+              <label className='inline-flex items-center'>
+                <input
+                  type='radio'
+                  name='gender'
+                  value='female'
+                  defaultChecked={isFemale}
+                  onChange={(e) => setFemale(true)}
+                />
+                <span className='ml-2 text-slate-200 text-[13.5px]'>
+                  Female
+                </span>
+              </label>
+            </div>
           )}
         </div>
         {isEditableInfo && (
-          <div className='flex justify-end text-[13px] mt-3 mb-1'>
+          <div className='flex justify-end text-[13px] mb-2'>
             <button
               className='bg-slate-200 text-slate-700 font-semibold py-[5px] px-2.5 rounded-[3px] hover:opacity-90'
               onClick={handleCancelClick}

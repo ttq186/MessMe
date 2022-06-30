@@ -17,8 +17,5 @@ postgres_session = sessionmaker(
 )
 
 
-MONGO_URL = (
-    f"mongodb+srv://{settings.MONGODB_USERNAME}:{settings.MONGODB_PASSWORD}"
-    f"@{settings.MONGODB_URL}/?retryWrites=true&w=majority"
-)
+MONGO_URL = f"mongodb://{settings.MONGO_HOSTNAME}:{settings.MONGO_PORT}"
 mongo_client = AsyncIOMotorClient(MONGO_URL)

@@ -11,6 +11,12 @@ class CRUDMessage:
         messages = await mongo_db["messages"].find().to_list(None)
         return messages
 
+    async def get_multi_by_owner(
+        self, mongo_db: AsyncIOMotorDatabase, user_id: str
+    ) -> list[MessageBase]:
+        messages = await mongo_db["messages"].find({"user_id": user_id}).to_list(None)
+        return messages
+
     async def get(self, mongo_db: AsyncIOMotorDatabase, id: ObjectId) -> MessageBase:
         message = await mongo_db["messages"].find_one({"_id": id})
         return message

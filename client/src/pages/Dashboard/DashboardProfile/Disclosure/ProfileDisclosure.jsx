@@ -2,12 +2,15 @@ import { useQuery } from '@apollo/client';
 
 import { AttachIcon, ProfileIcon } from 'assets/icons';
 import { Disclosure } from 'components/Disclosure';
+import { Heading } from 'components/Heading/Heading';
 import { ProfileAttachFile } from 'pages/Dashboard/DashboardProfile';
 import { GET_CURRENT_USER } from 'queries/userQueries';
 
 export const ProfileDisclosure = () => {
   const {
-    data: { currentUser },
+    data: {
+      currentUser: { username, email, phoneNumber, isFemale },
+    },
   } = useQuery(GET_CURRENT_USER);
 
   return (
@@ -16,24 +19,24 @@ export const ProfileDisclosure = () => {
         icon={<ProfileIcon width='23px' height='23px' />}
         title='About'
       >
-        <div className='px-1'>
+        <div className='px-1 py-1.5'>
           <div className='mb-3'>
-            <h2 className='text-gray-700 font-bold text-[15px]'>Name</h2>
-            <p className='ml-2'>{currentUser.username || 'N/A'}</p>
+            <Heading>Name</Heading>
+            <p className='ml-2'>{username || 'N/A'}</p>
           </div>
           <div className='mb-3'>
-            <h2 className='text-gray-700 font-bold text-[15px]'>Email</h2>
-            <p className='ml-2'>{currentUser.email}</p>
+            <Heading>Email</Heading>
+            <p className='ml-2'>{email}</p>
           </div>
           <div className='mb-3'>
-            <h2 className='text-gray-700 font-bold text-[15px]'>
-              Phone Number
-            </h2>
-            <p className='ml-2'>{currentUser.phoneNumber || 'N/A'}</p>
+            <Heading>Phone Number</Heading>
+            <p className='ml-2'>{phoneNumber || 'N/A'}</p>
           </div>
           <div className='mb-1'>
-            <h2 className='text-gray-700 font-bold text-[15px]'>Location</h2>
-            <p className='ml-2'>{currentUser.location || 'N/A'}</p>
+            <Heading>Gender</Heading>
+            <p className='ml-2'>
+              {isFemale == null ? 'N/A' : isFemale ? 'Female' : 'Male'}
+            </p>
           </div>
         </div>
       </Disclosure>

@@ -6,7 +6,7 @@ import crud
 import exceptions
 from models import User
 from core import security
-from db.session import postgres_session, mongo_client
+from db.config import postgres_session, mongo_client
 
 
 async def get_postgres_session() -> AsyncGenerator:
@@ -14,9 +14,6 @@ async def get_postgres_session() -> AsyncGenerator:
         yield session
 
 
-# async def get_mongo_db():
-#     # await init_beanie(database=mongo_client.messme, document_models=[MessageModel])
-#     return mongo_client.messme
 def get_mongo_db():
     return mongo_client.messme
 

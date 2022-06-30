@@ -18,6 +18,13 @@ async def resolver_get_messages(info: Info) -> list[MessageOut]:
     return [MessageOut(**message) for message in messages]
 
 
+async def resolver_get_messages_by_owner(info: Info, user_id: str) -> list[MessageOut]:
+    messages = await crud.message.get_multi_by_owner(
+        info.context["mongo_db"], user_id=user_id
+    )
+    return [MessageOut(**message) for message in messages]
+
+
 async def resolver_get_message(info: Info, id: ObjectIdType) -> MessageOut:
     message = await crud.message.get(info.context["mongo_db"], id=id)
     if message is None:
@@ -54,6 +61,10 @@ async def resolver_delete_message(info: Info, id: ObjectIdType) -> MessageDelete
 class MessageQuery:
     messages: list[MessageOut] = strawberry.field(
         resolver=resolver_get_messages,
+        permission_classes=[security.IsAuthenticatedUser],
+    )
+    messages_by_owner: list[MessageOut] = strawberry.field(
+        resolver=resolver_get_messages_by_owner,
         permission_classes=[security.IsAuthenticatedUser],
     )
     message: MessageOut = strawberry.field(

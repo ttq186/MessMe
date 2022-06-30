@@ -6,6 +6,7 @@ export const GET_USERS = gql`
       id
       email
       username
+      isFemale
       createdAt
       description
       avatarUrl
@@ -19,6 +20,7 @@ export const GET_USER = gql`
       id
       email
       username
+      isFemale
       createdAt
       description
       avatarUrl
@@ -32,6 +34,7 @@ export const GET_CURRENT_USER = gql`
       id
       email
       username
+      isFemale
       createdAt
       description
       phoneNumber

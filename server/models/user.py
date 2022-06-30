@@ -17,7 +17,7 @@ class User(Base):
     avatar_url = Column(String)
     description = Column(Text)
     phone_number = Column(String(15))
-    is_female = Column(Boolean, default=False)
+    is_female = Column(Boolean)
     date_of_birth = Column(Date)
     created_at = Column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
