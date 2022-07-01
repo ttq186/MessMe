@@ -47,16 +47,24 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           </div>
         </div>
         <div className='flex justify-evenly w-80 items-center'>
-          <SearchDropdown>
-            <Tippy content='Search Message'>
-              <div className='cursor-pointer'>
-                <img src={SearchIcon} alt='Search' className='w-9 h-9' />
-              </div>
-            </Tippy>
-          </SearchDropdown>
+          <SearchDropdown
+            triggerButton={
+              <Tippy
+                content={<b style={{ color: '#cbd5e1' }}>Search Message</b>}
+                allowHTML={true}
+              >
+                <div className='cursor-pointer'>
+                  <img src={SearchIcon} alt='Search' className='w-9 h-9' />
+                </div>
+              </Tippy>
+            }
+          ></SearchDropdown>
           <MainChatAudioCallModal
             triggerButton={
-              <Tippy content='Call'>
+              <Tippy
+                content={<b style={{ color: '#cbd5e1' }}>Call</b>}
+                allowHTML={true}
+              >
                 <div className='cursor-pointer'>
                   <PhoneIcon />
                 </div>
@@ -65,14 +73,20 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           />
           <MainChatVideoCallModal
             triggerButton={
-              <Tippy content='Video Call'>
+              <Tippy
+                content={<b style={{ color: '#cbd5e1' }}>Video Call</b>}
+                allowHTML={true}
+              >
                 <div className='cursor-pointer'>
                   <VideoCallIcon />
                 </div>
               </Tippy>
             }
           />
-          <Tippy content="Friend's Profile">
+          <Tippy
+            content={<b style={{ color: '#cbd5e1' }}>Friend's Profile</b>}
+            allowHTML={true}
+          >
             <div
               className='cursor-pointer'
               onClick={() => setOpenFriendProfile(true)}
@@ -82,7 +96,10 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           </Tippy>
           <OthersDropdown
             triggerButton={
-              <Tippy content='Others'>
+              <Tippy
+                content={<b style={{ color: '#cbd5e1' }}>Others</b>}
+                allowHTML={true}
+              >
                 <div className='cursor-pointer -ml-1'>
                   <img src={OtherIcon} alt='Other' className='w-6 h-6' />
                 </div>
@@ -114,7 +131,10 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
 
       <div className='relative bottom-0 w-full flex justify-between items-center px-5 py-3.5 border-t-2 border-slate-500'>
         <div className='flex items-center'>
-          <Tippy content='Attach File'>
+          <Tippy
+            content={<b style={{ color: '#cbd5e1' }}>Attach File</b>}
+            allowHTML={true}
+          >
             <div className='mx-4 cursor-pointer'>
               <label htmlFor='file-input' className='cursor-pointer'>
                 <AttachIcon width='28px' height='28px' fill='#cbd5e1' />
@@ -122,7 +142,10 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
               <input id='file-input' type='file' className='hidden' />
             </div>
           </Tippy>
-          <Tippy content='Images'>
+          <Tippy
+            content={<b style={{ color: '#cbd5e1' }}>Images</b>}
+            allowHTML={true}
+          >
             <div className='mr-4 cursor-pointer'>
               <label htmlFor='image-input' className='cursor-pointer'>
                 <GalleryIcon fill='#cbd5e1' />
@@ -130,7 +153,10 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
               <input id='image-input' type='file' className='hidden' />
             </div>
           </Tippy>
-          <Tippy content='Emoji'>
+          <Tippy
+            content={<b style={{ color: '#cbd5e1' }}>Emoji</b>}
+            allowHTML={true}
+          >
             <div className='mr-4 cursor-pointer'>
               <img
                 src={EmojiIcon}
@@ -173,7 +199,10 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
             ref={inputRef}
           />
         </div>
-        <Tippy content='Send Message'>
+        <Tippy
+          content={<b style={{ color: '#cbd5e1' }}>Send Message</b>}
+          allowHTML={true}
+        >
           <div className='bg-blue-300 mx-5 px-3.5 py-2 rounded cursor-pointer'>
             <img src={SendIcon} alt='Send' className='w-5 h-5' />
           </div>

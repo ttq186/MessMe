@@ -6,13 +6,6 @@ export const CREATE_USER = gql`
       id
       username
       email
-      description
-      dateOfBirth
-      createdAt
-      avatarUrl
-      hasConfirmedEmail
-      phoneNumber
-      isFemale
     }
   }
 `;

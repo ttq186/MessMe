@@ -5,6 +5,7 @@ import { DashboardSetting } from './DashboardSetting/DashboardSetting';
 import { DashboardProfile } from './DashboardProfile/DashboardProfile';
 import { DashboardMainChat } from './DashboardMainChat/DashboardMainChat';
 import { DashboardUsersChat } from './DashboardUsersChat/DashboardUsersChat';
+import { DashboardNotification } from './DashboardNotification/DashboardNotification';
 
 export {
   DashboardGroup,
@@ -14,4 +15,5 @@ export {
   DashboardProfile,
   DashboardMainChat,
   DashboardUsersChat,
+  DashboardNotification,
 };

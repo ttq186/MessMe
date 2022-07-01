@@ -1,3 +1,4 @@
+from typing import AsyncGenerator
 import strawberry
 from strawberry.types import Info
 
@@ -57,6 +58,12 @@ async def resolver_delete_message(info: Info, id: ObjectIdType) -> MessageDelete
     raise exceptions.DeleteFailed(resource_type="Message", id=id)
 
 
+async def resolver_messages_subscription(
+    info: Info, user_id: str
+) -> AsyncGenerator[MessageOut, None]:
+    pass
+
+
 @strawberry.type
 class MessageQuery:
     messages: list[MessageOut] = strawberry.field(
@@ -86,3 +93,8 @@ class MessageMutation:
         resolver=resolver_delete_message,
         permission_classes=[security.IsAuthenticatedUser],
     )
+
+
+@strawberry.type
+class MessageSubscription:
+    messages: AsyncGenerator[MessageOut, None] = strawberry.subscription()

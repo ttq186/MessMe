@@ -8,6 +8,8 @@ const Dropdown = ({
   top = 'top-8',
   left,
   bottom,
+  menuPadding = 'p-3',
+  width = 'w-36',
 }) => {
   return (
     <div>
@@ -23,7 +25,7 @@ const Dropdown = ({
           leaveTo='transform opacity-0 scale-95'
         >
           <Menu.Items
-            className={`${top} ${right} ${left} ${bottom} absolute p-3 w-36 z-10 rounded bg-slate-600 shadow-lg border-2 border-slate-500`}
+            className={`${top} ${right} ${left} ${bottom} absolute ${menuPadding} ${width} z-10 rounded bg-slate-600 shadow-lg border-2 border-slate-400`}
           >
             {children}
           </Menu.Items>

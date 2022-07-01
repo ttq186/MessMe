@@ -1,3 +1,5 @@
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import { useQuery } from '@apollo/client';
 import { FriendProfileIcon, OptionIcon } from 'assets/icons';
 import { MessageDropdown } from 'pages/Dashboard/DashboardMainChat';
@@ -16,17 +18,23 @@ export const MainChatMessage = ({ isSender = true }) => {
         />
       </div>
       <div className={`flex ${isSender && 'flex-row-reverse'}`}>
-        <div
-          className={`${
-            isSender
-              ? 'bg-slate-500 text-slate-200'
-              : 'bg-slate-700 text-slate-400'
-          } w-[400px] text-[15px] font-medium p-3 mb-4 rounded-md`}
+        <Tippy
+          content={<b style={{ color: '#cbd5e1' }}>17:24</b>}
+          placement='right-start'
+          allowHTML={true}
         >
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse aliquam
-          tempore similique vero totam neque ullam ducimus cumque voluptatem
-          rerum!
-        </div>
+          <div
+            className={`${
+              isSender
+                ? 'bg-slate-500 text-slate-200'
+                : 'bg-slate-700 text-slate-400'
+            } w-[400px] text-[15px] font-medium p-3 mb-4 rounded-md`}
+          >
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse
+            aliquam tempore similique vero totam neque ullam ducimus cumque
+            voluptatem rerum!
+          </div>
+        </Tippy>
         <MessageDropdown
           triggerButton={
             <OptionIcon fill={`${isSender ? '#94a3b8' : '#1f2937'}`} />

@@ -11,7 +11,7 @@ export const SideBarAccountDropdown = ({ triggerButton, setTabMode }) => {
 
   const handleLogout = () => {
     navigate('/');
-    client.resetStore();
+    client.clearStore()
   };
 
   return (

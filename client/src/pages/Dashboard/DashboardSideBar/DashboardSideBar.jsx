@@ -11,13 +11,15 @@ import {
   ProfileIcon,
   GroupIcon,
   SettingIcon,
+  NotificationIcon,
 } from 'assets/icons';
 import {
   CHAT_MODE,
-  CONTACT_MODE,
   GROUP_MODE,
+  CONTACT_MODE,
   PROFILE_MODE,
   SETTING_MODE,
+  NOTIFICATION_MODE,
 } from 'utils/contants/TabModeContants';
 import { SideBarAccountDropdown } from './Dropdown/SideBarAccountDropdown';
 import { GET_CURRENT_USER } from 'queries/userQueries';
@@ -31,7 +33,27 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
         <MessMeIcon />
       </Link>
       <div className='mb-20'>
-        <Tippy content='Profile'>
+        <Tippy
+          content={<b style={{ color: '#e2e8f0' }}>Notification</b>}
+          allowHTML={true}
+          placement='left-start'
+        >
+          <div
+            className={`${
+              tabMode === NOTIFICATION_MODE ? 'bg-slate-500' : ''
+            } p-2 my-5 rounded cursor-pointer`}
+            onClick={() => setTabMode(NOTIFICATION_MODE)}
+          >
+            <NotificationIcon
+              fill={tabMode === NOTIFICATION_MODE ? '#93c5fd' : '#a6b0cf'}
+            />
+          </div>
+        </Tippy>
+        <Tippy
+          content={<b style={{ color: '#e2e8f0' }}>Profile</b>}
+          allowHTML={true}
+          placement='left-start'
+        >
           <div
             className={`${
               tabMode === PROFILE_MODE ? 'bg-slate-500' : ''
@@ -43,7 +65,11 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
             />
           </div>
         </Tippy>
-        <Tippy content='Chat'>
+        <Tippy
+          content={<b style={{ color: '#e2e8f0' }}>Chat</b>}
+          allowHTML={true}
+          placement='left-start'
+        >
           <div
             className={`${
               tabMode === CHAT_MODE ? 'bg-slate-500' : ''
@@ -53,7 +79,11 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
             <ChatIcon fill={tabMode === CHAT_MODE ? '#93c5fd' : '#a6b0cf'} />
           </div>
         </Tippy>
-        <Tippy content='Group'>
+        <Tippy
+          content={<b style={{ color: '#e2e8f0' }}>Group</b>}
+          allowHTML={true}
+          placement='left-start'
+        >
           <div
             className={`${
               tabMode === GROUP_MODE ? 'bg-slate-500' : ''
@@ -63,7 +93,11 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
             <GroupIcon fill={tabMode === GROUP_MODE ? '#93c5fd' : '#a6b0cf'} />
           </div>
         </Tippy>
-        <Tippy content='Contact'>
+        <Tippy
+          content={<b style={{ color: '#e2e8f0' }}>Contact</b>}
+          allowHTML={true}
+          placement='left-start'
+        >
           <div
             className={`${
               tabMode === CONTACT_MODE ? 'bg-slate-500' : ''
@@ -75,7 +109,11 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
             />
           </div>
         </Tippy>
-        <Tippy content='Setting'>
+        <Tippy
+          content={<b style={{ color: '#e2e8f0' }}>Setting</b>}
+          allowHTML={true}
+          placement='left-start'
+        >
           <div
             className={`${
               tabMode === SETTING_MODE ? 'bg-slate-500' : ''

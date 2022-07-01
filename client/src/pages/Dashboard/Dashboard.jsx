@@ -9,42 +9,31 @@ import {
   DashboardProfile,
   DashboardMainChat,
   DashboardUsersChat,
+  DashboardNotification,
 } from 'pages/Dashboard';
-import {
-  CHAT_MODE,
-  CONTACT_MODE,
-  GROUP_MODE,
-  PROFILE_MODE,
-  SETTING_MODE,
-} from 'utils/contants/TabModeContants';
+import { CHAT_MODE } from 'utils/contants/TabModeContants';
 import { GET_CURRENT_USER } from 'queries/userQueries';
-
-const getComponentByTabMode = (tabMode) => {
-  switch (tabMode) {
-    case PROFILE_MODE:
-      return <DashboardProfile />;
-    case GROUP_MODE:
-      return <DashboardGroup />;
-    case CONTACT_MODE:
-      return <DashboardContact />;
-    case SETTING_MODE:
-      return <DashboardSetting />;
-    default:
-      return <DashboardUsersChat />;
-  }
-};
 
 export const Dashboard = () => {
   const [isOpenFriendProfile, setOpenFriendProfile] = useState(false);
   const [tabMode, setTabMode] = useState(CHAT_MODE);
-  useQuery(GET_CURRENT_USER)
+  useQuery(GET_CURRENT_USER);
+
+  const componentByTabMode = {
+    CHAT_MODE: <DashboardUsersChat />,
+    GROUP_MODE: <DashboardGroup />,
+    PROFILE_MODE: <DashboardProfile />,
+    CONTACT_MODE: <DashboardContact />,
+    SETTING_MODE: <DashboardSetting />,
+    NOTIFICATION_MODE: <DashboardNotification />,
+  };
 
   return (
     <div className='flex'>
       <DashboardSideBar tabMode={tabMode} setTabMode={setTabMode} />
 
       <div className='flex flex-col w-[390px] h-screen bg-gray-700 text-slate-200'>
-        {getComponentByTabMode(tabMode)}
+        {componentByTabMode[tabMode]}
       </div>
 
       <DashboardMainChat setOpenFriendProfile={setOpenFriendProfile} />

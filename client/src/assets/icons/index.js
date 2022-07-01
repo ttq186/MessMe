@@ -37,6 +37,7 @@ import DownloadIcon from 'assets/icons/svg/download.svg';
 import VideoCallIcon from 'assets/icons/jsx/VideoCallIcon';
 import CoffeeCupIcon from 'assets/icons/png/coffee-cup.png';
 import ArrowDownIcon from 'assets/icons/svg/arrow-down.svg';
+import NotificationIcon from 'assets/icons/jsx/NotificationIcon';
 import ArrowForwardIcon from 'assets/icons/svg/arrow-forward.svg';
 import FriendProfileIcon from 'assets/icons/svg/friend-profile.svg';
 
@@ -48,6 +49,7 @@ export {
   ProfileIcon,
   GroupIcon,
   SettingIcon,
+  NotificationIcon,
   CoffeeCupIcon,
   GoogleIcon,
   AttachIcon,

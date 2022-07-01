@@ -12,16 +12,16 @@ ObjectIdType = strawberry.scalar(ObjectId, serialize=str)
 @strawberry.type
 class MessageBase:
     _id: ObjectIdType = strawberry.field(name="_id")
-    user_id: str
-    conversation_id: int
+    sender_id: str
+    receiver_id: str
     content: str
     created_at: datetime
 
 
 @strawberry.input
 class MessageCreate:
-    user_id: str
-    conversation_id: int
+    sender_id: str
+    receiver_id: str
     content: str
     created_at: datetime
 
