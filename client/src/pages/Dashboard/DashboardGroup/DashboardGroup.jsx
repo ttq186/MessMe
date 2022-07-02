@@ -12,7 +12,10 @@ export const DashboardGroup = () => {
           <p className='text-2xl font-bold'>Groups</p>
           <GroupModal
             triggerButton={
-              <Tippy content='Create Group'>
+              <Tippy
+                content={<b style={{ color: '#cbd5e1' }}>Create Group</b>}
+                allowHTML={true}
+              >
                 <img src={AddIcon} alt='Create Group' className='w-7' />
               </Tippy>
             }

@@ -4,7 +4,7 @@ import { AttachIcon, ProfileIcon } from 'assets/icons';
 import { Disclosure } from 'components/Disclosure';
 import { Heading } from 'components/Heading/Heading';
 import { ProfileAttachFile } from 'pages/Dashboard/DashboardProfile';
-import { GET_CURRENT_USER } from 'queries/userQueries';
+import { GET_CURRENT_USER } from 'graphql/users';
 
 export const ProfileDisclosure = () => {
   const {

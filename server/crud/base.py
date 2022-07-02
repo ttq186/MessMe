@@ -57,7 +57,7 @@ class CRUDBase(Generic[ModelType, SchemaType]):
                 exclude_unset=True, exclude={"id", "email", "user_id", "is_admin"}
             )
         for field in obj_data:
-            if update_data.get(field):
+            if update_data.get(field) is not None:
                 setattr(db_obj, field, update_data[field])
         session.add(db_obj)
         await session.commit()

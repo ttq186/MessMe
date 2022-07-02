@@ -11,7 +11,7 @@ import {
 import { AlertIcon } from 'assets/icons';
 import { MainLayout } from 'components/Layout';
 import { Spinner } from 'components/Spinner/Spinner';
-import { CREATE_USER } from 'mutations/userMutations';
+import { CREATE_USER } from 'graphql/users';
 import { TransitionSlide } from 'components/Transition/TransitionSlide';
 import { isSignUpSuccessVar } from 'cache';
 
@@ -39,7 +39,7 @@ export const SignUp = () => {
   };
 
   if (data) {
-    isSignUpSuccessVar(true)
+    isSignUpSuccessVar(true);
     navigate('/sign-in');
   }
 

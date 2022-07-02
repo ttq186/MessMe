@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.graphql_app import graphql_app
-from api import deps
 
 
 app = FastAPI(title="MessMe", version="1.0.0", root_path="")

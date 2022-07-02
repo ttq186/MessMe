@@ -1,21 +1,27 @@
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { useQuery } from '@apollo/client';
-import { FriendProfileIcon, OptionIcon } from 'assets/icons';
+import { AvatarIcon, FriendProfileIcon, OptionIcon } from 'assets/icons';
 import { MessageDropdown } from 'pages/Dashboard/DashboardMainChat';
-import { GET_CURRENT_USER } from 'queries/userQueries';
+import { GET_CURRENT_USER } from 'graphql/users';
 
 export const MainChatMessage = ({ isSender = true }) => {
   const { data } = useQuery(GET_CURRENT_USER);
 
+  if (!data) return;
+
   return (
     <div className={`flex items-end ${isSender && 'flex-row-reverse'}`}>
       <div className='py-2 px-1 pb-0'>
-        <img
-          src={isSender ? data?.currentUser.avatarUrl : FriendProfileIcon}
-          alt='Profile'
-          className='w-10 h-10 rounded-full border-2 border-slate-500'
-        />
+        {!data.currentUser.avatarUrl ? (
+          <AvatarIcon width='40px' height='40px' />
+        ) : (
+          <img
+            src={data.currentUser.avatarUrl}
+            alt='Profile'
+            className='w-10 h-10 rounded-full border-2 border-slate-500'
+          />
+        )}
       </div>
       <div className={`flex ${isSender && 'flex-row-reverse'}`}>
         <Tippy

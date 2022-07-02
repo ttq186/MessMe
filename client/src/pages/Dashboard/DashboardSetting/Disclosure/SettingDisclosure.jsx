@@ -11,8 +11,7 @@ import {
 import { Heading } from 'components/Heading/Heading';
 import { Disclosure } from 'components/Disclosure';
 import { SettingDropdown } from 'pages/Dashboard/DashboardSetting';
-import { GET_CURRENT_USER } from 'queries/userQueries';
-import { UPDATE_USER } from 'mutations/userMutations';
+import { GET_CURRENT_USER, UPDATE_USER } from 'graphql/users';
 
 export const SettingDisclosure = () => {
   const [isEditableInfo, setEditableInfo] = useState(false);
@@ -113,7 +112,7 @@ export const SettingDisclosure = () => {
                   type='radio'
                   name='gender'
                   value='male'
-                  defaultChecked={isFemale == false}
+                  defaultChecked={isFemale === false}
                   onChange={(e) => setFemale(false)}
                 />
                 <span className='ml-2 text-slate-200 text-[13.5px]'>Male</span>

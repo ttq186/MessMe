@@ -16,7 +16,10 @@ export const DashboardContact = () => {
           <p className='text-2xl font-bold'>Contacts</p>
           <ContactModal
             triggerButton={
-              <Tippy content='Add Contact'>
+              <Tippy
+                content={<b style={{ color: '#cbd5e1' }}>Add Contact</b>}
+                allowHTML={true}
+              >
                 <img src={AddIcon} alt='Add Contact' className='w-7' />
               </Tippy>
             }

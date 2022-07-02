@@ -7,8 +7,7 @@ import {
   ProfileDropdown,
   ProfileDisclosure,
 } from 'pages/Dashboard/DashboardProfile';
-import { GET_CURRENT_USER } from 'queries/userQueries';
-import { UPDATE_USER } from 'mutations/userMutations';
+import { GET_CURRENT_USER, UPDATE_USER } from 'graphql/users';
 
 export const DashboardProfile = ({
   isOpenFriendProfile,
@@ -40,7 +39,7 @@ export const DashboardProfile = ({
 
   return (
     <>
-      <div className='p-6 pb-2 border-b-[1px] border-slate-600'>
+      <div className='p-6 pb-[9.2px] border-b-[1px] border-slate-600'>
         {!isOpenFriendProfile ? (
           <div className='flex justify-between'>
             <p className='text-2xl font-bold'>My Profile</p>

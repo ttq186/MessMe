@@ -8,7 +8,7 @@ import { isSignUpSuccessVar } from 'cache';
 import { AlertIcon, CoffeeCupIcon, SuccessIcon } from 'assets/icons';
 import { EmailInput, PasswordInput } from 'components/Form';
 import { MainLayout } from 'components/Layout';
-import { LOGIN, LOGIN_VIA_GOOGLE } from 'queries/authQueries';
+import { LOGIN, LOGIN_VIA_GOOGLE } from 'graphql/auth';
 import { TransitionSlide } from 'components/Transition/TransitionSlide';
 import { Spinner } from 'components/Spinner/Spinner';
 

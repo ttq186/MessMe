@@ -22,10 +22,12 @@ import {
   NOTIFICATION_MODE,
 } from 'utils/contants/TabModeContants';
 import { SideBarAccountDropdown } from './Dropdown/SideBarAccountDropdown';
-import { GET_CURRENT_USER } from 'queries/userQueries';
+import { GET_CURRENT_USER } from 'graphql/users';
 
 export const DashboardSideBar = ({ tabMode, setTabMode }) => {
   const { data } = useQuery(GET_CURRENT_USER);
+
+  if (!data) return;
 
   return (
     <div className='flex flex-col h-screen justify-between items-center w-[70px] pt-5 pb-3 bg-slate-600'>
@@ -131,7 +133,7 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
         setTabMode={setTabMode}
         triggerButton={
           <div className='cursor-pointer p-2 rounded hover:bg-slate-500'>
-            {!data ? (
+            {!data.currentUser.avatarUrl ? (
               <AvatarIcon width='40px' height='40px' />
             ) : (
               <img

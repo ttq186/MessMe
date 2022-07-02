@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
 
 import {
   DashboardGroup,
@@ -12,12 +11,10 @@ import {
   DashboardNotification,
 } from 'pages/Dashboard';
 import { CHAT_MODE } from 'utils/contants/TabModeContants';
-import { GET_CURRENT_USER } from 'queries/userQueries';
 
 export const Dashboard = () => {
   const [isOpenFriendProfile, setOpenFriendProfile] = useState(false);
   const [tabMode, setTabMode] = useState(CHAT_MODE);
-  useQuery(GET_CURRENT_USER);
 
   const componentByTabMode = {
     CHAT_MODE: <DashboardUsersChat />,

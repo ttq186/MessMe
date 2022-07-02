@@ -4,8 +4,7 @@ import 'tippy.js/dist/tippy.css';
 
 import { PencilIcon, AvatarIcon } from 'assets/icons';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { GET_CURRENT_USER, GET_SIGNED_URL } from 'queries/userQueries';
-import { UPDATE_USER } from 'mutations/userMutations';
+import { GET_CURRENT_USER, GET_SIGNED_URL, UPDATE_USER } from 'graphql/users';
 import { uploadFileToGoogleStorage } from 'utils/fileUtils';
 
 export const SettingAvatar = () => {
@@ -63,7 +62,10 @@ export const SettingAvatar = () => {
             className='hidden'
             onChange={(e) => handleUploadFile(e.target.files[0])}
           />
-          <Tippy content='Update Avatar'>
+          <Tippy
+            content={<b style={{ color: '#cbd5e1' }}>Update Avatar</b>}
+            allowHTML={true}
+          >
             <label
               htmlFor='update-avatar'
               className='absolute bg-slate-600 p-1.5 cursor-pointer rounded-full hover:bg-gray-600'
