@@ -16,8 +16,8 @@ config = context.config
 config.set_main_option(
     "sqlalchemy.url",
     (
-        f"postgresql+asyncpg://{settings.DB_USERNAME}:{settings.DB_PASSWORD}"
-        f"@{settings.DB_HOSTNAME}:{settings.DB_PORT}/{settings.DB_NAME}"
+        f"postgresql+asyncpg://{settings.PG_USERNAME}:{settings.PG_PASSWORD}"
+        f"@{settings.PG_HOSTNAME}:{settings.PG_PORT}/{settings.PG_NAME}"
     ),
 )
 

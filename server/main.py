@@ -6,12 +6,6 @@ from api.graphql_app import graphql_app
 
 app = FastAPI(title="MessMe", version="1.0.0", root_path="")
 
-
-# @app.on_event("startup")
-# async def startup_event():
-#     await deps.get_mongo_db().messages.find_one()
-
-
 allowed_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 app.add_middleware(
@@ -21,5 +15,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(graphql_app, prefix="/graphql")

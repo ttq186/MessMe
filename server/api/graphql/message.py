@@ -1,5 +1,5 @@
 import asyncio
-from typing import AsyncGenerator, AsyncIterator
+from typing import AsyncIterator
 import strawberry
 from strawberry.types import Info
 
@@ -14,7 +14,7 @@ from schemas import (
     MessageDeleteSuccess,
 )
 
-queue = asyncio.Queue(maxsize=0)
+queues = []
 
 
 async def resolver_get_messages(info: Info) -> list[MessageOut]:
@@ -38,7 +38,8 @@ async def resolver_get_message(info: Info, id: ObjectIdType) -> MessageOut:
 
 async def resolver_create_message(info: Info, message_in: MessageCreate) -> MessageOut:
     message = await crud.message.create(info.context["mongo_db"], message_in)
-    await queue.put(MessageOut(**message))
+    for queue in queues:
+        await queue.put(MessageOut(**message))
 
     return MessageOut(**message)
 
@@ -98,11 +99,16 @@ class MessageMutation:
 class MessageSubscription:
     @strawberry.subscription
     async def messages(self, user_id: str) -> AsyncIterator[MessageOut]:
-        while True:
-            message = await queue.get()
-            print(message)
-            if message.receiver_id == user_id:
+        queue = asyncio.Queue(maxsize=0)
+        queues.append(queue)
+        try:
+            while True:
+                print("listen")
+                message = await queue.get()
                 queue.task_done()
-                yield message
-            else:
-                await queue.put(message)
+                print(message.receiver_id)
+                if message.receiver_id == user_id:
+                    yield message
+        except asyncio.CancelledError:
+            queues.remove(queue)
+            raise
