@@ -75,7 +75,7 @@ def set_access_token_on_http_only_cookie(response: Response, access_token: str) 
     response.set_cookie(
         key="Authorization",
         value=access_token,
-        expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
+        expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 2,  # Token expires is enough
         httponly=True,
     )
 

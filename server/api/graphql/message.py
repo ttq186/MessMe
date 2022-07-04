@@ -1,5 +1,6 @@
 import asyncio
 from typing import AsyncIterator
+
 import strawberry
 from strawberry.types import Info
 
@@ -19,29 +20,37 @@ queues = []
 
 async def resolver_get_messages(info: Info) -> list[MessageOut]:
     messages = await crud.message.get_multi(info.context["mongo_db"])
-    return [MessageOut(**message) for message in messages]
+    return messages
 
 
 async def resolver_get_messages_by_owner(info: Info, user_id: str) -> list[MessageOut]:
     messages = await crud.message.get_multi_by_owner(
         info.context["mongo_db"], user_id=user_id
     )
-    return [MessageOut(**message) for message in messages]
+    return messages
 
 
 async def resolver_get_message(info: Info, id: ObjectIdType) -> MessageOut:
     message = await crud.message.get(info.context["mongo_db"], id=id)
     if message is None:
         raise exceptions.ResourceNotFound(resource_type="Message", id=id)
-    return MessageOut(**message)
+    return message
 
 
 async def resolver_create_message(info: Info, message_in: MessageCreate) -> MessageOut:
     message = await crud.message.create(info.context["mongo_db"], message_in)
     for queue in queues:
-        await queue.put(MessageOut(**message))
+        await queue.put(message)
+    pubsub = info.context["pubsub"]
+    await pubsub.publish("AddedMessage", message)
+    # print(info.context["redis"])
+    # redis: Redis = info.context["redis"]
+    # print(message)
+    # hehe = str(message).encode("ascii")
+    # redis.publish("channel1", base64.b64encode(hehe))
+    # redis.publish("channel1", pickle.dumps(message))
 
-    return MessageOut(**message)
+    return message
 
 
 async def resolver_update_message(info: Info, message_in: MessageUpdate) -> MessageOut:
@@ -50,7 +59,7 @@ async def resolver_update_message(info: Info, message_in: MessageUpdate) -> Mess
     if message is None:
         raise exceptions.ResourceNotFound(resource_type="Message", id=message_in._id)
     message = await crud.message.update(mongo_db, message_in=message_in)
-    return MessageOut(**message)
+    return message
 
 
 async def resolver_delete_message(info: Info, id: ObjectIdType) -> MessageDeleteSuccess:
@@ -95,20 +104,28 @@ class MessageMutation:
     )
 
 
+def on_event(data):
+    print(data)
+    return data
+
+
 @strawberry.type
 class MessageSubscription:
     @strawberry.subscription
-    async def messages(self, user_id: str) -> AsyncIterator[MessageOut]:
+    async def messages(self, info: Info, user_id: str) -> AsyncIterator[MessageOut]:
         queue = asyncio.Queue(maxsize=0)
         queues.append(queue)
         try:
             while True:
-                print("listen")
-                message = await queue.get()
-                queue.task_done()
-                print(message.receiver_id)
-                if message.receiver_id == user_id:
-                    yield message
-        except asyncio.CancelledError:
-            queues.remove(queue)
-            raise
+                pubsub = info.context["pubsub"]
+                data = await pubsub.subscribe("AddedMessage", on_event)
+                print(data)
+                # print("listen")
+                # message = await queue.get()
+                # queue.task_done()
+                # print(message.receiver_id)
+                # if message.receiver_id == user_id:
+                # yield message
+                yield data
+        except Exception as e:
+            print(e)

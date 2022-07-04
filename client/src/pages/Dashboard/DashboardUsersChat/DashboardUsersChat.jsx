@@ -1,7 +1,15 @@
+import { useSubscription } from '@apollo/client';
 import { SearchBar } from 'components/SearchBar';
+import { MESSAGES_SUBSCRIPTION } from 'graphql/messages/subscriptions';
 import { UsersChatConversation } from './Conversation/UsersChatConversation';
 
 export const DashboardUsersChat = () => {
+  const { data, loading } = useSubscription(MESSAGES_SUBSCRIPTION, {
+    variables: { userId: '123123123' },
+  });
+  if (!data) return;
+  console.log(data);
+
   return (
     <>
       <div className='p-6 pb-2'>

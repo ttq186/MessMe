@@ -1,4 +1,5 @@
 from redis import Redis
+from redis.client import PubSub
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -24,6 +25,7 @@ mongo_client = AsyncIOMotorClient(MONGO_URL)
 
 redis = Redis(
     host=settings.REDIS_HOSTNAME,
-    port=settings.REDIS_HOSTNAME,
-    password=settings.REDIS_PASSWORD,
+    port=settings.REDIS_PORT,
 )
+
+pubsub: PubSub = redis.pubsub()

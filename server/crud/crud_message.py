@@ -3,39 +3,39 @@ from bson.objectid import ObjectId
 
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
-from schemas import MessageBase, MessageCreate, MessageUpdate, ObjectIdType
+from schemas import MessageOut, MessageCreate, MessageUpdate, ObjectIdType
 
 
 class CRUDMessage:
-    async def get_multi(self, mongo_db: AsyncIOMotorDatabase) -> list[MessageBase]:
+    async def get_multi(self, mongo_db: AsyncIOMotorDatabase) -> list[MessageOut]:
         messages = await mongo_db["messages"].find().to_list(None)
-        return messages
+        return [MessageOut(**message) for message in messages]
 
     async def get_multi_by_owner(
         self, mongo_db: AsyncIOMotorDatabase, user_id: str
-    ) -> list[MessageBase]:
+    ) -> list[MessageOut]:
         messages = await mongo_db["messages"].find({"user_id": user_id}).to_list(None)
-        return messages
+        return [MessageOut(**message) for message in messages]
 
-    async def get(self, mongo_db: AsyncIOMotorDatabase, id: ObjectId) -> MessageBase:
+    async def get(self, mongo_db: AsyncIOMotorDatabase, id: ObjectId) -> dict:
         message = await mongo_db["messages"].find_one({"_id": id})
-        return message
+        return MessageOut(**message)
 
     async def create(
         self, mongo_db: AsyncIOMotorDatabase, message_in: MessageCreate
-    ) -> MessageBase:
+    ) -> MessageOut:
         message_in.created_at = datetime.utcnow()
         new_message = await mongo_db["messages"].insert_one(message_in.__dict__)
         created_message = await mongo_db["messages"].find_one(
             {"_id": ObjectId(new_message.inserted_id)}
         )
-        return created_message
+        return MessageOut(**created_message)
 
     async def update(
         self,
         mongo_db: AsyncIOMotorDatabase,
         message_in: MessageUpdate,
-    ) -> MessageBase:
+    ) -> MessageOut:
         await mongo_db["messages"].update_one(
             {"_id": message_in._id}, {"$set": message_in.__dict__}
         )

@@ -65,3 +65,9 @@ class DeleteFailed(Exception):
     def __init__(self, resource_type: str, id: Any) -> None:
         self.message = f"Delete {resource_type} with id {id} failed!"
         super().__init__(self.message)
+
+
+class TokenHasExpired(Exception):
+    def __init__(self) -> None:
+        self.message = "Token has expired!"
+        super().__init__(self.message)
