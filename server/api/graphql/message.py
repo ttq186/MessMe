@@ -1,4 +1,4 @@
-import asyncio
+from bson import json_util
 from typing import AsyncIterator
 
 import strawberry
@@ -7,55 +7,61 @@ from strawberry.types import Info
 import crud
 import exceptions
 from core import security
+from api import deps
 from schemas import (
-    MessageOut,
+    Message,
     MessageCreate,
     MessageUpdate,
-    ObjectIdType,
     MessageDeleteSuccess,
+    ObjectIdType,
 )
+from db.config import broadcast
+from utils import generate_channel_name_by_user_id
 
-queues = []
 
-
-async def resolver_get_messages(info: Info) -> list[MessageOut]:
+async def resolver_get_messages(info: Info) -> list[Message]:
     messages = await crud.message.get_multi(info.context["mongo_db"])
     return messages
 
 
-async def resolver_get_messages_by_owner(info: Info, user_id: str) -> list[MessageOut]:
-    messages = await crud.message.get_multi_by_owner(
-        info.context["mongo_db"], user_id=user_id
+async def resolver_get_messages_by_sender_and_receiver(
+    info: Info, sender_id: str, receiver_id: str
+) -> list[Message]:
+    channel_id = generate_channel_name_by_user_id(sender_id, receiver_id)
+    messages = await crud.message.get_multi_by_channel_id(
+        info.context["mongo_db"], channel_id=channel_id
     )
     return messages
 
 
-async def resolver_get_message(info: Info, id: ObjectIdType) -> MessageOut:
+async def resolver_get_message(info: Info, id: ObjectIdType) -> Message:
     message = await crud.message.get(info.context["mongo_db"], id=id)
     if message is None:
         raise exceptions.ResourceNotFound(resource_type="Message", id=id)
     return message
 
 
-async def resolver_create_message(info: Info, message_in: MessageCreate) -> MessageOut:
+async def resolver_create_message(
+    info: Info, message_in: MessageCreate, receiver_id: str | None = None
+) -> Message:
+    current_user = info.context.get("current_user")
+    print(receiver_id is not None)
+    message_in.sender_id = current_user.id
+    if receiver_id is not None:
+        message_in.channel_id = generate_channel_name_by_user_id(
+            current_user.id, receiver_id
+        )
     message = await crud.message.create(info.context["mongo_db"], message_in)
-    for queue in queues:
-        await queue.put(message)
-    pubsub = info.context["pubsub"]
-    await pubsub.publish("AddedMessage", message)
-    # print(info.context["redis"])
-    # redis: Redis = info.context["redis"]
-    # print(message)
-    # hehe = str(message).encode("ascii")
-    # redis.publish("channel1", base64.b64encode(hehe))
-    # redis.publish("channel1", pickle.dumps(message))
-
+    await broadcast.publish(
+        channel=message_in.channel_id, message=json_util.dumps(message.__dict__)
+    )
     return message
 
 
-async def resolver_update_message(info: Info, message_in: MessageUpdate) -> MessageOut:
+async def resolver_update_message(info: Info, message_in: MessageUpdate) -> Message:
     mongo_db = info.context["mongo_db"]
     message = await crud.message.get(mongo_db, id=message_in._id)
+    print(message)
     if message is None:
         raise exceptions.ResourceNotFound(resource_type="Message", id=message_in._id)
     message = await crud.message.update(mongo_db, message_in=message_in)
@@ -75,26 +81,26 @@ async def resolver_delete_message(info: Info, id: ObjectIdType) -> MessageDelete
 
 @strawberry.type
 class MessageQuery:
-    messages: list[MessageOut] = strawberry.field(
+    messages: list[Message] = strawberry.field(
         resolver=resolver_get_messages,
         permission_classes=[security.IsAuthenticatedUser],
     )
-    messages_by_owner: list[MessageOut] = strawberry.field(
-        resolver=resolver_get_messages_by_owner,
+    messages_by_sender_and_receiver: list[Message] = strawberry.field(
+        resolver=resolver_get_messages_by_sender_and_receiver,
         permission_classes=[security.IsAuthenticatedUser],
     )
-    message: MessageOut = strawberry.field(
+    message: Message = strawberry.field(
         resolver=resolver_get_message, permission_classes=[security.IsAuthenticatedUser]
     )
 
 
 @strawberry.type
 class MessageMutation:
-    create_message: MessageOut = strawberry.field(
+    create_message: Message = strawberry.field(
         resolver=resolver_create_message,
         permission_classes=[security.IsAuthenticatedUser],
     )
-    update_message: MessageOut = strawberry.field(
+    update_message: Message = strawberry.field(
         resolver=resolver_update_message,
         permission_classes=[security.IsAuthenticatedUser],
     )
@@ -104,28 +110,16 @@ class MessageMutation:
     )
 
 
-def on_event(data):
-    print(data)
-    return data
-
-
 @strawberry.type
 class MessageSubscription:
     @strawberry.subscription
-    async def messages(self, info: Info, user_id: str) -> AsyncIterator[MessageOut]:
-        queue = asyncio.Queue(maxsize=0)
-        queues.append(queue)
-        try:
-            while True:
-                pubsub = info.context["pubsub"]
-                data = await pubsub.subscribe("AddedMessage", on_event)
-                print(data)
-                # print("listen")
-                # message = await queue.get()
-                # queue.task_done()
-                # print(message.receiver_id)
-                # if message.receiver_id == user_id:
-                # yield message
-                yield data
-        except Exception as e:
-            print(e)
+    async def subscribe_message(
+        self, info: Info, receiver_id: str
+    ) -> AsyncIterator[Message]:
+        current_user = await deps.get_current_user(info)
+        channel_name = generate_channel_name_by_user_id(current_user.id, receiver_id)
+        print(channel_name)
+        async with broadcast.subscribe(channel=channel_name) as subscriber:
+            async for event in subscriber:
+                data = json_util.loads(event.message)
+                yield Message(**data)

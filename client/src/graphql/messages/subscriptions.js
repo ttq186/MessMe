@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const MESSAGES_SUBSCRIPTION = gql`
-  subscription ($userId: String!) {
-    messages(userId: $userId) {
+export const SUBSCRIBE_MESSAGE = gql`
+  subscription ($receiverId: String!) {
+    message(receiverId: $receiverId) {
       _id
       senderId
       receiverId

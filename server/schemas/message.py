@@ -10,10 +10,10 @@ ObjectIdType = strawberry.scalar(ObjectId, serialize=str)
 
 @strawberry.schema_directive(locations=[Location.OBJECT])
 @strawberry.type
-class MessageBase:
+class Message:
     _id: ObjectIdType = strawberry.field(name="_id")
     sender_id: str
-    receiver_id: str
+    channel_id: str
     content: str
     created_at: datetime
 
@@ -21,9 +21,9 @@ class MessageBase:
 @strawberry.input
 class MessageCreate:
     sender_id: str
-    receiver_id: str
     content: str
     created_at: datetime
+    channel_id: str | None
 
 
 @strawberry.schema_directive(locations=[Location.OBJECT])
@@ -31,10 +31,6 @@ class MessageCreate:
 class MessageUpdate:
     _id: ObjectIdType = strawberry.field(name="_id")
     content: str
-
-
-class MessageOut(MessageBase):
-    pass
 
 
 @strawberry.type

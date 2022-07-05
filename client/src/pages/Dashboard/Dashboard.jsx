@@ -11,8 +11,11 @@ import {
   DashboardNotification,
 } from 'pages/Dashboard';
 import { CHAT_MODE } from 'utils/contants/TabModeContants';
+import { useQuery } from '@apollo/client';
+import { GET_CURRENT_USER } from 'graphql/users';
 
 export const Dashboard = () => {
+  useQuery(GET_CURRENT_USER);
   const [isOpenFriendProfile, setOpenFriendProfile] = useState(false);
   const [tabMode, setTabMode] = useState(CHAT_MODE);
 

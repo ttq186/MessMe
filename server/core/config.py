@@ -22,7 +22,6 @@ class Settings(BaseSettings):
 
     REDIS_HOSTNAME: str
     REDIS_PORT: int
-    REDIS_PASSWORD: str
 
     class Config:
         env_file = ".env"

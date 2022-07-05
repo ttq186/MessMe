@@ -1,14 +1,16 @@
-import { useSubscription } from '@apollo/client';
+// import { useSubscription } from '@apollo/client';
 import { SearchBar } from 'components/SearchBar';
-import { MESSAGES_SUBSCRIPTION } from 'graphql/messages/subscriptions';
+// import { MESSAGES_SUBSCRIPTION } from 'graphql/messages/subscriptions';
 import { UsersChatConversation } from './Conversation/UsersChatConversation';
 
 export const DashboardUsersChat = () => {
-  const { data, loading } = useSubscription(MESSAGES_SUBSCRIPTION, {
-    variables: { userId: '123123123' },
-  });
-  if (!data) return;
-  console.log(data);
+  // const { data } = useSubscription(MESSAGES_SUBSCRIPTION, {
+  //   variables: { receiverId: '123123123' },
+  //   // onSubscriptionData: (data) => console.log("newdata", data)
+  //   onSubscriptionComplete: data => console.log("newData", data)
+  // });
+  // if (!data) return;
+  // console.log(data);
 
   return (
     <>

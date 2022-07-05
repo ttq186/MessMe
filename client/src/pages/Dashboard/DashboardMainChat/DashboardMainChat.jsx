@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import 'emoji-mart/css/emoji-mart.css';
-import data from 'emoji-mart/data/facebook.json';
+import { default as EmojiData } from 'emoji-mart/data/facebook.json';
 import { NimblePicker } from 'emoji-mart';
 
 import {
@@ -24,8 +24,21 @@ import {
   OthersDropdown,
   SearchDropdown,
 } from 'pages/Dashboard/DashboardMainChat';
+import {
+  GET_MESSAGES_BY_SENDER_AND_RECEIVER,
+  SUBSCRIBE_MESSAGE,
+} from 'graphql/messages';
+import { useQuery } from '@apollo/client';
+import { GET_CURRENT_USER } from 'graphql/users';
 
 export const DashboardMainChat = ({ setOpenFriendProfile }) => {
+  const { data } = useQuery(GET_CURRENT_USER);
+  const { subscribeToMore, data: messagesObj } = useQuery(
+    GET_MESSAGES_BY_SENDER_AND_RECEIVER,
+    {
+      variables: { senderId: data?.currentUser.id, receiverId: 'u123123123' },
+    }
+  );
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
   const inputRef = useRef();
 
@@ -35,6 +48,15 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const handleChooseIcon = (e) => {
     inputRef.current.innerText += e.native;
   };
+
+  // if (data) {
+  //   subscribeToMore({
+  //     document: SUBSCRIBE_MESSAGE,
+  //     variables: {
+  //       receiverId:
+  //     }
+  //   })
+  // }
 
   return (
     <div className='flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600'>
@@ -171,7 +193,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
               <div className='absolute -left-2 bottom-6 p-1 bg-slate-800 z-10 border border-slate-700 rounded'>
                 <NimblePicker
                   set='facebook'
-                  data={data}
+                  data={EmojiData}
                   title='MessMe Emoji'
                   showPreview={false}
                   showSkinTones={false}

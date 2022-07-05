@@ -1,5 +1,4 @@
-from redis import Redis
-from redis.client import PubSub
+from broadcaster import Broadcast
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -22,10 +21,5 @@ postgres_session = sessionmaker(
 MONGO_URL = f"mongodb://{settings.MONGO_HOSTNAME}:{settings.MONGO_PORT}"
 mongo_client = AsyncIOMotorClient(MONGO_URL)
 
-
-redis = Redis(
-    host=settings.REDIS_HOSTNAME,
-    port=settings.REDIS_PORT,
-)
-
-pubsub: PubSub = redis.pubsub()
+REDIS_URL = f"redis://{settings.REDIS_HOSTNAME}:{settings.REDIS_PORT}"
+broadcast = Broadcast(REDIS_URL)

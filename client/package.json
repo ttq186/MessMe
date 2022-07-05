@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.6.8",
+    "@apollo/client": "^3.6.9",
     "@google-cloud/storage": "^6.2.0",
     "@headlessui/react": "^1.6.0",
     "@react-oauth/google": "^0.2.6",

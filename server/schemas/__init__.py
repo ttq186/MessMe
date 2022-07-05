@@ -13,8 +13,7 @@ from .attachment import Attachment
 from .conversation import Conversation
 from .message import (
     ObjectIdType,
-    MessageOut,
-    MessageBase,
+    Message,
     MessageCreate,
     MessageUpdate,
     MessageDeleteSuccess,
