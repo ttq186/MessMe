@@ -32,7 +32,7 @@ export const Dashboard = () => {
     <div className='flex'>
       <DashboardSideBar tabMode={tabMode} setTabMode={setTabMode} />
 
-      <div className='flex flex-col w-[390px] h-screen bg-gray-700 text-slate-200'>
+      <div className='flex flex-col w-[400px] h-screen bg-gray-700 text-slate-200'>
         {componentByTabMode[tabMode]}
       </div>
 

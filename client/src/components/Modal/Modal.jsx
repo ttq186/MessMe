@@ -11,7 +11,6 @@ export const Modal = ({
   return (
     <>
       <button onClick={openModal}>{triggerButton}</button>
-
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={closeModal}>
           <Transition.Child

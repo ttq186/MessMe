@@ -1,4 +1,4 @@
-from typing import Generic, Type, TypeVar, Dict, Any
+from typing import Generic, TypeVar, Dict, Any
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
@@ -12,7 +12,7 @@ SchemaType = TypeVar("SchemaType", bound=StrawberryType)
 
 
 class CRUDBase(Generic[ModelType, SchemaType]):
-    def __init__(self, model: Type[ModelType]):
+    def __init__(self, model: ModelType):
         """
         CRUD object with default Create, Read, Update, Delete methods.
 
@@ -34,10 +34,7 @@ class CRUDBase(Generic[ModelType, SchemaType]):
         return result.scalars().all()
 
     async def create(self, session: AsyncSession, obj_in: SchemaType) -> ModelType:
-        obj_in_data = obj_in.to_pydantic().dict(
-            exclude_unset=True, exclude={"user_id", "is_admin"}
-        )
-        db_obj = self._model(**obj_in_data)
+        db_obj = self._model(**obj_in.__dict__)
         session.add(db_obj)
         await session.commit()
         await session.refresh(db_obj)
@@ -53,9 +50,7 @@ class CRUDBase(Generic[ModelType, SchemaType]):
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
-            update_data = obj_in.to_pydantic().dict(
-                exclude_unset=True, exclude={"id", "email", "user_id", "is_admin"}
-            )
+            update_data = obj_in.__dict__
         for field in obj_data:
             if update_data.get(field) is not None:
                 setattr(db_obj, field, update_data[field])

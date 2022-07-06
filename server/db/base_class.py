@@ -1,4 +1,21 @@
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.ext.declarative import as_declarative
 
 
-Base = declarative_base()
+@as_declarative()
+class Base:
+    def to_dict(self, exclude_unset: bool = False) -> dict:
+        if exclude_unset:
+            return dict(
+                [
+                    (key, getattr(self, key))
+                    for key in self.__dict__.keys()
+                    if not key.startswith("_") and getattr(self, key) is not None
+                ]
+            )
+        return dict(
+            [
+                (key, getattr(self, key))
+                for key in self.__dict__.keys()
+                if not key.startswith("_")
+            ]
+        )

@@ -12,7 +12,6 @@ from google.cloud import storage
 
 import exceptions
 from api import deps
-from models import User
 from core.config import settings
 
 
@@ -98,14 +97,14 @@ def generate_signed_url(bucket_name: str, blob_type: str, blob_name: str) -> str
 
 
 class IsAuthenticatedUser(BasePermission):
-    async def has_permission(self, source: Any, info: Info, **kwargs) -> User:
+    async def has_permission(self, source: Any, info: Info, **kwargs) -> bool:
         current_user = await deps.get_current_user(info)
         info.context["current_user"] = current_user
         return True
 
 
 class IsAuthenticatedAdmin(BasePermission):
-    async def has_permission(self, source: Any, info: Info, **kwargs) -> User:
+    async def has_permission(self, source: Any, info: Info, **kwargs) -> bool:
         current_user = await deps.get_current_superuser(info)
         info.context["current_user"] = current_user
         return True

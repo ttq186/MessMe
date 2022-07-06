@@ -9,9 +9,9 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from api import deps
 
 from .graphql import (
+    AuthQuery,
     UserQuery,
     UserMutation,
-    AuthMutation,
     MessageQuery,
     MessageMutation,
     MessageSubscription,
@@ -25,8 +25,8 @@ async def get_context(
     return {"pg_session": pg_session, "mongo_db": mongo_db}
 
 
-Query = merge_types("Query", (UserQuery, MessageQuery))
-Mutation = merge_types("Mutation", (UserMutation, AuthMutation, MessageMutation))
+Query = merge_types("Query", (AuthQuery, UserQuery, MessageQuery))
+Mutation = merge_types("Mutation", (UserMutation, MessageMutation))
 Subscription = merge_types("Subscription", (MessageSubscription,))
 
 schema = strawberry.Schema(query=Query, mutation=Mutation, subscription=Subscription)

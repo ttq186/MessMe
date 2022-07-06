@@ -5,7 +5,6 @@ export const SUBSCRIBE_MESSAGE = gql`
     message(receiverId: $receiverId) {
       _id
       senderId
-      receiverId
       content
       createdAt
     }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -17,22 +17,16 @@ export const SignIn = () => {
   const formMethods = useForm();
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const [login, { loading: loginLoading, data: loginData }] = useMutation(
+  const [login, { loading: loginLoading, data: loginData }] = useLazyQuery(
     LOGIN,
     {
       onError: (error) => setErrorMessage(error.message),
-      // update(cache, { data: { login } }) {
-      //   cache.writeQuery({
-      //     query: GET_CURRENT_USER,
-      //     data: { login },
-      //   });
-      // },
     }
   );
   const [
     loginViaGoogle,
     { loading: loginViaGoogleLoading, data: loginViaGoogleData },
-  ] = useMutation(LOGIN_VIA_GOOGLE, {
+  ] = useLazyQuery(LOGIN_VIA_GOOGLE, {
     onError: (error) => setErrorMessage(error.message),
   });
 

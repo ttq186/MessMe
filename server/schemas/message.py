@@ -20,10 +20,10 @@ class Message:
 
 @strawberry.input
 class MessageCreate:
-    sender_id: str
     content: str
-    created_at: datetime
-    channel_id: str | None
+    sender_id: str | None = None
+    created_at: datetime | None = None
+    channel_id: str | None = None
 
 
 @strawberry.schema_directive(locations=[Location.OBJECT])

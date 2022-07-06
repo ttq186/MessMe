@@ -25,38 +25,77 @@ import {
   SearchDropdown,
 } from 'pages/Dashboard/DashboardMainChat';
 import {
+  CREATE_MESSAGE,
   GET_MESSAGES_BY_SENDER_AND_RECEIVER,
   SUBSCRIBE_MESSAGE,
 } from 'graphql/messages';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { GET_CURRENT_USER } from 'graphql/users';
+import { useEffect } from 'react';
 
 export const DashboardMainChat = ({ setOpenFriendProfile }) => {
-  const { data } = useQuery(GET_CURRENT_USER);
-  const { subscribeToMore, data: messagesObj } = useQuery(
-    GET_MESSAGES_BY_SENDER_AND_RECEIVER,
-    {
-      variables: { senderId: data?.currentUser.id, receiverId: 'u123123123' },
-    }
-  );
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
   const inputRef = useRef();
+
+  const [getMessages, { subscribeToMore, data: messagesData }] = useLazyQuery(
+    GET_MESSAGES_BY_SENDER_AND_RECEIVER
+  );
+  const { data: currentUserObj } = useQuery(GET_CURRENT_USER, {
+    onCompleted: ({ currentUser }) => {
+      getMessages({
+        variables: {
+          senderId: currentUser?.id,
+          receiverId: 'c991aa1c-c509-4e93-ab82-23ce85c419a9',
+        },
+      });
+    },
+  });
+
+  const [createMessage, { data: messageObj, loading }] =
+    useMutation(CREATE_MESSAGE);
+
+  useEffect(() => {
+    subscribeToMore({
+      document: SUBSCRIBE_MESSAGE,
+      variables: {
+        receiverId: '123123123',
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) return prev;
+        return {
+          messagesBySenderAndReceiver: [
+            ...prev.messagesBySenderAndReceiver,
+            subscriptionData.data.message,
+          ],
+        };
+      },
+    });
+  }, []);
 
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
   };
+
   const handleChooseIcon = (e) => {
     inputRef.current.innerText += e.native;
   };
 
-  // if (data) {
-  //   subscribeToMore({
-  //     document: SUBSCRIBE_MESSAGE,
-  //     variables: {
-  //       receiverId:
-  //     }
-  //   })
-  // }
+  const handleSendMessage = () => {
+    if (!inputRef.current.innerText.trim()) {
+      inputRef.current.innerHTML = '';
+      return;
+    }
+
+    createMessage({
+      variables: {
+        input: {
+          content: inputRef.current.innerText,
+        },
+        receiverId: '123123123',
+      },
+    });
+    inputRef.current.innerHTML = '';
+  };
 
   return (
     <div className='flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600'>
@@ -139,15 +178,14 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           </div>
           <div className='grow border-t-[1px] border-slate-500'></div>
         </div>
-        <div>
-          <MainChatMessage />
-          <MainChatMessage isSender={false} />
-          <MainChatMessage isSender={false} />
-          <MainChatMessage />
-          <MainChatMessage isSender={false} />
-          <MainChatMessage />
-          <MainChatMessage isSender={false} />
-          <MainChatMessage />
+        <div className=''>
+          {messagesData?.messagesBySenderAndReceiver.map((item) => (
+            <MainChatMessage
+              key={item._id}
+              isSender={currentUserObj?.currentUser.id === item.senderId}
+              {...item}
+            />
+          ))}
         </div>
       </div>
 
@@ -213,7 +251,6 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
             contentEditable='true'
             ref={inputRef}
           /> */}
-
           <div
             contentEditable='true'
             placeholder='Aa'
@@ -225,7 +262,11 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           content={<b style={{ color: '#cbd5e1' }}>Send Message</b>}
           allowHTML={true}
         >
-          <div className='bg-blue-300 mx-5 px-3.5 py-2 rounded cursor-pointer'>
+          <div
+            className='bg-blue-300 mx-5 px-3.5 py-2 rounded cursor-pointer'
+            tabIndex={0}
+            onClick={handleSendMessage}
+          >
             <img src={SendIcon} alt='Send' className='w-5 h-5' />
           </div>
         </Tippy>

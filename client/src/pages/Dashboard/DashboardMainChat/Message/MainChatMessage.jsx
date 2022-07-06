@@ -5,7 +5,7 @@ import { AvatarIcon, FriendProfileIcon, OptionIcon } from 'assets/icons';
 import { MessageDropdown } from 'pages/Dashboard/DashboardMainChat';
 import { GET_CURRENT_USER } from 'graphql/users';
 
-export const MainChatMessage = ({ isSender = true }) => {
+export const MainChatMessage = ({ isSender = true, content, createdAt }) => {
   const { data } = useQuery(GET_CURRENT_USER);
 
   if (!data) return;
@@ -25,7 +25,11 @@ export const MainChatMessage = ({ isSender = true }) => {
       </div>
       <div className={`flex ${isSender && 'flex-row-reverse'}`}>
         <Tippy
-          content={<b style={{ color: '#cbd5e1' }}>17:24</b>}
+          content={
+            <b style={{ color: '#cbd5e1' }}>
+              {new Date(createdAt).toLocaleTimeString()}
+            </b>
+          }
           placement='right-start'
           allowHTML={true}
         >
@@ -36,9 +40,7 @@ export const MainChatMessage = ({ isSender = true }) => {
                 : 'bg-slate-700 text-slate-400'
             } w-[400px] text-[15px] font-medium p-3 mb-4 rounded-md`}
           >
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse
-            aliquam tempore similique vero totam neque ullam ducimus cumque
-            voluptatem rerum!
+            {content}
           </div>
         </Tippy>
         <MessageDropdown

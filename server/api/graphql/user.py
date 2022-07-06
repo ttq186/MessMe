@@ -4,34 +4,32 @@ from strawberry.types import Info
 import crud
 import exceptions
 import utils
-import models
 from api import deps
 from core import security
-from schemas import UserCreate, UserUpdate, UserOut, UserDeleteSuccess, SignedUrl
+from schemas import User, UserCreate, UserUpdate, UserDeleteSuccess, SignedUrl
 
 
-async def resolver_get_users(info: Info) -> list[UserOut]:
+async def resolver_get_users(info: Info) -> list[User]:
     users = await crud.user.get_multi(session=info.context["pg_session"])
-    return [UserOut.from_pydantic(user) for user in users]
+    return users
 
 
-async def resolver_get_user(info: Info, id: str) -> UserOut | None:
-    current_user: models.User = info.context.get("current_user")
-
+async def resolver_get_user(info: Info, id: str) -> User | None:
+    current_user = info.context.get("current_user")
     if current_user.id != id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
     user = await crud.user.get(session=info.context["pg_session"], id=id)
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=id)
-    return UserOut.from_pydantic(user)
+    return user
 
 
-async def resolver_get_current_user(info: Info) -> UserOut | None:
-    current_user: models.User = info.context.get("current_user")
-    return UserOut.from_pydantic(current_user)
+async def resolver_get_current_user(info: Info) -> User | None:
+    current_user = info.context.get("current_user")
+    return current_user
 
 
-async def resolver_create_user(info: Info, user_in: UserCreate) -> UserOut:
+async def resolver_create_user(info: Info, user_in: UserCreate) -> User:
     pg_session = info.context["pg_session"]
     user = await crud.user.get_by_email(pg_session, email=user_in.email)
     if user is not None:
@@ -43,12 +41,11 @@ async def resolver_create_user(info: Info, user_in: UserCreate) -> UserOut:
     user_in.id = user_id
     user_in.password = security.get_hashed_password(user_in.password)
     user = await crud.user.create(pg_session, obj_in=user_in)
-    return UserOut.from_pydantic(user)
+    return user
 
 
-async def resolver_update_user(info: Info, user_in: UserUpdate) -> UserOut:
-    current_user = info.context.get("current_user")
-
+async def resolver_update_user(info: Info, user_in: UserUpdate) -> User:
+    current_user: User = info.context.get("current_user")
     if current_user.id != user_in.id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
 
@@ -59,12 +56,11 @@ async def resolver_update_user(info: Info, user_in: UserUpdate) -> UserOut:
     if user_in.password is not None:
         user_in.password = security.get_hashed_password(user_in.password)
     user = await crud.user.update(pg_session, db_obj=user, obj_in=user_in)
-    return UserOut.from_pydantic(user)
+    return user
 
 
 async def resolver_delete_user(info: Info, id: str) -> UserDeleteSuccess:
-    current_user = await deps.get_current_user(info)
-
+    current_user: User = await deps.get_current_user(info)
     pg_session = info.context["pg_session"]
     if current_user.id != id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
@@ -84,13 +80,13 @@ async def resolver_get_signed_url(blob_type: str, blob_name: str) -> SignedUrl:
 
 @strawberry.type
 class UserQuery:
-    users: list[UserOut] = strawberry.field(
+    users: list[User] = strawberry.field(
         resolver=resolver_get_users, permission_classes=[security.IsAuthenticatedAdmin]
     )
-    user: UserOut = strawberry.field(
+    user: User = strawberry.field(
         resolver=resolver_get_user, permission_classes=[security.IsAuthenticatedUser]
     )
-    current_user: UserOut = strawberry.field(
+    current_user: User = strawberry.field(
         resolver=resolver_get_current_user,
         permission_classes=[security.IsAuthenticatedUser],
     )
@@ -102,8 +98,8 @@ class UserQuery:
 
 @strawberry.type
 class UserMutation:
-    create_user: UserOut = strawberry.field(resolver=resolver_create_user)
-    update_user: UserOut = strawberry.field(
+    create_user: User = strawberry.field(resolver=resolver_create_user)
+    update_user: User = strawberry.field(
         resolver=resolver_update_user, permission_classes=[security.IsAuthenticatedUser]
     )
     delete_user: UserDeleteSuccess = strawberry.field(

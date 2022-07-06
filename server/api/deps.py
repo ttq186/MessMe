@@ -4,9 +4,9 @@ from strawberry.types import Info
 
 import crud
 import exceptions
-from models import User
 from core import security
 from db.config import postgres_session, mongo_client
+from schemas import User
 
 
 async def get_postgres_session() -> AsyncGenerator:

@@ -1,3 +1,3 @@
 from .user import UserQuery, UserMutation
-from .auth import AuthMutation
+from .auth import AuthQuery
 from .message import MessageQuery, MessageMutation, MessageSubscription

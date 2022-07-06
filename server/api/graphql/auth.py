@@ -8,12 +8,6 @@ from core import security
 from schemas import User
 
 
-@strawberry.type
-class LoginSuccess:
-    user: User
-    login_type: str = "Normal"
-
-
 async def resolver_login(info: Info, email: str, password: str) -> User:
     pg_session = info.context["pg_session"]
     user = await crud.user.get_by_email(pg_session, email=email)
@@ -26,7 +20,7 @@ async def resolver_login(info: Info, email: str, password: str) -> User:
     security.set_access_token_on_http_only_cookie(
         info.context["response"], access_token
     )
-    return User.from_pydantic(user, extra={"login_type": "Normal"})
+    return user
 
 
 async def resolver_login_via_google(info: Info, tokenId: str) -> User:
@@ -49,10 +43,10 @@ async def resolver_login_via_google(info: Info, tokenId: str) -> User:
     security.set_access_token_on_http_only_cookie(
         info.context["response"], access_token
     )
-    return User.from_pydantic(user, extra={"login_type": "Google"})
+    return user
 
 
 @strawberry.type
-class AuthMutation:
+class AuthQuery:
     login: User = strawberry.field(resolver=resolver_login)
     login_via_google: User = strawberry.field(resolver=resolver_login_via_google)

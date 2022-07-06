@@ -44,8 +44,9 @@ async def resolver_get_message(info: Info, id: ObjectIdType) -> Message:
 async def resolver_create_message(
     info: Info, message_in: MessageCreate, receiver_id: str | None = None
 ) -> Message:
+    if receiver_id is None and message_in.channel_id is None:
+        raise Exception("At least receiver_id or channel_id has to be provided!")
     current_user = info.context.get("current_user")
-    print(receiver_id is not None)
     message_in.sender_id = current_user.id
     if receiver_id is not None:
         message_in.channel_id = generate_channel_name_by_user_id(
@@ -61,7 +62,6 @@ async def resolver_create_message(
 async def resolver_update_message(info: Info, message_in: MessageUpdate) -> Message:
     mongo_db = info.context["mongo_db"]
     message = await crud.message.get(mongo_db, id=message_in._id)
-    print(message)
     if message is None:
         raise exceptions.ResourceNotFound(resource_type="Message", id=message_in._id)
     message = await crud.message.update(mongo_db, message_in=message_in)
@@ -113,12 +113,9 @@ class MessageMutation:
 @strawberry.type
 class MessageSubscription:
     @strawberry.subscription
-    async def subscribe_message(
-        self, info: Info, receiver_id: str
-    ) -> AsyncIterator[Message]:
+    async def message(self, info: Info, receiver_id: str) -> AsyncIterator[Message]:
         current_user = await deps.get_current_user(info)
         channel_name = generate_channel_name_by_user_id(current_user.id, receiver_id)
-        print(channel_name)
         async with broadcast.subscribe(channel=channel_name) as subscriber:
             async for event in subscriber:
                 data = json_util.loads(event.message)
