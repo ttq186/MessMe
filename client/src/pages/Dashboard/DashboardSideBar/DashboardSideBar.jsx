@@ -82,20 +82,6 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
           </div>
         </Tippy>
         <Tippy
-          content={<b style={{ color: '#e2e8f0' }}>Group</b>}
-          allowHTML={true}
-          placement='left-start'
-        >
-          <div
-            className={`${
-              tabMode === GROUP_MODE ? 'bg-slate-500' : ''
-            } p-2 my-5 rounded cursor-pointer`}
-            onClick={() => setTabMode(GROUP_MODE)}
-          >
-            <GroupIcon fill={tabMode === GROUP_MODE ? '#93c5fd' : '#a6b0cf'} />
-          </div>
-        </Tippy>
-        <Tippy
           content={<b style={{ color: '#e2e8f0' }}>Contact</b>}
           allowHTML={true}
           placement='left-start'
@@ -109,6 +95,20 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
             <ContactIcon
               fill={tabMode === CONTACT_MODE ? '#93c5fd' : '#a6b0cf'}
             />
+          </div>
+        </Tippy>
+        <Tippy
+          content={<b style={{ color: '#e2e8f0' }}>Group</b>}
+          allowHTML={true}
+          placement='left-start'
+        >
+          <div
+            className={`${
+              tabMode === GROUP_MODE ? 'bg-slate-500' : ''
+            } p-2 my-5 rounded cursor-pointer`}
+            onClick={() => setTabMode(GROUP_MODE)}
+          >
+            <GroupIcon fill={tabMode === GROUP_MODE ? '#93c5fd' : '#a6b0cf'} />
           </div>
         </Tippy>
         <Tippy

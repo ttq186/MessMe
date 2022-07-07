@@ -40,37 +40,38 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [getMessages, { subscribeToMore, data: messagesData }] = useLazyQuery(
     GET_MESSAGES_BY_SENDER_AND_RECEIVER
   );
+  const [createMessage] = useMutation(CREATE_MESSAGE);
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER, {
     onCompleted: ({ currentUser }) => {
       getMessages({
         variables: {
-          senderId: currentUser?.id,
-          receiverId: 'c991aa1c-c509-4e93-ab82-23ce85c419a9',
+          senderId: currentUser.id,
+          receiverId: '123123123',
         },
       });
     },
   });
 
-  const [createMessage, { data: messageObj, loading }] =
-    useMutation(CREATE_MESSAGE);
-
   useEffect(() => {
-    subscribeToMore({
-      document: SUBSCRIBE_MESSAGE,
-      variables: {
-        receiverId: '123123123',
-      },
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData) return prev;
-        return {
-          messagesBySenderAndReceiver: [
-            ...prev.messagesBySenderAndReceiver,
-            subscriptionData.data.message,
-          ],
-        };
-      },
-    });
-  }, []);
+    if (currentUserObj) {
+      subscribeToMore({
+        document: SUBSCRIBE_MESSAGE,
+        variables: {
+          senderId: currentUserObj.currentUser.id,
+          receiverId: '123123123',
+        },
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData) return prev;
+          return {
+            messagesBySenderAndReceiver: [
+              ...prev.messagesBySenderAndReceiver,
+              subscriptionData.data.message,
+            ],
+          };
+        },
+      });
+    }
+  }, [currentUserObj]);
 
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);

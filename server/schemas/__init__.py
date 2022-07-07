@@ -5,7 +5,7 @@ from .user import (
     UserDeleteSuccess,
     SignedUrl,
 )
-from .contact import Contact
+from .contact import Contact, ContactCreate, ContactDeleteSuccess
 from .attachment import Attachment
 from .conversation import Conversation
 from .message import (

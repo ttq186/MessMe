@@ -4,7 +4,6 @@ from strawberry.types import Info
 import crud
 import exceptions
 import utils
-from api import deps
 from core import security
 from schemas import User, UserCreate, UserUpdate, UserDeleteSuccess, SignedUrl
 
@@ -60,7 +59,7 @@ async def resolver_update_user(info: Info, user_in: UserUpdate) -> User:
 
 
 async def resolver_delete_user(info: Info, id: str) -> UserDeleteSuccess:
-    current_user: User = await deps.get_current_user(info)
+    current_user = info.context.get("current_user")
     pg_session = info.context["pg_session"]
     if current_user.id != id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()

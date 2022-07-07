@@ -1,3 +1,3 @@
-import { UsersChatConversation } from './Conversation/UsersChatConversation';
+import { UsersChatItem } from './Conversation/UsersChatItem';
 
-export { UsersChatConversation };
+export { UsersChatItem };

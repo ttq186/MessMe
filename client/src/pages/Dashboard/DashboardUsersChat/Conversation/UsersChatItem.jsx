@@ -1,6 +1,9 @@
-export const UsersChatConversation = ({
+export const UsersChatItem = ({
   isActive = false,
   isChose = false,
+  email,
+  username,
+  avatarUrl,
 }) => {
   return (
     <div
@@ -10,16 +13,16 @@ export const UsersChatConversation = ({
     >
       <div className={`flex items-end p-1 ${isActive ? 'mr-1' : 'mr-2'} `}>
         <img
-          src='https://triparis.blob.core.windows.net/triparis-container/images/template.png'
-          alt='User'
-          className='w-10 rounded-full'
+          src={avatarUrl}
+          alt={username ? username : email.split('@')[0]}
+          className='w-10 h-10 rounded-full'
         />
         {isActive && (
           <span className='w-3 h-3 rounded-full  bg-green-500 -ml-2 border-slate-200 border-2'></span>
         )}
       </div>
       <div className='grow'>
-        <p className='font-bold'>Duy Dâm</p>
+        <p className='font-bold'>{username ? username : email.split('@')[0]}</p>
         <p className='text-sm text-slate-300 font-medium'>
           Tao lạy m, đừng học nữa :))
         </p>

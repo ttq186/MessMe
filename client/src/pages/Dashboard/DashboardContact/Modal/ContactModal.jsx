@@ -1,9 +1,14 @@
 import { useState } from 'react';
+import { useMutation } from '@apollo/client';
 
 import { Modal } from 'components/Modal';
+import { CREATE_CONTACT } from 'graphql/contacts/mutations';
 
 export const ContactModal = ({ triggerButton }) => {
+  const [contactInfo, setContactInfo] = useState('');
+  const [invitationMessage, setInvitationMessage] = useState('');
   const [isOpen, setOpen] = useState(false);
+  const [createContact] = useMutation(CREATE_CONTACT);
 
   const openModal = () => {
     setOpen(true);
@@ -11,6 +16,22 @@ export const ContactModal = ({ triggerButton }) => {
 
   const closeModal = () => {
     setOpen(false);
+  };
+
+  const handleAddContact = () => {
+    if (!contactInfo.trim()) return;
+    createContact({
+      variables: {
+        email: contactInfo,
+        input: {
+          invitationMessage,
+        },
+      },
+    });
+
+    closeModal();
+    setContactInfo('');
+    setInvitationMessage('');
   };
 
   return (
@@ -30,14 +51,15 @@ export const ContactModal = ({ triggerButton }) => {
       <div className='mt-5'>
         <div className='mb-4 text-slate-300'>
           <label className='text-[15px] font-bold' htmlFor='email'>
-            Email
+            Name or Email
           </label>
           <div className='my-1'>
             <input
               type='text'
               id='email'
-              placeholder='Enter Email'
+              placeholder='Enter name or email'
               className='w-full p-2.5 md:px-4 bg-gray-600 rounded font-medium text-sm md:text-[15px] focus:outline-none'
+              onChange={(e) => setContactInfo(e.target.value)}
             />
           </div>
         </div>
@@ -49,15 +71,16 @@ export const ContactModal = ({ triggerButton }) => {
             <textarea
               id='invitation-message'
               className='w-full bg-gray-600 text-sm p-2 px-4 font-medium focus:outline-none rounded'
-              placeholder='Enter Message'
+              placeholder='Enter message'
               rows={4}
+              onChange={(e) => setInvitationMessage(e.target.value)}
             />
           </div>
         </div>
         <div className='my-5'>
           <button
             className='float-right bg-blue-300 font-semibold text-gray-700 rounded-[3px] py-1.5 px-3 text-[15px] hover:opacity-90'
-            onClick={closeModal}
+            onClick={handleAddContact}
           >
             Add Contact
           </button>
