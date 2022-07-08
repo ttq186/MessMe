@@ -1,9 +1,15 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import 'emoji-mart/css/emoji-mart.css';
 import { default as EmojiData } from 'emoji-mart/data/facebook.json';
 import { NimblePicker } from 'emoji-mart';
+import {
+  useLazyQuery,
+  useMutation,
+  useQuery,
+  useReactiveVar,
+} from '@apollo/client';
 
 import {
   AvatarIcon,
@@ -29,36 +35,34 @@ import {
   GET_MESSAGES_BY_SENDER_AND_RECEIVER,
   SUBSCRIBE_MESSAGE,
 } from 'graphql/messages';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { GET_CURRENT_USER } from 'graphql/users';
-import { useEffect } from 'react';
+import { activeUserChatVar } from 'cache';
 
 export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
   const inputRef = useRef();
+  const activeUserChat = useReactiveVar(activeUserChatVar);
 
   const [getMessages, { subscribeToMore, data: messagesData }] = useLazyQuery(
     GET_MESSAGES_BY_SENDER_AND_RECEIVER
   );
   const [createMessage] = useMutation(CREATE_MESSAGE);
-  const { data: currentUserObj } = useQuery(GET_CURRENT_USER, {
-    onCompleted: ({ currentUser }) => {
-      getMessages({
-        variables: {
-          senderId: currentUser.id,
-          receiverId: '123123123',
-        },
-      });
-    },
-  });
+  const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
 
   useEffect(() => {
-    if (currentUserObj) {
+    if (activeUserChat) {
+      getMessages({
+        variables: {
+          receiverId: activeUserChat.id,
+          senderId: currentUserObj.currentUser.id,
+        },
+      });
+
       subscribeToMore({
         document: SUBSCRIBE_MESSAGE,
         variables: {
           senderId: currentUserObj.currentUser.id,
-          receiverId: '123123123',
+          receiverId: activeUserChat.id,
         },
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData) return prev;
@@ -71,7 +75,8 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
         },
       });
     }
-  }, [currentUserObj]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeUserChat]);
 
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
@@ -82,17 +87,16 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   };
 
   const handleSendMessage = () => {
-    if (!inputRef.current.innerText.trim()) {
+    if (!inputRef.current.innerText.trim() || !activeUserChat) {
       inputRef.current.innerHTML = '';
       return;
     }
-
     createMessage({
       variables: {
         input: {
           content: inputRef.current.innerText,
         },
-        receiverId: '123123123',
+        receiverId: activeUserChat.id,
       },
     });
     inputRef.current.innerHTML = '';
@@ -102,9 +106,21 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
     <div className='flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600'>
       <div className='flex justify-between border-b-2 border-slate-500'>
         <div className='flex items-center p-4'>
-          <AvatarIcon width='45px' height='45px' />
+          {!activeUserChat?.avatarUrl ? (
+            <AvatarIcon width='40px' height='40px' />
+          ) : (
+            <img
+              src={activeUserChat.avatarUrl}
+              alt='Profile'
+              className='w-10 h-10 rounded-full border-2 border-slate-500'
+            />
+          )}
           <div className='font-bold'>
-            <p className='ml-2 text-slate-100 cursor-pointer'>Thanh Quang</p>
+            <p className='ml-2 text-slate-100 cursor-pointer'>
+              {activeUserChat?.username
+                ? activeUserChat.username
+                : activeUserChat?.email.split('@')[0]}
+            </p>
             <p className='ml-2 text-xs text-green-300'>Online</p>
           </div>
         </div>
@@ -183,7 +199,12 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           {messagesData?.messagesBySenderAndReceiver.map((item) => (
             <MainChatMessage
               key={item._id}
-              isSender={currentUserObj?.currentUser.id === item.senderId}
+              isSender={activeUserChat.id !== item.senderId}
+              author={
+                currentUserObj?.currentUser.id === item.senderId
+                  ? currentUserObj.currentUser
+                  : activeUserChat
+              }
               {...item}
             />
           ))}
@@ -264,7 +285,9 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           allowHTML={true}
         >
           <div
-            className='bg-blue-300 mx-5 px-3.5 py-2 rounded cursor-pointer'
+            className={`bg-blue-300 mx-5 px-3.5 py-2 rounded ${
+              activeUserChat ? 'cursor-pointer' : 'cursor-not-allowed'
+            }`}
             tabIndex={0}
             onClick={handleSendMessage}
           >

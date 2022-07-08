@@ -1,14 +1,20 @@
-import { useQuery } from '@apollo/client';
+import { useRef } from 'react';
+import { useQuery, useReactiveVar } from '@apollo/client';
 
 import { SearchBar } from 'components/SearchBar';
 import { GET_CONTACTS } from 'graphql/contacts/queries';
 import { UsersChatItem } from './Conversation/UsersChatItem';
+import { activeUserChatVar } from 'cache';
 
 export const DashboardUsersChat = () => {
-  const { data } = useQuery(GET_CONTACTS);
+  const userChatRefs = useRef([]);
+  const activeUserChat = useReactiveVar(activeUserChatVar);
 
-  if (!data) return;
-  console.log(data);
+  const { data } = useQuery(GET_CONTACTS, {
+    onCompleted: (data) => {
+      activeUserChatVar(data.contacts[0].friend);
+    },
+  });
 
   return (
     <>
@@ -19,12 +25,13 @@ export const DashboardUsersChat = () => {
 
       <p className='font-bold text ml-6 mt-5 mb-3'>Recent</p>
       <div className='ml-3 mr-1.5 mb-3 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
-        {data.contacts.map((item) => (
+        {data?.contacts.map((item, index) => (
           <UsersChatItem
-            key={item.id}
-            {...item.friend}
+            key={item.friend.id}
+            {...item}
             isActive={true}
-            isChose={true}
+            isChose={activeUserChat.id === item.friend.id}
+            ref={userChatRefs.current[index]}
           />
         ))}
       </div>

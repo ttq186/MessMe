@@ -27,8 +27,6 @@ import { GET_CURRENT_USER } from 'graphql/users';
 export const DashboardSideBar = ({ tabMode, setTabMode }) => {
   const { data } = useQuery(GET_CURRENT_USER);
 
-  if (!data) return;
-
   return (
     <div className='flex flex-col h-screen justify-between items-center w-[70px] pt-5 pb-3 bg-slate-600'>
       <Link to='/dashboard'>
@@ -133,7 +131,7 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
         setTabMode={setTabMode}
         triggerButton={
           <div className='cursor-pointer p-2 rounded hover:bg-slate-500'>
-            {!data.currentUser.avatarUrl ? (
+            { !data?.currentUser.avatarUrl ? (
               <AvatarIcon width='40px' height='40px' />
             ) : (
               <img

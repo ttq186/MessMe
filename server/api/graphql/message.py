@@ -1,4 +1,3 @@
-from datetime import datetime
 from bson import json_util
 from typing import AsyncIterator
 
@@ -51,21 +50,14 @@ async def resolver_create_message(
     current_user = info.context.get("current_user")
     message_in.sender_id = current_user.id
 
-    pg_session = info.context["pg_session"]
     if receiver_id is not None:
-        user = crud.user.get(pg_session, receiver_id)
+        user = crud.user.get(info.context["pg_session"], receiver_id)
         if user is None:
             raise exceptions.ResourceNotFound(resource_type="User", id=receiver_id)
         message_in.channel_id = generate_channel_name_by_user_id(
             current_user.id, receiver_id
         )
     message = await crud.message.create(info.context["mongo_db"], message_in)
-    contact = await crud.contact.get_by_user_and_friend_id(
-        pg_session, user_id=current_user.id, friend_id=receiver_id
-    )
-    contact = await crud.contact.update(
-        pg_session, contact, obj_in={"last_interaction_at": datetime.now()}
-    )
     await broadcast.publish(
         channel=message_in.channel_id, message=json_util.dumps(message.__dict__)
     )

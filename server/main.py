@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
 from api.graphql_app import graphql_app
-from db.config import broadcast, postgres_session, postgres_engine
+from db.config import broadcast, postgres_session, postgres_engine, mongo_client
 
 
 app = FastAPI(title="MessMe", version="1.0.0", root_path="")
@@ -27,6 +27,8 @@ async def startup_event():
     # Test postgresql connection
     async with postgres_engine.connect() as conn:
         await conn.execute(text("SELECT 1"))
+    # Test mongodb connection
+    await mongo_client.start_session()
 
 
 @app.on_event("shutdown")

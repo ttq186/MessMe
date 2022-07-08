@@ -19,6 +19,19 @@ class CRUDMessage:
         )
         return [Message(**message) for message in messages]
 
+    async def get_most_recent_by_channel_id(
+        self, mongo_db: AsyncIOMotorDatabase, channel_id: str
+    ) -> Message | None:
+        message = (
+            await mongo_db["messages"]
+            .find({"channel_id": channel_id})
+            .sort("created_at", -1)
+            .limit(1)
+            .to_list(1)
+        )
+
+        return Message(**message[0]) if len(message) != 0 else None
+
     async def get(self, mongo_db: AsyncIOMotorDatabase, id: ObjectId) -> Message | None:
         message = await mongo_db["messages"].find_one({"_id": id})
         return Message(**message) if message is not None else None

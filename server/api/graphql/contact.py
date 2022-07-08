@@ -11,14 +11,29 @@ from schemas import (
     ContactCreate,
     ContactDeleteSuccess,
 )
+from utils import generate_channel_name_by_user_id
 
 
 async def resolver_get_contacts(info: Info) -> list[Contact]:
     current_user = info.context["current_user"]
-    contacts = await crud.contact.get_multi_by_user_or_friend_id(
+    contacts = await crud.contact.get_multi_by_requester_or_accepter_id(
         info.context["pg_session"], user_id=current_user.id
     )
-    return contacts
+    return [
+        Contact(
+            **contact.to_dict(exclude=["requester", "accepter"]),
+            last_message=await crud.message.get_most_recent_by_channel_id(
+                info.context["mongo_db"],
+                channel_id=generate_channel_name_by_user_id(
+                    contact.requester_id, contact.accepter_id
+                ),
+            ),
+            friend=contact.accepter
+            if contact.requester_id == current_user.id
+            else contact.requester
+        )
+        for contact in contacts
+    ]
 
 
 async def resolver_get_contact(info: Info, id: str) -> Contact | None:
@@ -43,11 +58,10 @@ async def resolver_create_contact(
     if user is None:
         raise exceptions.EmailDoesNotExist()
     contact_in.created_at = datetime.now()
-    contact_in.last_interaction_at = datetime.now()
-    contact_in.friend_id = user.id
-    contact_in.user_id = current_user.id
+    contact_in.requester_id = current_user.id
+    contact_in.accepter_id = user.id
     contact = await crud.contact.create(pg_session, contact_in)
-    return Contact(**contact.to_dict(), friend=user)
+    return Contact(**contact.to_dict(exclude=["requester", "accepter"]), friend=user)
 
 
 async def resolver_delete_contact(info: Info, id: str) -> ContactDeleteSuccess:

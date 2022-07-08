@@ -7,12 +7,13 @@ from schemas import Contact as ContactSchema
 
 
 class CRUDContact(CRUDBase[ContactModal, ContactSchema]):
-    async def get_multi_by_user_or_friend_id(
+    async def get_multi_by_requester_or_accepter_id(
         self, session: AsyncSession, user_id: str
     ) -> list[ContactModal]:
         result = await session.execute(
             select(ContactModal).where(
-                (ContactModal.user_id == user_id) | (ContactModal.friend_id == user_id)
+                (ContactModal.requester_id == user_id)
+                | (ContactModal.accepter_id == user_id)
             )
         )
         return result.scalars().all()
