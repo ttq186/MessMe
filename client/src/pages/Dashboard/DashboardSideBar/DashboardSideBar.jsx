@@ -130,17 +130,23 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
       <SideBarAccountDropdown
         setTabMode={setTabMode}
         triggerButton={
-          <div className='cursor-pointer p-2 rounded hover:bg-slate-500'>
-            { !data?.currentUser.avatarUrl ? (
-              <AvatarIcon width='40px' height='40px' />
-            ) : (
-              <img
-                src={data.currentUser.avatarUrl}
-                alt='Avatar'
-                className='w-10 h-10 rounded-full border-2 border-gray-600'
-              />
-            )}
-          </div>
+          !data ? (
+            <div className='animate-pulse flex justify-center items-center w-[63px] h-[63px]'>
+              <div className='rounded-full bg-slate-400 h-8 w-8 opacity-75'></div>
+            </div>
+          ) : (
+            <div className='cursor-pointer p-2 rounded hover:bg-slate-500'>
+              {!data?.currentUser.avatarUrl ? (
+                <AvatarIcon width='40px' height='40px' />
+              ) : (
+                <img
+                  src={data.currentUser.avatarUrl}
+                  alt='Avatar'
+                  className='w-10 h-10 rounded-full border-2 border-gray-600'
+                />
+              )}
+            </div>
+          )
         }
       />
     </div>

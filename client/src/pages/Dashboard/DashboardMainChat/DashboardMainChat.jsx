@@ -37,6 +37,8 @@ import {
 } from 'graphql/messages';
 import { GET_CURRENT_USER } from 'graphql/users';
 import { activeUserChatVar } from 'cache';
+import { CurrentUserSkeleton } from './Skeleton/CurrentUserSkeleton';
+import { MessageSkeleton } from './Skeleton/MessageSkeleton';
 
 export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
@@ -105,25 +107,29 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   return (
     <div className='flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600'>
       <div className='flex justify-between border-b-2 border-slate-500'>
-        <div className='flex items-center p-4'>
-          {!activeUserChat?.avatarUrl ? (
-            <AvatarIcon width='40px' height='40px' />
-          ) : (
-            <img
-              src={activeUserChat.avatarUrl}
-              alt='Profile'
-              className='w-10 h-10 rounded-full border-2 border-slate-500'
-            />
-          )}
-          <div className='font-bold'>
-            <p className='ml-2 text-slate-100 cursor-pointer'>
-              {activeUserChat?.username
-                ? activeUserChat.username
-                : activeUserChat?.email.split('@')[0]}
-            </p>
-            <p className='ml-2 text-xs text-green-300'>Online</p>
+        {!currentUserObj ? (
+          <CurrentUserSkeleton />
+        ) : (
+          <div className='flex items-center p-4'>
+            {!activeUserChat?.avatarUrl ? (
+              <AvatarIcon width='40px' height='40px' />
+            ) : (
+              <img
+                src={activeUserChat.avatarUrl}
+                alt='Profile'
+                className='w-10 h-10 rounded-full border-2 border-slate-500'
+              />
+            )}
+            <div className='font-bold'>
+              <p className='ml-2 text-slate-100 cursor-pointer'>
+                {activeUserChat?.username
+                  ? activeUserChat.username
+                  : activeUserChat?.email.split('@')[0]}
+              </p>
+              <p className='ml-2 text-xs text-green-300'>Online</p>
+            </div>
           </div>
-        </div>
+        )}
         <div className='flex justify-evenly w-80 items-center'>
           <SearchDropdown
             triggerButton={
@@ -187,29 +193,40 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
         </div>
       </div>
 
-      <div className='p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
-        <div className='flex items-center p-4 px-8'>
-          <div className='grow border-t-[1px] border-slate-500'></div>
-          <div className='mx-3 bg-slate-500 text-slate-300 font-medium text-sm px-2.5 py-0.5 rounded'>
-            Today
+      {!currentUserObj ? (
+        <div>
+          <MessageSkeleton />
+          <MessageSkeleton isReverse={true} />
+          <MessageSkeleton />
+          <MessageSkeleton isReverse={true} />
+          <MessageSkeleton />
+          <MessageSkeleton isReverse={true} />
+        </div>
+      ) : (
+        <div className='p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
+          <div className='flex items-center p-4 px-8'>
+            <div className='grow border-t-[1px] border-slate-500'></div>
+            <div className='mx-3 bg-slate-500 text-slate-300 font-medium text-sm px-2.5 py-0.5 rounded'>
+              Today
+            </div>
+            <div className='grow border-t-[1px] border-slate-500'></div>
           </div>
-          <div className='grow border-t-[1px] border-slate-500'></div>
+          <div className=''>
+            {messagesData?.messagesBySenderAndReceiver.map((item) => (
+              <MainChatMessage
+                key={item._id}
+                isSender={activeUserChat.id !== item.senderId}
+                author={
+                  currentUserObj?.currentUser.id === item.senderId
+                    ? currentUserObj.currentUser
+                    : activeUserChat
+                }
+                {...item}
+              />
+            ))}
+          </div>
         </div>
-        <div className=''>
-          {messagesData?.messagesBySenderAndReceiver.map((item) => (
-            <MainChatMessage
-              key={item._id}
-              isSender={activeUserChat.id !== item.senderId}
-              author={
-                currentUserObj?.currentUser.id === item.senderId
-                  ? currentUserObj.currentUser
-                  : activeUserChat
-              }
-              {...item}
-            />
-          ))}
-        </div>
-      </div>
+      )}
 
       <div className='relative bottom-0 w-full flex justify-between items-center px-5 py-3.5 border-t-2 border-slate-500'>
         <div className='flex items-center'>

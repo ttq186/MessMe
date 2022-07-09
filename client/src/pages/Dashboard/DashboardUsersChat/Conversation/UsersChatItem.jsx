@@ -1,5 +1,4 @@
 import { AvatarIcon } from 'assets/icons';
-import { forwardRef } from 'react';
 import { activeUserChatVar } from 'cache';
 
 export const UsersChatItem = ({
