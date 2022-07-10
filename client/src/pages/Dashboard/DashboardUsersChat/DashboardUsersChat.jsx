@@ -13,7 +13,8 @@ export const DashboardUsersChat = () => {
 
   const { data } = useQuery(GET_CONTACTS, {
     onCompleted: (data) => {
-      activeUserChatVar(data.contacts[0].friend);
+      if (data.contacts.length !== 0)
+        activeUserChatVar(data.contacts[0].friend);
     },
   });
 

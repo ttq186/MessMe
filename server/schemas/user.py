@@ -5,8 +5,8 @@ import strawberry
 
 @strawberry.type
 class User:
-    id: str | None
     email: str | None
+    id: str | None = None
     username: str | None = None
     avatar_url: str | None = None
     description: str | None = None
