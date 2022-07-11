@@ -16,7 +16,7 @@ from schemas import (
     ObjectIdType,
 )
 from db.config import broadcast
-from utils import generate_channel_name_by_user_id
+from utils import generate_channel_by_users_id
 
 
 async def resolver_get_messages(info: Info) -> list[Message]:
@@ -27,7 +27,9 @@ async def resolver_get_messages(info: Info) -> list[Message]:
 async def resolver_get_messages_by_sender_and_receiver(
     info: Info, sender_id: str, receiver_id: str
 ) -> list[Message]:
-    channel_id = generate_channel_name_by_user_id(sender_id, receiver_id)
+    channel_id = generate_channel_by_users_id(
+        sender_id, receiver_id, channel_type="message"
+    )
     messages = await crud.message.get_multi_by_channel_id(
         info.context["mongo_db"], channel_id=channel_id
     )
@@ -54,8 +56,8 @@ async def resolver_create_message(
         user = crud.user.get(info.context["pg_session"], receiver_id)
         if user is None:
             raise exceptions.ResourceNotFound(resource_type="User", id=receiver_id)
-        message_in.channel_id = generate_channel_name_by_user_id(
-            current_user.id, receiver_id
+        message_in.channel_id = generate_channel_by_users_id(
+            current_user.id, receiver_id, channel_type="message"
         )
     message = await crud.message.create(info.context["mongo_db"], message_in)
     await broadcast.publish(
@@ -122,8 +124,10 @@ class MessageSubscription:
         self, info: Info, receiver_id: str, sender_id: str | None = None
     ) -> AsyncIterator[Message]:
         current_user = await deps.get_current_user(info)
-        channel_name = generate_channel_name_by_user_id(current_user.id, receiver_id)
-        async with broadcast.subscribe(channel=channel_name) as subscriber:
+        channel_id = generate_channel_by_users_id(
+            current_user.id, receiver_id, channel_type="message"
+        )
+        async with broadcast.subscribe(channel=channel_id) as subscriber:
             async for event in subscriber:
                 data = json_util.loads(event.message)
                 yield Message(**data)

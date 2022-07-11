@@ -51,6 +51,26 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [createMessage] = useMutation(CREATE_MESSAGE);
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
 
+  const subcribeMoreMessage = () => {
+    subscribeToMore({
+      document: SUBSCRIBE_MESSAGE,
+      variables: {
+        senderId: currentUserObj.currentUser.id,
+        receiverId: activeUserChat.id,
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        console.log(prev)
+        if (!subscriptionData) return prev;
+        return {
+          messagesBySenderAndReceiver: [
+            ...prev.messagesBySenderAndReceiver,
+            subscriptionData.data.message,
+          ],
+        };
+      },
+    });
+  };
+
   useEffect(() => {
     if (activeUserChat) {
       getMessages({
@@ -60,24 +80,8 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
         },
       });
 
-      subscribeToMore({
-        document: SUBSCRIBE_MESSAGE,
-        variables: {
-          senderId: currentUserObj.currentUser.id,
-          receiverId: activeUserChat.id,
-        },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData) return prev;
-          return {
-            messagesBySenderAndReceiver: [
-              ...prev.messagesBySenderAndReceiver,
-              subscriptionData.data.message,
-            ],
-          };
-        },
-      });
+      subcribeMoreMessage();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeUserChat]);
 
   const toggleEmojiPicker = () => {
@@ -203,7 +207,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           <MessageSkeleton isReverse={true} />
         </div>
       ) : (
-        <div className='p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
+        <div className='grow p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
           <div className='flex items-center p-4 px-8'>
             <div className='grow border-t-[1px] border-slate-500'></div>
             <div className='mx-3 bg-slate-500 text-slate-300 font-medium text-sm px-2.5 py-0.5 rounded'>

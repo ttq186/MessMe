@@ -1,4 +1,6 @@
+import json
 from datetime import datetime
+from typing import AsyncIterator
 
 import strawberry
 from strawberry.types import Info
@@ -11,7 +13,8 @@ from schemas import (
     ContactCreate,
     ContactDeleteSuccess,
 )
-from utils import generate_channel_name_by_user_id
+from utils import generate_channel_by_users_id
+from db.config import broadcast
 
 
 async def resolver_get_contacts(info: Info) -> list[Contact]:
@@ -24,8 +27,8 @@ async def resolver_get_contacts(info: Info) -> list[Contact]:
             **contact.to_dict(exclude=["requester", "accepter"]),
             last_message=await crud.message.get_most_recent_by_channel_id(
                 info.context["mongo_db"],
-                channel_id=generate_channel_name_by_user_id(
-                    contact.requester_id, contact.accepter_id
+                channel_id=generate_channel_by_users_id(
+                    contact.requester_id, contact.accepter_id, channel_type="message"
                 ),
             ),
             friend=contact.accepter
@@ -61,6 +64,10 @@ async def resolver_create_contact(
     contact_in.requester_id = current_user.id
     contact_in.accepter_id = user.id
     contact = await crud.contact.create(pg_session, contact_in)
+    channel_id = generate_channel_by_users_id(
+        contact_in.requester_id, contact_in.accepter_id, channel_type="contact"
+    )
+    await broadcast.publish(channel=channel_id, message=json.dumps(contact.__dict__))
     return Contact(**contact.to_dict(exclude=["requester", "accepter"]), friend=user)
 
 
@@ -98,3 +105,21 @@ class ContactMutation:
         resolver=resolver_delete_contact,
         permission_classes=[security.IsAuthenticatedAdmin],
     )
+
+
+@strawberry.type
+class ContactSubscription:
+    @strawberry.subscription
+    async def contact(self, info: Info, friend_email: str) -> AsyncIterator[Contact]:
+        friend = await crud.user.get_by_email(info.context["pg_session"])
+        if friend is None:
+            raise exceptions.ResourceNotFound(resource_type="User", email=friend_email)
+
+        current_user = info.context.get("current_user")
+        channel_id = generate_channel_by_users_id(
+            current_user.id, friend.id, channel_type="contact"
+        )
+        async with broadcast.subscribe(channel=channel_id) as subcriber:
+            async for event in subcriber:
+                data = json.loads(event)
+                yield Contact(**data)

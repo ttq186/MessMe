@@ -29,18 +29,20 @@ export const UsersChatItem = ({
         )}
       </div>
       <div className='grow'>
-        <p className='font-bold'>
-          {friend.username ? friend.username : friend.email.split('@')[0]}
-        </p>
-        <p className='text-sm text-slate-300 font-medium'>
+        <div className='flex justify-between'>
+          <p className='font-bold'>
+            {friend.username ? friend.username : friend.email.split('@')[0]}
+          </p>
+          <p className='w-[85px] text-[13px] font-bold text-gray-400'>
+            {lastMessage?.createdAt
+              ? new Date(lastMessage.createdAt).toLocaleTimeString()
+              : ''}
+          </p>
+        </div>
+        <p className='text-sm text-slate-300 font-medium w-[250px] truncate overflow-hidden'>
           {lastMessage?.content}
         </p>
       </div>
-      <p className='text-sm font-bold text-gray-400'>
-        {lastMessage?.createdAt
-          ? new Date(lastMessage.createdAt).toLocaleTimeString()
-          : ''}
-      </p>
     </div>
   );
 };

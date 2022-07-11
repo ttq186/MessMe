@@ -13,6 +13,8 @@ async def resolver_login(info: Info, email: str, password: str) -> User:
     user = await crud.user.get_by_email(pg_session, email=email)
     if user is None:
         raise exceptions.InvalidLoginCredentials()
+    if user is not None and user.password is None:
+        raise exceptions.AccountCreatedByGoogle()
     if not security.verify_password(password, user.password):
         raise exceptions.InvalidLoginCredentials()
 
