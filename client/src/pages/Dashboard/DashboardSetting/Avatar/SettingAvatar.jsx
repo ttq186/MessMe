@@ -16,6 +16,7 @@ export const SettingAvatar = () => {
   const [updateCurrentUser] = useMutation(UPDATE_USER);
 
   const handleUploadFile = (file) => {
+    if (file.type.split('/')[0] !== 'image') return;
     const fileNameSplit = file.name.split('.');
     const fileName = `${fileNameSplit[0]}-${file.size}.${fileNameSplit[1]}`;
     getSignedUrl({
@@ -57,7 +58,7 @@ export const SettingAvatar = () => {
           )}
           <input
             type='file'
-            accept='.gif .jpg .jpeg .png'
+            accept='image/*'
             id='update-avatar'
             className='hidden'
             onChange={(e) => handleUploadFile(e.target.files[0])}

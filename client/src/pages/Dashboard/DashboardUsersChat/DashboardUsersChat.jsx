@@ -1,15 +1,13 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useReactiveVar } from '@apollo/client';
 
 import { SearchBar } from 'components/SearchBar';
 import { GET_CONTACTS } from 'graphql/contacts/queries';
 import { UsersChatItem } from './Conversation/UsersChatItem';
-import { activeUserChatVar } from 'cache';
+import { activeUserChatVar, contactsIdVar } from 'cache';
 import { UsersChatSkeleton } from './Skeleton/UsersChatSkeleton';
-import { useEffect } from 'react';
 
 export const DashboardUsersChat = () => {
-  const userChatRefs = useRef([]);
   const [contactsByLastInteraction, setContactsByLastInteraction] = useState(
     []
   );
@@ -19,6 +17,7 @@ export const DashboardUsersChat = () => {
     onCompleted: (data) => {
       if (data.contacts.length === 0) return;
 
+      contactsIdVar(data.contacts.map((contact) => contact.friend.id));
       const temp = [...data.contacts].sort(
         (firstContact, secondContact) =>
           new Date(secondContact.lastMessage.createdAt).getTime() -
@@ -49,13 +48,12 @@ export const DashboardUsersChat = () => {
             <UsersChatSkeleton />
           </div>
         ) : (
-          contactsByLastInteraction.map((item, index) => (
+          contactsByLastInteraction.map((item) => (
             <UsersChatItem
               key={item.friend.id}
               {...item}
               isActive={true}
               isChose={activeUserChat.id === item.friend.id}
-              ref={userChatRefs.current[index]}
             />
           ))
         )}

@@ -1,13 +1,17 @@
 import { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { Modal } from 'components/Modal';
 import { CREATE_CONTACT } from 'graphql/contacts/mutations';
+import { GET_CONTACTS } from 'graphql/contacts/queries';
+import { useEffect } from 'react';
 
 export const ContactModal = ({ triggerButton }) => {
   const [contactInfo, setContactInfo] = useState('');
+  const [lastTyping, setlastTyping] = useState(Date.now());
   const [invitationMessage, setInvitationMessage] = useState('');
   const [isOpen, setOpen] = useState(false);
+  const [getContacts, { data }] = useLazyQuery(GET_CONTACTS);
   const [createContact] = useMutation(CREATE_CONTACT);
 
   const openModal = () => {
@@ -32,6 +36,19 @@ export const ContactModal = ({ triggerButton }) => {
     closeModal();
     setContactInfo('');
     setInvitationMessage('');
+  };
+
+  const handleContactInputChange = (currentContactInfo) => {
+    setContactInfo(currentContactInfo);
+
+    if (Date.now() - lastTyping > 500) {
+      getContacts({
+        variables: {
+          search: currentContactInfo,
+        },
+      });
+    }
+    setlastTyping(Date.now());
   };
 
   return (
@@ -59,7 +76,7 @@ export const ContactModal = ({ triggerButton }) => {
               id='email'
               placeholder='Enter name or email'
               className='w-full p-2.5 md:px-4 bg-gray-600 rounded font-medium text-sm md:text-[15px] focus:outline-none'
-              onChange={(e) => setContactInfo(e.target.value)}
+              onChange={(e) => handleContactInputChange(e.target.value)}
             />
           </div>
         </div>

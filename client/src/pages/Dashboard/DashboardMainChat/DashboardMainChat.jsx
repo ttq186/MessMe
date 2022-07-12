@@ -36,7 +36,7 @@ import {
   SUBSCRIBE_MESSAGE,
 } from 'graphql/messages';
 import { GET_CURRENT_USER } from 'graphql/users';
-import { activeUserChatVar } from 'cache';
+import { activeUserChatVar, contactsIdVar } from 'cache';
 import { CurrentUserSkeleton } from './Skeleton/CurrentUserSkeleton';
 import { MessageSkeleton } from './Skeleton/MessageSkeleton';
 
@@ -44,31 +44,34 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
   const inputRef = useRef();
   const activeUserChat = useReactiveVar(activeUserChatVar);
+  const contactsId = useReactiveVar(contactsIdVar);
 
-  const [getMessages, { subscribeToMore, data: messagesData }] = useLazyQuery(
-    GET_MESSAGES_BY_SENDER_AND_RECEIVER
-  );
+  const [getMessages, { subscribeToMore, data: messagesData, loading, error }] =
+    useLazyQuery(GET_MESSAGES_BY_SENDER_AND_RECEIVER);
   const [createMessage] = useMutation(CREATE_MESSAGE);
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
 
-  const subcribeMoreMessage = () => {
-    subscribeToMore({
-      document: SUBSCRIBE_MESSAGE,
-      variables: {
-        senderId: currentUserObj.currentUser.id,
-        receiverId: activeUserChat.id,
-      },
-      updateQuery: (prev, { subscriptionData }) => {
-        console.log(prev)
-        if (!subscriptionData) return prev;
-        return {
-          messagesBySenderAndReceiver: [
-            ...prev.messagesBySenderAndReceiver,
-            subscriptionData.data.message,
-          ],
-        };
-      },
-    });
+  const subcribeMessageToAllContacts = () => {
+    if (contactsId.length === 0) return;
+
+    for (let id of contactsId) {
+      subscribeToMore({
+        document: SUBSCRIBE_MESSAGE,
+        variables: {
+          senderId: currentUserObj.currentUser.id,
+          receiverId: id,
+        },
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData) return prev;
+          return {
+            messagesBySenderAndReceiver: [
+              ...prev.messagesBySenderAndReceiver,
+              subscriptionData.data.message,
+            ],
+          };
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -78,11 +81,14 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           receiverId: activeUserChat.id,
           senderId: currentUserObj.currentUser.id,
         },
+        
       });
-
-      subcribeMoreMessage();
     }
   }, [activeUserChat]);
+
+  useEffect(() => {
+    subcribeMessageToAllContacts();
+  }, [contactsId]);
 
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
@@ -197,7 +203,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
         </div>
       </div>
 
-      {!currentUserObj ? (
+      {!currentUserObj || loading ? (
         <div>
           <MessageSkeleton />
           <MessageSkeleton isReverse={true} />
@@ -216,18 +222,26 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
             <div className='grow border-t-[1px] border-slate-500'></div>
           </div>
           <div className=''>
-            {messagesData?.messagesBySenderAndReceiver.map((item) => (
-              <MainChatMessage
-                key={item._id}
-                isSender={activeUserChat.id !== item.senderId}
-                author={
-                  currentUserObj?.currentUser.id === item.senderId
-                    ? currentUserObj.currentUser
-                    : activeUserChat
-                }
-                {...item}
-              />
-            ))}
+            {messagesData?.messagesBySenderAndReceiver.map((item) => {
+              // if (
+              //   ![currentUserObj?.currentUser.id, activeUserChat.id].includes(
+              //     item.senderId
+              //   )
+              // )
+              //   return;
+              return (
+                <MainChatMessage
+                  key={item._id}
+                  isSender={activeUserChat.id !== item.senderId}
+                  author={
+                    currentUserObj?.currentUser.id === item.senderId
+                      ? currentUserObj.currentUser
+                      : activeUserChat
+                  }
+                  {...item}
+                />
+              );
+            })}
           </div>
         </div>
       )}

@@ -4,7 +4,6 @@ from sqlalchemy.ext.declarative import as_declarative
 @as_declarative()
 class Base:
     def to_dict(self, exclude_unset: bool = False, exclude: list = []) -> dict:
-        print("hello")
         if exclude_unset:
             return dict(
                 [

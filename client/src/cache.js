@@ -3,6 +3,7 @@ import { makeVar, InMemoryCache } from '@apollo/client';
 export const hasLoadWelcomeAnimationVar = makeVar(false);
 export const isSignUpSuccessVar = makeVar(false);
 export const activeUserChatVar = makeVar(null);
+export const contactsIdVar = makeVar([]);
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -21,6 +22,11 @@ export const cache = new InMemoryCache({
         activeUserChat: {
           read() {
             return activeUserChatVar();
+          },
+        },
+        contactsId: {
+          read() {
+            return contactsIdVar();
           },
         },
       },

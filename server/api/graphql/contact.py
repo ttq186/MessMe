@@ -17,11 +17,12 @@ from utils import generate_channel_by_users_id
 from db.config import broadcast
 
 
-async def resolver_get_contacts(info: Info) -> list[Contact]:
+async def resolver_get_contacts(info: Info, search: str | None = None) -> list[Contact]:
     current_user = info.context["current_user"]
     contacts = await crud.contact.get_multi_by_requester_or_accepter_id(
         info.context["pg_session"], user_id=current_user.id
     )
+    print(search)
     return [
         Contact(
             **contact.to_dict(exclude=["requester", "accepter"]),

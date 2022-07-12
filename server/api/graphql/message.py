@@ -53,7 +53,7 @@ async def resolver_create_message(
     message_in.sender_id = current_user.id
 
     if receiver_id is not None:
-        user = crud.user.get(info.context["pg_session"], receiver_id)
+        user = await crud.user.get(info.context["pg_session"], receiver_id)
         if user is None:
             raise exceptions.ResourceNotFound(resource_type="User", id=receiver_id)
         message_in.channel_id = generate_channel_by_users_id(
@@ -120,9 +120,7 @@ class MessageMutation:
 @strawberry.type
 class MessageSubscription:
     @strawberry.subscription
-    async def message(
-        self, info: Info, receiver_id: str, sender_id: str | None = None
-    ) -> AsyncIterator[Message]:
+    async def message(self, info: Info, receiver_id: str) -> AsyncIterator[Message]:
         current_user = await deps.get_current_user(info)
         channel_id = generate_channel_by_users_id(
             current_user.id, receiver_id, channel_type="message"
