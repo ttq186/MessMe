@@ -8,26 +8,39 @@ from schemas import Contact as ContactSchema
 
 class CRUDContact(CRUDBase[ContactModal, ContactSchema]):
     async def get_multi_by_requester_or_accepter_id(
-        self, session: AsyncSession, user_id: str
+        self, session: AsyncSession, user_id: str, is_established: bool | None = None
     ) -> list[ContactModal]:
-        result = await session.execute(
-            select(ContactModal).where(
-                (ContactModal.requester_id == user_id)
-                | (ContactModal.accepter_id == user_id)
-            )
+        stmt = select(ContactModal).where(
+            (ContactModal.requester_id == user_id)
+            | (ContactModal.accepter_id == user_id)
         )
+        if is_established is not None:
+            stmt = stmt.where(ContactModal.is_established == is_established)
+        result = await session.execute(stmt)
         return result.scalars().all()
 
-    async def get_by_user_and_friend_id(
-        self, session: AsyncSession, user_id: str, friend_id: str
+    async def get_by_requester_and_accepter_id(
+        self, session: AsyncSession, requester_id: str, accepter_id: str
     ) -> ContactModal | None:
         result = await session.execute(
             select(ContactModal).where(
-                ContactModal.user_id.in_([user_id, friend_id]),
-                ContactModal.friend_id.in_([user_id, friend_id]),
+                ContactModal.requester_id.in_([requester_id, accepter_id]),
+                ContactModal.accepter_id.in_([requester_id, accepter_id]),
             )
         )
         return result.scalars().first()
+
+    async def get_multi_by_accepter_id(
+        self,
+        session: AsyncSession,
+        accepter_id: str,
+        is_established: bool | None = None,
+    ) -> list[ContactModal]:
+        stmt = select(ContactModal).where((ContactModal.accepter_id == accepter_id))
+        if is_established is not None:
+            stmt = stmt.where(ContactModal.is_established == is_established)
+        result = await session.execute(stmt)
+        return result.scalars().all()
 
 
 contact = CRUDContact(ContactModal)

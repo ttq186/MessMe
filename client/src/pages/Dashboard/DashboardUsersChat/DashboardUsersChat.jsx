@@ -17,13 +17,24 @@ export const DashboardUsersChat = () => {
     onCompleted: (data) => {
       if (data.contacts.length === 0) return;
 
-      contactsIdVar(data.contacts.map((contact) => contact.friend.id));
-      const temp = [...data.contacts].sort(
-        (firstContact, secondContact) =>
+      const contactsId = data.contacts.map((contact) => contact.friend.id);
+      contactsIdVar(contactsId);
+
+      const establishedContacts = data.contacts.filter(
+        (contact) => contact.isEstablished
+      );
+      const temp = establishedContacts.sort((firstContact, secondContact) => {
+        if (!firstContact.lastMessage) return 1;
+        if (!secondContact.lastMessage) return -1;
+        return (
           new Date(secondContact.lastMessage.createdAt).getTime() -
           new Date(firstContact.lastMessage.createdAt).getTime()
-      );
-      activeUserChatVar(temp[0].friend);
+        );
+      });
+
+      if (!activeUserChat) {
+        activeUserChatVar(temp[0].friend);
+      }
       setContactsByLastInteraction(temp);
     },
   });

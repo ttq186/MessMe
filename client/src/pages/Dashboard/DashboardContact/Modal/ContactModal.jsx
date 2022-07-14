@@ -1,18 +1,84 @@
 import { useState } from 'react';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import {
+  useLazyQuery,
+  useMutation,
+  useQuery,
+  useReactiveVar,
+} from '@apollo/client';
 
 import { Modal } from 'components/Modal';
-import { CREATE_CONTACT } from 'graphql/contacts/mutations';
-import { GET_CONTACTS } from 'graphql/contacts/queries';
-import { useEffect } from 'react';
+import { CREATE_CONTACT } from 'graphql/contacts';
+import { GET_CURRENT_USER, GET_USERS } from 'graphql/users';
+import { AvatarIcon } from 'assets/icons';
+import {
+  contactRequestsIdVar,
+  contactsIdVar,
+  currentChoseUserIdVar,
+} from 'cache';
+
+const partnerStatus = {
+  FRIEND: 'Friend',
+  REQUESTED: 'Requested',
+  STRANGER: 'Stranger',
+};
+
+const UserItem = ({ id, avatarUrl, username, email, status }) => {
+  const handleChooseUser = (e) => {
+    if (!e.target.checked) {
+      currentChoseUserIdVar(null);
+    } else {
+      currentChoseUserIdVar(id);
+    }
+  };
+
+  return (
+    <label
+      className='flex items-center p-2 mx-3 mb-2.5 opacity-80 bg-slate-500 rounded cursor-pointer transition duration-300 ease-out hover:ease-in hover:opacity-100'
+      id='checkbox'
+    >
+      <div className='flex items-end p-1'>
+        {!avatarUrl ? (
+          <AvatarIcon width='40px' height='40px' />
+        ) : (
+          <img
+            src={avatarUrl}
+            alt='Friend'
+            className='w-10 h-10 rounded-full'
+          />
+        )}
+      </div>
+      <div className='grow ml-2'>
+        <p className='font-bold -mt-0.5'>
+          {username ? username : email.split('@')[0]}
+        </p>
+        <p className='text-sm text-slate-300 font-medium'>{status}</p>
+      </div>
+      {status === partnerStatus.STRANGER && (
+        <div className='mr-4'>
+          <input
+            type='checkbox'
+            id='checkbox'
+            className='scale-125'
+            onChange={(e) => handleChooseUser(e)}
+          />
+        </div>
+      )}
+    </label>
+  );
+};
 
 export const ContactModal = ({ triggerButton }) => {
-  const [contactInfo, setContactInfo] = useState('');
-  const [lastTyping, setlastTyping] = useState(Date.now());
   const [invitationMessage, setInvitationMessage] = useState('');
   const [isOpen, setOpen] = useState(false);
-  const [getContacts, { data }] = useLazyQuery(GET_CONTACTS);
+  const [timeOutObj, setTimeOutObj] = useState(null);
+
+  const contactsId = useReactiveVar(contactsIdVar);
+  const currentChoseUserId = useReactiveVar(currentChoseUserIdVar);
+  const contactRequestsId = useReactiveVar(contactRequestsIdVar);
+
+  const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [createContact] = useMutation(CREATE_CONTACT);
+  const [getUsers, { data }] = useLazyQuery(GET_USERS);
 
   const openModal = () => {
     setOpen(true);
@@ -20,35 +86,47 @@ export const ContactModal = ({ triggerButton }) => {
 
   const closeModal = () => {
     setOpen(false);
+    getUsers({
+      variables: {
+        search: '1862002',
+      },
+    });
   };
 
   const handleAddContact = () => {
-    if (!contactInfo.trim()) return;
+    if (!currentChoseUserId) return;
+
     createContact({
       variables: {
-        email: contactInfo,
-        input: {
-          invitationMessage,
-        },
+        id: currentChoseUserId,
+        input: { invitationMessage },
       },
     });
-
     closeModal();
-    setContactInfo('');
+    currentChoseUserIdVar(null);
+    contactRequestsIdVar([...contactRequestsId, currentChoseUserId]);
     setInvitationMessage('');
   };
 
   const handleContactInputChange = (currentContactInfo) => {
-    setContactInfo(currentContactInfo);
+    clearTimeout(timeOutObj);
+    const newTimeout = setTimeout(() => {
+      if (currentContactInfo.trim() !== '') {
+        getUsers({
+          variables: {
+            search: currentContactInfo,
+          },
+        });
+      }
+    }, 500);
+    setTimeOutObj(newTimeout);
+  };
 
-    if (Date.now() - lastTyping > 500) {
-      getContacts({
-        variables: {
-          search: currentContactInfo,
-        },
-      });
-    }
-    setlastTyping(Date.now());
+  const getPartnerStatus = (partner) => {
+    const partnerId = partner.id;
+    if (contactsId.includes(partnerId)) return partnerStatus.FRIEND;
+    if (contactRequestsId.includes(partnerId)) return partnerStatus.REQUESTED;
+    return partnerStatus.STRANGER;
   };
 
   return (
@@ -79,6 +157,23 @@ export const ContactModal = ({ triggerButton }) => {
               onChange={(e) => handleContactInputChange(e.target.value)}
             />
           </div>
+
+          {data && (
+            <div className='bg-slate-600 py-2.5 rounded mt-2'>
+              <div className='max-h-[300px] pl-1 bg-slate-600 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
+                {data.users.map((user) => {
+                  if (user.id === currentUserObj?.currentUser.id) return;
+                  return (
+                    <UserItem
+                      key={user.id}
+                      {...user}
+                      status={getPartnerStatus(user)}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
         <div className='mb-4 text-slate-300'>
           <label className='text-[15px] font-bold' htmlFor='invitation-message'>
@@ -99,7 +194,7 @@ export const ContactModal = ({ triggerButton }) => {
             className='float-right bg-blue-300 font-semibold text-gray-700 rounded-[3px] py-1.5 px-3 text-[15px] hover:opacity-90'
             onClick={handleAddContact}
           >
-            Add Contact
+            Send Request
           </button>
           <button
             className='float-right text-blue-300 font-semibold rounded py-1.5 px-3 mr-3 text-[15px] hover:opacity-90'

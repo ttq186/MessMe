@@ -46,20 +46,18 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const activeUserChat = useReactiveVar(activeUserChatVar);
   const contactsId = useReactiveVar(contactsIdVar);
 
-  const [getMessages, { subscribeToMore, data: messagesData, loading, error }] =
+  const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
+  const [getMessages, { subscribeToMore, data: messagesData, loading }] =
     useLazyQuery(GET_MESSAGES_BY_SENDER_AND_RECEIVER);
   const [createMessage] = useMutation(CREATE_MESSAGE);
-  const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
 
   const subcribeMessageToAllContacts = () => {
-    if (contactsId.length === 0) return;
-
-    for (let id of contactsId) {
+    for (let contactId of contactsId) {
       subscribeToMore({
         document: SUBSCRIBE_MESSAGE,
         variables: {
           senderId: currentUserObj.currentUser.id,
-          receiverId: id,
+          receiverId: contactId,
         },
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData) return prev;
@@ -75,20 +73,21 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   };
 
   useEffect(() => {
-    if (activeUserChat) {
+    if (activeUserChat && currentUserObj) {
       getMessages({
         variables: {
           receiverId: activeUserChat.id,
           senderId: currentUserObj.currentUser.id,
         },
-        
       });
     }
-  }, [activeUserChat]);
+  }, [activeUserChat, currentUserObj]);
 
   useEffect(() => {
-    subcribeMessageToAllContacts();
-  }, [contactsId]);
+    if (contactsId.length !== 0 && currentUserObj) {
+      subcribeMessageToAllContacts();
+    }
+  }, [contactsId, currentUserObj]);
 
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
@@ -213,14 +212,14 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           <MessageSkeleton isReverse={true} />
         </div>
       ) : (
-        <div className='grow p-2 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
-          <div className='flex items-center p-4 px-8'>
+        <div className='grow p-3 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
+          {/* <div className='flex items-center p-4 px-8'>
             <div className='grow border-t-[1px] border-slate-500'></div>
             <div className='mx-3 bg-slate-500 text-slate-300 font-medium text-sm px-2.5 py-0.5 rounded'>
               Today
             </div>
             <div className='grow border-t-[1px] border-slate-500'></div>
-          </div>
+          </div> */}
           <div className=''>
             {messagesData?.messagesBySenderAndReceiver.map((item) => {
               // if (

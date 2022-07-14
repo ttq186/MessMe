@@ -1,9 +1,9 @@
-import json
 from datetime import datetime
 from typing import AsyncIterator
 
 import strawberry
 from strawberry.types import Info
+from bson import json_util
 
 import crud
 import exceptions
@@ -17,12 +17,29 @@ from utils import generate_channel_by_users_id
 from db.config import broadcast
 
 
-async def resolver_get_contacts(info: Info, search: str | None = None) -> list[Contact]:
+async def resolver_get_contact_request(info: Info) -> list[Contact]:
+    current_user = info.context["current_user"]
+    contacts = await crud.contact.get_multi_by_accepter_id(
+        info.context["pg_session"], accepter_id=current_user.id, is_established=False
+    )
+    return [
+        Contact(
+            **contact.to_dict(exclude=["requester", "accepter"]),
+            friend=contact.requester
+        )
+        for contact in contacts
+    ]
+
+
+async def resolver_get_contacts(
+    info: Info, is_established: bool | None = None
+) -> list[Contact]:
     current_user = info.context["current_user"]
     contacts = await crud.contact.get_multi_by_requester_or_accepter_id(
-        info.context["pg_session"], user_id=current_user.id
+        info.context["pg_session"],
+        user_id=current_user.id,
+        is_established=is_established,
     )
-    print(search)
     return [
         Contact(
             **contact.to_dict(exclude=["requester", "accepter"]),
@@ -51,16 +68,26 @@ async def resolver_get_contact(info: Info, id: str) -> Contact | None:
 
 
 async def resolver_create_contact(
-    info: Info, email: str, contact_in: ContactCreate | None
+    info: Info, id: str | None, contact_in: ContactCreate | None
 ) -> Contact:
     current_user = info.context.get("current_user")
     pg_session = info.context["pg_session"]
 
-    if current_user.email == email:
+    if current_user.id == id:
         raise Exception("You can not create a new contact with yourself!")
-    user = await crud.user.get_by_email(pg_session, email=email)
+    user = await crud.user.get(pg_session, id)
     if user is None:
         raise exceptions.EmailDoesNotExist()
+
+    contact = await crud.contact.get_by_requester_and_accepter_id(
+        pg_session, requester_id=current_user.id, accepter_id=user.id
+    )
+    if contact is not None:
+        if contact.is_established:
+            raise exceptions.ContactAlreadyExist()
+        else:
+            raise exceptions.ContactWaitForAccepting()
+
     contact_in.created_at = datetime.now()
     contact_in.requester_id = current_user.id
     contact_in.accepter_id = user.id
@@ -68,7 +95,10 @@ async def resolver_create_contact(
     channel_id = generate_channel_by_users_id(
         contact_in.requester_id, contact_in.accepter_id, channel_type="contact"
     )
-    await broadcast.publish(channel=channel_id, message=json.dumps(contact.__dict__))
+    await broadcast.publish(
+        channel=channel_id,
+        message=json_util.dumps(contact.to_dict(exclude=["requester", "accepter"])),
+    )
     return Contact(**contact.to_dict(exclude=["requester", "accepter"]), friend=user)
 
 
@@ -89,6 +119,10 @@ async def resolver_delete_contact(info: Info, id: str) -> ContactDeleteSuccess:
 class ContactQuery:
     contacts: list[Contact] = strawberry.field(
         resolver=resolver_get_contacts,
+        permission_classes=[security.IsAuthenticatedUser],
+    )
+    contactRequests: list[Contact] = strawberry.field(
+        resolver=resolver_get_contact_request,
         permission_classes=[security.IsAuthenticatedUser],
     )
     contact: Contact = strawberry.field(
@@ -122,5 +156,5 @@ class ContactSubscription:
         )
         async with broadcast.subscribe(channel=channel_id) as subcriber:
             async for event in subcriber:
-                data = json.loads(event)
+                data = json_util.loads(event)
                 yield Contact(**data)

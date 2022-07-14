@@ -26,7 +26,7 @@ export const MainChatMessage = ({
         <Tippy
           content={
             <b style={{ color: '#cbd5e1' }}>
-              {new Date(createdAt).toLocaleTimeString()}
+              {new Date(createdAt).toLocaleString()}
             </b>
           }
           placement='right-start'

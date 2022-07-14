@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, Text, DateTime
+from sqlalchemy import Boolean, Column, String, Integer, ForeignKey, Text, DateTime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
@@ -15,6 +15,7 @@ class Contact(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
     invitation_message = Column(Text)
+    is_established = Column(Boolean, default=False)
 
     requester = relationship("User", lazy="selectin", foreign_keys=[requester_id])
     accepter = relationship("User", lazy="selectin", foreign_keys=[accepter_id])

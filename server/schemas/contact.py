@@ -14,6 +14,7 @@ class Contact:
     invitation_message: str | None = None
     friend: User | None = None
     last_message: Message | None = None
+    is_established: bool | None = None
 
 
 @strawberry.input

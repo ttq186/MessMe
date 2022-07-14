@@ -8,8 +8,8 @@ from core import security
 from schemas import User, UserCreate, UserUpdate, UserDeleteSuccess, SignedUrl
 
 
-async def resolver_get_users(info: Info) -> list[User]:
-    users = await crud.user.get_multi(session=info.context["pg_session"])
+async def resolver_get_users(info: Info, search: str | None = None) -> list[User]:
+    users = await crud.user.get_multi(session=info.context["pg_session"], search=search)
     return users
 
 
@@ -80,7 +80,7 @@ async def resolver_get_signed_url(blob_type: str, blob_name: str) -> SignedUrl:
 @strawberry.type
 class UserQuery:
     users: list[User] = strawberry.field(
-        resolver=resolver_get_users, permission_classes=[security.IsAuthenticatedAdmin]
+        resolver=resolver_get_users, permission_classes=[security.IsAuthenticatedUser]
     )
     user: User = strawberry.field(
         resolver=resolver_get_user, permission_classes=[security.IsAuthenticatedUser]
