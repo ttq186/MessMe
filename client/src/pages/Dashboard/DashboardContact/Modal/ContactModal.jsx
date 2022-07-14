@@ -95,10 +95,11 @@ export const ContactModal = ({ triggerButton }) => {
 
   const handleAddContact = () => {
     if (!currentChoseUserId) return;
+    console.log(currentChoseUserId)
 
     createContact({
       variables: {
-        id: currentChoseUserId,
+        partnerId: currentChoseUserId,
         input: { invitationMessage },
       },
     });

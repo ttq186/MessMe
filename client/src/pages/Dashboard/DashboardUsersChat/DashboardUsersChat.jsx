@@ -6,6 +6,7 @@ import { GET_CONTACTS } from 'graphql/contacts/queries';
 import { UsersChatItem } from './Conversation/UsersChatItem';
 import { activeUserChatVar, contactsIdVar } from 'cache';
 import { UsersChatSkeleton } from './Skeleton/UsersChatSkeleton';
+import { useEffect } from 'react';
 
 export const DashboardUsersChat = () => {
   const [contactsByLastInteraction, setContactsByLastInteraction] = useState(
@@ -19,7 +20,6 @@ export const DashboardUsersChat = () => {
 
       const contactsId = data.contacts.map((contact) => contact.friend.id);
       contactsIdVar(contactsId);
-
       const establishedContacts = data.contacts.filter(
         (contact) => contact.isEstablished
       );
@@ -37,6 +37,7 @@ export const DashboardUsersChat = () => {
       }
       setContactsByLastInteraction(temp);
     },
+    fetchPolicy: 'network-only',
   });
 
   return (

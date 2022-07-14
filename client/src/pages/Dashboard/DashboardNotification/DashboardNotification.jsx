@@ -4,8 +4,9 @@ import { GET_CONTACT_REQUESTS } from 'graphql/contacts';
 import { NotificationItem } from './Item/NotificationItem';
 
 export const DashboardNotification = () => {
-  const { data: contactRequestsObj } = useQuery(GET_CONTACT_REQUESTS);
-  if (contactRequestsObj) console.log(contactRequestsObj.contactRequests);
+  const { data: contactRequestsObj } = useQuery(GET_CONTACT_REQUESTS, {
+    fetchPolicy: 'cache-and-network',
+  });
 
   return (
     <>

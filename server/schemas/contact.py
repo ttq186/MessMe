@@ -25,6 +25,11 @@ class ContactCreate:
     invitation_message: str | None = None
 
 
+@strawberry.input
+class ContactUpdate:
+    is_established: bool | None = None
+
+
 @strawberry.type
 class ContactDeleteSuccess:
     message: str

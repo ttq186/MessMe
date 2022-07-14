@@ -21,6 +21,7 @@ export const GET_CONTACTS = gql`
 export const GET_CONTACT_REQUESTS = gql`
   query GetContactRequests {
     contactRequests {
+      id
       friend {
         id
         email

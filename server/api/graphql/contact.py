@@ -10,6 +10,7 @@ import exceptions
 from core import security
 from schemas import (
     Contact,
+    ContactUpdate,
     ContactCreate,
     ContactDeleteSuccess,
 )
@@ -19,6 +20,7 @@ from db.config import broadcast
 
 async def resolver_get_contact_request(info: Info) -> list[Contact]:
     current_user = info.context["current_user"]
+    print(current_user.id)
     contacts = await crud.contact.get_multi_by_accepter_id(
         info.context["pg_session"], accepter_id=current_user.id, is_established=False
     )
@@ -57,7 +59,7 @@ async def resolver_get_contacts(
     ]
 
 
-async def resolver_get_contact(info: Info, id: str) -> Contact | None:
+async def resolver_get_contact(info: Info, id: strawberry.ID) -> Contact | None:
     current_user = info.context.get("current_user")
     contact = await crud.contact.get(session=info.context["pg_session"], id=id)
     if contact is None:
@@ -68,19 +70,19 @@ async def resolver_get_contact(info: Info, id: str) -> Contact | None:
 
 
 async def resolver_create_contact(
-    info: Info, id: str | None, contact_in: ContactCreate | None
+    info: Info, partner_id: str | None, contact_in: ContactCreate | None
 ) -> Contact:
     current_user = info.context.get("current_user")
     pg_session = info.context["pg_session"]
 
-    if current_user.id == id:
+    if current_user.id == partner_id:
         raise Exception("You can not create a new contact with yourself!")
-    user = await crud.user.get(pg_session, id)
-    if user is None:
+    accepter = await crud.user.get(pg_session, partner_id)
+    if accepter is None:
         raise exceptions.EmailDoesNotExist()
 
     contact = await crud.contact.get_by_requester_and_accepter_id(
-        pg_session, requester_id=current_user.id, accepter_id=user.id
+        pg_session, requester_id=current_user.id, accepter_id=accepter.id
     )
     if contact is not None:
         if contact.is_established:
@@ -90,7 +92,7 @@ async def resolver_create_contact(
 
     contact_in.created_at = datetime.now()
     contact_in.requester_id = current_user.id
-    contact_in.accepter_id = user.id
+    contact_in.accepter_id = accepter.id
     contact = await crud.contact.create(pg_session, contact_in)
     channel_id = generate_channel_by_users_id(
         contact_in.requester_id, contact_in.accepter_id, channel_type="contact"
@@ -99,17 +101,40 @@ async def resolver_create_contact(
         channel=channel_id,
         message=json_util.dumps(contact.to_dict(exclude=["requester", "accepter"])),
     )
-    return Contact(**contact.to_dict(exclude=["requester", "accepter"]), friend=user)
+    return Contact(
+        **contact.to_dict(exclude=["requester", "accepter"]), friend=accepter
+    )
 
 
-async def resolver_delete_contact(info: Info, id: str) -> ContactDeleteSuccess:
+async def resolver_update_contact(
+    info: Info, id: strawberry.ID, contact_in: ContactUpdate
+) -> Contact:
     pg_session = info.context["pg_session"]
+    id = int(id)
     contact = await crud.contact.get(pg_session, id)
     if contact is None:
         raise exceptions.ResourceNotFound(resource_type="Contact", id=id)
 
     current_user = info.context.get("current_user")
-    if current_user not in [contact.user_id, contact.friend_id]:
+    if current_user.id not in [contact.requester_id, contact.accepter_id]:
+        raise exceptions.NotAuthorized()
+    contact = await crud.contact.update(pg_session, db_obj=contact, obj_in=contact_in)
+    return Contact(
+        **contact.to_dict(exclude=["requester", "accepter"]), friend=contact.requester
+    )
+
+
+async def resolver_delete_contact(
+    info: Info, id: strawberry.ID
+) -> ContactDeleteSuccess:
+    pg_session = info.context["pg_session"]
+    id = int(id)
+    contact = await crud.contact.get(pg_session, id)
+    if contact is None:
+        raise exceptions.ResourceNotFound(resource_type="Contact", id=id)
+
+    current_user = info.context.get("current_user")
+    if current_user.id not in [contact.requester_id, contact.accepter_id]:
         raise exceptions.NotAuthorized()
     await crud.contact.delete(pg_session, id=id)
     return ContactDeleteSuccess(message="Deleted Successfully!")
@@ -136,9 +161,13 @@ class ContactMutation:
         resolver=resolver_create_contact,
         permission_classes=[security.IsAuthenticatedUser],
     )
+    update_contact: Contact = strawberry.field(
+        resolver=resolver_update_contact,
+        permission_classes=[security.IsAuthenticatedUser],
+    )
     delete_contact: ContactDeleteSuccess = strawberry.field(
         resolver=resolver_delete_contact,
-        permission_classes=[security.IsAuthenticatedAdmin],
+        permission_classes=[security.IsAuthenticatedUser],
     )
 
 

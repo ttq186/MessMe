@@ -1,9 +1,51 @@
+import { useMutation } from '@apollo/client';
 import { AvatarIcon } from 'assets/icons';
+import {
+  DELETE_CONTACT,
+  GET_CONTACT_REQUESTS,
+  UPDATE_CONTACT,
+} from 'graphql/contacts';
 
-export const NotificationItem = ({ partner, invitationMessage, createdAt }) => {
-  const handleAcceptRequest = () => {};
+export const NotificationItem = ({
+  id,
+  partner,
+  invitationMessage,
+  createdAt,
+}) => {
+  const [deleteContact] = useMutation(DELETE_CONTACT, {
+    refetchQueries: [
+      {
+        query: GET_CONTACT_REQUESTS,
+      },
+      'GetContactsRequests',
+    ],
+  });
 
-  const handleRejectRequest = () => {};
+  const [updateContact] = useMutation(UPDATE_CONTACT, {
+    refetchQueries: [
+      {
+        query: GET_CONTACT_REQUESTS,
+      },
+      'GetContactsRequests',
+    ],
+  });
+
+  const handleAcceptRequest = () => {
+    updateContact({
+      variables: {
+        id,
+        input: {
+          isEstablished: true,
+        },
+      },
+    });
+  };
+
+  const handleRejectRequest = () => {
+    deleteContact({
+      variables: { id },
+    });
+  };
 
   return (
     <div className='p-[14px] py-[10px] mx-3 mb-2.5 opacity-80 bg-slate-500 hover:opacity-100 rounded cursor-pointer transition duration-300 ease-out hover:ease-in'>
