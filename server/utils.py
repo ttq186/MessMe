@@ -10,9 +10,11 @@ def to_camel(string: str) -> str:
     return string_split[0] + "".join(word.capitalize() for word in string_split[1:])
 
 
-def generate_channel_by_users_id(
-    first_id: str, second_id: str, channel_type: str
-) -> str:
+def generate_message_channel_by_users_id(first_id: str, second_id: str) -> str:
     if first_id <= second_id:
-        return f"{channel_type}-{first_id}-{second_id}"
-    return f"{channel_type}-{second_id}-{first_id}"
+        return f"messages-{first_id}-{second_id}"
+    return f"messages-{second_id}-{first_id}"
+
+
+def generate_contact_requests_channel(user_id: str) -> str:
+    return f"contact-requests-{user_id}"

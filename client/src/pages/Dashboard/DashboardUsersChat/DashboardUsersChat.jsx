@@ -4,7 +4,7 @@ import { useQuery, useReactiveVar, useSubscription } from '@apollo/client';
 import { SearchBar } from 'components/SearchBar';
 import { GET_CONTACTS, SUBCRIBE_CONTACT_REQUESTS } from 'graphql/contacts';
 import { UsersChatItem } from './Conversation/UsersChatItem';
-import { activeUserChatVar, contactsIdVar } from 'cache';
+import { activeUserChatVar, contactsIdVar, hasNewNotificationVar } from 'cache';
 import { UsersChatSkeleton } from './Skeleton/UsersChatSkeleton';
 
 export const DashboardUsersChat = () => {
@@ -13,11 +13,13 @@ export const DashboardUsersChat = () => {
   );
   const activeUserChat = useReactiveVar(activeUserChatVar);
 
-  const { data: lorem, loading: subcribeLoading } = useSubscription(
-    SUBCRIBE_CONTACT_REQUESTS
-  );
-  if (lorem) console.log(lorem);
-  if (subcribeLoading) console.log(subcribeLoading);
+  useSubscription(SUBCRIBE_CONTACT_REQUESTS, {
+    onSubscriptionData: () => {
+      console.log('bump!');
+      document.title = 'New friend requests!';
+      hasNewNotificationVar(true);
+    },
+  });
 
   const { data } = useQuery(GET_CONTACTS, {
     onCompleted: (data) => {

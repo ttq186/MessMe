@@ -6,6 +6,7 @@ export const activeUserChatVar = makeVar(null);
 export const contactsIdVar = makeVar([]);
 export const currentChoseUserIdVar = makeVar(null);
 export const contactRequestsIdVar = makeVar([]);
+export const hasNewNotificationVar = makeVar(false);
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -39,6 +40,11 @@ export const cache = new InMemoryCache({
         currentChoseUserId: {
           read() {
             return currentChoseUserIdVar();
+          },
+        },
+        hasNewNotification: {
+          read() {
+            return hasNewNotificationVar();
           },
         },
       },

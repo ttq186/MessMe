@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { useQuery } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 
 import {
   MessMeIcon,
@@ -23,9 +23,11 @@ import {
 } from 'utils/contants/TabModeContants';
 import { SideBarAccountDropdown } from './Dropdown/SideBarAccountDropdown';
 import { GET_CURRENT_USER } from 'graphql/users';
+import { hasNewNotificationVar } from 'cache';
 
 export const DashboardSideBar = ({ tabMode, setTabMode }) => {
   const { data } = useQuery(GET_CURRENT_USER);
+  const hasNewNotification = useReactiveVar(hasNewNotificationVar);
 
   return (
     <div className='flex flex-col h-screen justify-between items-center w-[70px] pt-5 pb-3 bg-slate-600'>
@@ -41,12 +43,18 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
           <div
             className={`${
               tabMode === NOTIFICATION_MODE ? 'bg-slate-500' : ''
-            } p-2 my-5 rounded cursor-pointer`}
-            onClick={() => setTabMode(NOTIFICATION_MODE)}
+            } p-2 my-5 rounded cursor-pointer flex items-center`}
+            onClick={() => {
+              hasNewNotificationVar(false);
+              setTabMode(NOTIFICATION_MODE);
+            }}
           >
             <NotificationIcon
               fill={tabMode === NOTIFICATION_MODE ? '#93c5fd' : '#a6b0cf'}
             />
+            {hasNewNotification && (
+              <span className='w-3 h-3 rounded-full bg-red-500 -ml-3'></span>
+            )}
           </div>
         </Tippy>
         <Tippy

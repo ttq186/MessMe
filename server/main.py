@@ -27,6 +27,7 @@ async def startup_event():
     # Test postgresql connection
     async with postgres_engine.connect() as conn:
         await conn.execute(text("SELECT 1"))
+
     # Test mongodb connection
     await mongo_client.start_session()
 

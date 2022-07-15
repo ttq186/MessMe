@@ -14,14 +14,16 @@ from schemas import (
     ContactCreate,
     ContactDeleteSuccess,
 )
-from utils import generate_channel_by_users_id
+from utils import (
+    generate_message_channel_by_users_id,
+    generate_contact_requests_channel,
+)
 from db.config import broadcast
 from api import deps
 
 
 async def resolver_get_contact_request(info: Info) -> list[Contact]:
     current_user = info.context["current_user"]
-    print(current_user.id)
     contacts = await crud.contact.get_multi_by_accepter_id(
         info.context["pg_session"], accepter_id=current_user.id, is_established=False
     )
@@ -48,8 +50,8 @@ async def resolver_get_contacts(
             **contact.to_dict(exclude=["requester", "accepter"]),
             last_message=await crud.message.get_most_recent_by_channel_id(
                 info.context["mongo_db"],
-                channel_id=generate_channel_by_users_id(
-                    contact.requester_id, contact.accepter_id, channel_type="message"
+                channel_id=generate_message_channel_by_users_id(
+                    contact.requester_id, contact.accepter_id
                 ),
             ),
             friend=contact.accepter
@@ -96,10 +98,14 @@ async def resolver_create_contact(
     contact_in.accepter_id = accepter.id
     contact = await crud.contact.create(pg_session, contact_in)
 
-    channel_id = f"contact-{partner_id}"
+    channel_id = generate_contact_requests_channel(partner_id)
+    pushed_message = {
+        **contact.to_dict(exclude=["requester", "accepter"]),
+        # "friend": accepter.to_dict(),
+    }
     await broadcast.publish(
         channel=channel_id,
-        message=json_util.dumps(contact.to_dict(exclude=["requester", "accepter"])),
+        message=json_util.dumps(pushed_message),
     )
     return Contact(
         **contact.to_dict(exclude=["requester", "accepter"]), friend=accepter
@@ -176,8 +182,8 @@ class ContactSubscription:
     @strawberry.subscription
     async def contact_requests(self, info: Info) -> AsyncIterator[Contact]:
         current_user = await deps.get_current_user(info)
-        channel_id = f"contact-{current_user.id}"
+        channel_id = generate_contact_requests_channel(current_user.id)
         async with broadcast.subscribe(channel=channel_id) as subcriber:
             async for event in subcriber:
-                data = json_util.loads(event)
+                data = json_util.loads(event.message)
                 yield Contact(**data)

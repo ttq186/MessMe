@@ -8,6 +8,8 @@ export const DashboardNotification = () => {
     fetchPolicy: 'cache-and-network',
   });
 
+  document.title = 'MessMe';
+
   return (
     <>
       <div className='p-6 pb-2 mb-10'>

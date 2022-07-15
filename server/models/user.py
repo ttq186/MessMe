@@ -25,5 +25,4 @@ class User(Base):
     has_confirmed_email = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
 
-    conversations = relationship("Conversation", back_populates="user", lazy="selectin")
     attachments = relationship("Attachment", back_populates="user", lazy="selectin")
