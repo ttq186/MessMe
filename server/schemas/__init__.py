@@ -7,7 +7,6 @@ from .user import (
 )
 from .contact import Contact, ContactUpdate, ContactCreate, ContactDeleteSuccess
 from .attachment import Attachment
-from .conversation import Conversation
 from .message import (
     ObjectIdType,
     Message,

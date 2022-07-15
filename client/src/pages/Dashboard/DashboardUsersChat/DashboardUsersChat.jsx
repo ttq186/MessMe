@@ -1,18 +1,23 @@
 import { useState } from 'react';
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { useQuery, useReactiveVar, useSubscription } from '@apollo/client';
 
 import { SearchBar } from 'components/SearchBar';
-import { GET_CONTACTS } from 'graphql/contacts/queries';
+import { GET_CONTACTS, SUBCRIBE_CONTACT_REQUESTS } from 'graphql/contacts';
 import { UsersChatItem } from './Conversation/UsersChatItem';
 import { activeUserChatVar, contactsIdVar } from 'cache';
 import { UsersChatSkeleton } from './Skeleton/UsersChatSkeleton';
-import { useEffect } from 'react';
 
 export const DashboardUsersChat = () => {
   const [contactsByLastInteraction, setContactsByLastInteraction] = useState(
     []
   );
   const activeUserChat = useReactiveVar(activeUserChatVar);
+
+  const { data: lorem, loading: subcribeLoading } = useSubscription(
+    SUBCRIBE_CONTACT_REQUESTS
+  );
+  if (lorem) console.log(lorem);
+  if (subcribeLoading) console.log(subcribeLoading);
 
   const { data } = useQuery(GET_CONTACTS, {
     onCompleted: (data) => {

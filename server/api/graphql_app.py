@@ -14,6 +14,7 @@ from .graphql import (
     UserMutation,
     ContactQuery,
     ContactMutation,
+    ContactSubscription,
     MessageQuery,
     MessageMutation,
     MessageSubscription,
@@ -29,7 +30,7 @@ async def get_context(
 
 Query = merge_types("Query", (AuthQuery, UserQuery, MessageQuery, ContactQuery))
 Mutation = merge_types("Mutation", (UserMutation, MessageMutation, ContactMutation))
-Subscription = merge_types("Subscription", (MessageSubscription,))
+Subscription = merge_types("Subscription", (MessageSubscription, ContactSubscription))
 
 schema = strawberry.Schema(query=Query, mutation=Mutation, subscription=Subscription)
 

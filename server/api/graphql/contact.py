@@ -16,6 +16,7 @@ from schemas import (
 )
 from utils import generate_channel_by_users_id
 from db.config import broadcast
+from api import deps
 
 
 async def resolver_get_contact_request(info: Info) -> list[Contact]:
@@ -27,7 +28,7 @@ async def resolver_get_contact_request(info: Info) -> list[Contact]:
     return [
         Contact(
             **contact.to_dict(exclude=["requester", "accepter"]),
-            friend=contact.requester
+            friend=contact.requester,
         )
         for contact in contacts
     ]
@@ -53,7 +54,7 @@ async def resolver_get_contacts(
             ),
             friend=contact.accepter
             if contact.requester_id == current_user.id
-            else contact.requester
+            else contact.requester,
         )
         for contact in contacts
     ]
@@ -94,9 +95,8 @@ async def resolver_create_contact(
     contact_in.requester_id = current_user.id
     contact_in.accepter_id = accepter.id
     contact = await crud.contact.create(pg_session, contact_in)
-    channel_id = generate_channel_by_users_id(
-        contact_in.requester_id, contact_in.accepter_id, channel_type="contact"
-    )
+
+    channel_id = f"contact-{partner_id}"
     await broadcast.publish(
         channel=channel_id,
         message=json_util.dumps(contact.to_dict(exclude=["requester", "accepter"])),
@@ -174,15 +174,9 @@ class ContactMutation:
 @strawberry.type
 class ContactSubscription:
     @strawberry.subscription
-    async def contact(self, info: Info, friend_email: str) -> AsyncIterator[Contact]:
-        friend = await crud.user.get_by_email(info.context["pg_session"])
-        if friend is None:
-            raise exceptions.ResourceNotFound(resource_type="User", email=friend_email)
-
-        current_user = info.context.get("current_user")
-        channel_id = generate_channel_by_users_id(
-            current_user.id, friend.id, channel_type="contact"
-        )
+    async def contact_requests(self, info: Info) -> AsyncIterator[Contact]:
+        current_user = await deps.get_current_user(info)
+        channel_id = f"contact-{current_user.id}"
         async with broadcast.subscribe(channel=channel_id) as subcriber:
             async for event in subcriber:
                 data = json_util.loads(event)
