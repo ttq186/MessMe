@@ -25,7 +25,7 @@ export const MainChatMessage = ({
       <div className={`flex ${isSender && 'flex-row-reverse'}`}>
         <Tippy
           content={
-            <b style={{ color: '#cbd5e1' }}>
+            <b style={{ color: '#cbd5e1', fontSize: '13px' }}>
               {new Date(createdAt).toLocaleString()}
             </b>
           }

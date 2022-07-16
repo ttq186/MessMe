@@ -2,7 +2,7 @@ import enum
 
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum, DateTime
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
+# from sqlalchemy.orm import relationship
 
 from db.base_class import Base
 
@@ -26,4 +26,4 @@ class Attachment(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
 
-    user = relationship("User", back_populates="attachments")
+    # user = relationship("User", back_populates="attachments")

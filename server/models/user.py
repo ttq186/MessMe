@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from sqlalchemy import Column, Date, String, DateTime, Boolean, Text
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
+# from sqlalchemy.orm import relationship
 
 from db.base_class import Base
 
@@ -25,4 +25,4 @@ class User(Base):
     has_confirmed_email = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
 
-    attachments = relationship("Attachment", back_populates="user", lazy="selectin")
+    # attachments = relationship("Attachment", back_populates="user", lazy="selectin")

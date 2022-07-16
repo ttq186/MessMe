@@ -62,14 +62,34 @@ async def resolver_get_contacts(
     ]
 
 
-async def resolver_get_contact(info: Info, id: strawberry.ID) -> Contact | None:
+async def resolver_get_contact(
+    info: Info, id: strawberry.ID | None = None, partner_id: str | None = None
+) -> Contact | None:
     current_user = info.context.get("current_user")
-    contact = await crud.contact.get(session=info.context["pg_session"], id=id)
+    pg_session = info.context["pg_session"]
+
+    if id is not None:
+        contact = await crud.contact.get(pg_session, id=id)
+    else:
+        contact = await crud.contact.get_by_requester_and_accepter_id(
+            pg_session, current_user.id, partner_id
+        )
     if contact is None:
         raise exceptions.ResourceNotFound(resource_type="Contact", id=id)
-    if current_user.id not in [contact.user_id, contact.friend_id]:
+    if current_user.id not in [contact.requester_id, contact.accepter_id]:
         raise exceptions.NotAuthorized()
-    return contact
+    return Contact(
+        **contact.to_dict(exclude=["requester", "accepter"]),
+        last_message=await crud.message.get_most_recent_by_channel_id(
+            info.context["mongo_db"],
+            channel_id=generate_message_channel_by_users_id(
+                contact.requester_id, contact.accepter_id
+            ),
+        ),
+        friend=contact.accepter
+        if contact.requester_id == current_user.id
+        else contact.requester,
+    )
 
 
 async def resolver_create_contact(

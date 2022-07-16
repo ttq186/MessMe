@@ -17,7 +17,6 @@ export const NotificationItem = ({
       {
         query: GET_CONTACT_REQUESTS,
       },
-      'GetContactsRequests',
     ],
   });
 
@@ -26,7 +25,7 @@ export const NotificationItem = ({
       {
         query: GET_CONTACT_REQUESTS,
       },
-      'GetContactsRequests',
+      'contactRequests',
     ],
   });
 

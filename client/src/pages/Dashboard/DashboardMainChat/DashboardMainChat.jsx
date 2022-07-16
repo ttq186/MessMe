@@ -34,44 +34,26 @@ import {
 import {
   CREATE_MESSAGE,
   GET_MESSAGES_BY_SENDER_AND_RECEIVER,
-  SUBSCRIBE_MESSAGE,
 } from 'graphql/messages';
 import { GET_CURRENT_USER } from 'graphql/users';
-import { activeUserChatVar, contactsIdVar } from 'cache';
+import { activeUserChatVar } from 'cache';
 import { CurrentUserSkeleton } from './Skeleton/CurrentUserSkeleton';
 import { MessageSkeleton } from './Skeleton/MessageSkeleton';
 
 export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
   const inputRef = useRef();
+
   const activeUserChat = useReactiveVar(activeUserChatVar);
-  const contactsId = useReactiveVar(contactsIdVar);
 
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
-  const [getMessages, { subscribeToMore, data: messagesData, loading }] =
-    useLazyQuery(GET_MESSAGES_BY_SENDER_AND_RECEIVER);
-  const [createMessage] = useMutation(CREATE_MESSAGE);
-
-  const subcribeMessageToAllContacts = () => {
-    for (let contactId of contactsId) {
-      subscribeToMore({
-        document: SUBSCRIBE_MESSAGE,
-        variables: {
-          senderId: currentUserObj.currentUser.id,
-          receiverId: contactId,
-        },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData) return prev;
-          return {
-            messagesBySenderAndReceiver: [
-              ...prev.messagesBySenderAndReceiver,
-              subscriptionData.data.message,
-            ],
-          };
-        },
-      });
+  const [getMessages, { data: messagesData, loading }] = useLazyQuery(
+    GET_MESSAGES_BY_SENDER_AND_RECEIVER,
+    {
+      fetchPolicy: 'cache-and-network',
     }
-  };
+  );
+  const [createMessage] = useMutation(CREATE_MESSAGE);
 
   useEffect(() => {
     if (activeUserChat && currentUserObj) {
@@ -83,12 +65,6 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
       });
     }
   }, [activeUserChat, currentUserObj]);
-
-  useEffect(() => {
-    if (contactsId.length !== 0 && currentUserObj) {
-      subcribeMessageToAllContacts();
-    }
-  }, [contactsId, currentUserObj]);
 
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
@@ -221,26 +197,25 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
             </div>
             <div className='grow border-t-[1px] border-slate-500'></div>
           </div> */}
-          <div className=''>
+          <div>
             {messagesData?.messagesBySenderAndReceiver.map((item) => {
-              // if (
-              //   ![currentUserObj?.currentUser.id, activeUserChat.id].includes(
-              //     item.senderId
-              //   )
-              // )
-              //   return;
-              return (
-                <MainChatMessage
-                  key={item._id}
-                  isSender={activeUserChat.id !== item.senderId}
-                  author={
-                    currentUserObj?.currentUser.id === item.senderId
-                      ? currentUserObj.currentUser
-                      : activeUserChat
-                  }
-                  {...item}
-                />
-              );
+              if (
+                item.senderId === activeUserChat.id ||
+                item.senderId === currentUserObj?.currentUser.id
+              ) {
+                return (
+                  <MainChatMessage
+                    key={item._id}
+                    isSender={currentUserObj.currentUser.id === item.senderId}
+                    author={
+                      currentUserObj?.currentUser.id === item.senderId
+                        ? currentUserObj.currentUser
+                        : activeUserChat
+                    }
+                    {...item}
+                  />
+                );
+              }
             })}
           </div>
         </div>

@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useQuery, useReactiveVar, useSubscription } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 
 import { SearchBar } from 'components/SearchBar';
-import { GET_CONTACTS, SUBCRIBE_CONTACT_REQUESTS } from 'graphql/contacts';
+import { GET_CONTACTS } from 'graphql/contacts';
 import { UsersChatItem } from './Conversation/UsersChatItem';
-import { activeUserChatVar, contactsIdVar, hasNewNotificationVar } from 'cache';
+import { activeUserChatVar, contactsIdVar } from 'cache';
 import { UsersChatSkeleton } from './Skeleton/UsersChatSkeleton';
 
 export const DashboardUsersChat = () => {
@@ -13,13 +13,14 @@ export const DashboardUsersChat = () => {
   );
   const activeUserChat = useReactiveVar(activeUserChatVar);
 
-  useSubscription(SUBCRIBE_CONTACT_REQUESTS, {
-    onSubscriptionData: () => {
-      console.log('bump!');
-      document.title = 'New friend requests!';
-      hasNewNotificationVar(true);
-    },
-  });
+  const sortContactByLastMessage = (firstContact, secondContact) => {
+    if (!firstContact.lastMessage) return 1;
+    if (!secondContact.lastMessage) return -1;
+    return (
+      new Date(secondContact.lastMessage.createdAt).getTime() -
+      new Date(firstContact.lastMessage.createdAt).getTime()
+    );
+  };
 
   const { data } = useQuery(GET_CONTACTS, {
     onCompleted: (data) => {
@@ -30,19 +31,14 @@ export const DashboardUsersChat = () => {
       const establishedContacts = data.contacts.filter(
         (contact) => contact.isEstablished
       );
-      const temp = establishedContacts.sort((firstContact, secondContact) => {
-        if (!firstContact.lastMessage) return 1;
-        if (!secondContact.lastMessage) return -1;
-        return (
-          new Date(secondContact.lastMessage.createdAt).getTime() -
-          new Date(firstContact.lastMessage.createdAt).getTime()
-        );
-      });
-
+      const sortedContactsByLastMessage = establishedContacts.sort(
+        (firstContact, secondContact) =>
+          sortContactByLastMessage(firstContact, secondContact)
+      );
       if (!activeUserChat) {
-        activeUserChatVar(temp[0].friend);
+        activeUserChatVar(sortedContactsByLastMessage[0].friend);
       }
-      setContactsByLastInteraction(temp);
+      setContactsByLastInteraction(sortedContactsByLastMessage);
     },
     fetchPolicy: 'network-only',
   });
@@ -58,10 +54,6 @@ export const DashboardUsersChat = () => {
       <div className='ml-3 mr-1.5 mb-3 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
         {!data ? (
           <div>
-            <UsersChatSkeleton />
-            <UsersChatSkeleton />
-            <UsersChatSkeleton />
-            <UsersChatSkeleton />
             <UsersChatSkeleton />
             <UsersChatSkeleton />
             <UsersChatSkeleton />

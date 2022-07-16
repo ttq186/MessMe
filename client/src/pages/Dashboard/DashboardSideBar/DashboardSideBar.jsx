@@ -26,7 +26,7 @@ import { GET_CURRENT_USER } from 'graphql/users';
 import { hasNewNotificationVar } from 'cache';
 
 export const DashboardSideBar = ({ tabMode, setTabMode }) => {
-  const { data } = useQuery(GET_CURRENT_USER);
+  const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const hasNewNotification = useReactiveVar(hasNewNotificationVar);
 
   return (
@@ -45,7 +45,6 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
               tabMode === NOTIFICATION_MODE ? 'bg-slate-500' : ''
             } p-2 my-5 rounded cursor-pointer flex items-center`}
             onClick={() => {
-              hasNewNotificationVar(false);
               setTabMode(NOTIFICATION_MODE);
             }}
           >
@@ -138,17 +137,17 @@ export const DashboardSideBar = ({ tabMode, setTabMode }) => {
       <SideBarAccountDropdown
         setTabMode={setTabMode}
         triggerButton={
-          !data ? (
+          !currentUserObj ? (
             <div className='animate-pulse flex justify-center items-center w-[63px] h-[63px]'>
               <div className='rounded-full bg-slate-400 h-8 w-8 opacity-75'></div>
             </div>
           ) : (
             <div className='cursor-pointer p-2 rounded hover:bg-slate-500'>
-              {!data?.currentUser.avatarUrl ? (
+              {!currentUserObj.currentUser?.avatarUrl ? (
                 <AvatarIcon width='40px' height='40px' />
               ) : (
                 <img
-                  src={data.currentUser.avatarUrl}
+                  src={currentUserObj.currentUser.avatarUrl}
                   alt='Avatar'
                   className='w-10 h-10 rounded-full border-2 border-gray-600'
                 />

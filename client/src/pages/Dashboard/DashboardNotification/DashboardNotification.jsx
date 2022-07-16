@@ -2,10 +2,18 @@ import { useQuery } from '@apollo/client';
 
 import { GET_CONTACT_REQUESTS } from 'graphql/contacts';
 import { NotificationItem } from './Item/NotificationItem';
+import { hasNewNotificationVar } from 'cache';
 
 export const DashboardNotification = () => {
   const { data: contactRequestsObj } = useQuery(GET_CONTACT_REQUESTS, {
     fetchPolicy: 'cache-and-network',
+    onCompleted: (data) => {
+      if (data.contactRequests.length !== 0) {
+        hasNewNotificationVar(true);
+      } else {
+        hasNewNotificationVar(false)
+      }
+    },
   });
 
   document.title = 'MessMe';
