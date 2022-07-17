@@ -8,7 +8,7 @@ export const Spinner = () => {
   };
 
   return (
-    <div className='fixed flex items-center justify-center -top-12 right-0 left-0 bottom-0 bg-slate-700 text-slate-100'>
+    <div className='fixed flex items-center justify-center -top-12 right-0 left-0 bottom-0 bg-gray-700 text-slate-100'>
       <LazyMotion features={domAnimation}>
         <m.span
           animate={{ rotate: 360 }}

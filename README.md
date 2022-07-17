@@ -1,4 +1,4 @@
-# <img src="https://user-images.githubusercontent.com/73225256/179389251-128d4555-52bc-48b3-8d54-b720963e4597.png" width='25px'> **MessMe**
+# <img src="https://user-images.githubusercontent.com/73225256/179389251-128d4555-52bc-48b3-8d54-b720963e4597.png" width='40px'> **MessMe**
 
 ### **A full-featured chat app, built with FastAPI/Strawberry and ReactJS/ApolloClient**
 
@@ -39,4 +39,4 @@ https://user-images.githubusercontent.com/73225256/179389289-92c0ef8a-92c1-4502-
 - **MessMe** is designed to work well with laptop screens, so the UI may not be suitable on other screens.
 
 ## Credits
-- The design is inspired by [ChatVia](http://chatvia-dark.react.themesbrand.com/)
+- The UI design is inspired by [ChatVia](http://chatvia-dark.react.themesbrand.com/)

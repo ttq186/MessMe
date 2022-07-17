@@ -30,7 +30,6 @@ import {
   contactsIdVar,
   activeUserChatVar,
   contactsJustSentMessagesVar,
-  subscriptionMessageChannelsVar,
 } from 'cache';
 
 import {
@@ -85,9 +84,6 @@ export const Dashboard = () => {
 
   const contactsId = useReactiveVar(contactsIdVar);
   const activeUserChat = useReactiveVar(activeUserChatVar);
-  const subscriptionMessageChannels = useReactiveVar(
-    subscriptionMessageChannelsVar
-  );
 
   const contactsJustSentMessages = useReactiveVar(contactsJustSentMessagesVar);
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
@@ -115,9 +111,6 @@ export const Dashboard = () => {
         currentUserObj.currentUser.id,
         contactId
       );
-      // if (subscriptionMessageChannels.includes(channelId)) {
-      //   continue;
-      // }
 
       subscribeToMore({
         document: SUBSCRIBE_MESSAGE,
@@ -138,11 +131,6 @@ export const Dashboard = () => {
             (message) => message._id === subscriptionMessage._id
           );
           if (foundMessage) return prev;
-
-          // subscriptionMessageChannelsVar([
-          //   ...subscriptionMessageChannels,
-          //   channelId,
-          // ]);
 
           if (messageSenderId !== currentUserObj.currentUser.id) {
             updateLastMessageOfContacts(messageSenderId, subscriptionMessage);
