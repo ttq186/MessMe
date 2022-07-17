@@ -8,7 +8,6 @@ import {
   useLazyQuery,
   useMutation,
   useQuery,
-  useSubscription,
   useReactiveVar,
 } from '@apollo/client';
 
@@ -31,14 +30,19 @@ import {
   OthersDropdown,
   SearchDropdown,
 } from 'pages/Dashboard/DashboardMainChat';
-import {
-  CREATE_MESSAGE,
-  GET_MESSAGES_BY_SENDER_AND_RECEIVER,
-} from 'graphql/messages';
+import { CREATE_MESSAGE, GET_MESSAGES_BY_CHANNEL } from 'graphql/messages';
 import { GET_CURRENT_USER } from 'graphql/users';
 import { activeUserChatVar } from 'cache';
 import { CurrentUserSkeleton } from './Skeleton/CurrentUserSkeleton';
 import { MessageSkeleton } from './Skeleton/MessageSkeleton';
+import { generateMessageChannelByUsersId } from 'utils';
+import { updateLastMessageOfContacts } from '../Dashboard';
+
+const AlwaysScrollToBottom = () => {
+  const elementRef = useRef();
+  useEffect(() => elementRef.current.scrollIntoView({ behavior: 'smooth' }));
+  return <div ref={elementRef} />;
+};
 
 export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
@@ -48,10 +52,8 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
 
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [getMessages, { data: messagesData, loading }] = useLazyQuery(
-    GET_MESSAGES_BY_SENDER_AND_RECEIVER,
-    {
-      fetchPolicy: 'cache-and-network',
-    }
+    GET_MESSAGES_BY_CHANNEL,
+    { fetchPolicy: 'network-only' }
   );
   const [createMessage] = useMutation(CREATE_MESSAGE);
 
@@ -59,8 +61,10 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
     if (activeUserChat && currentUserObj) {
       getMessages({
         variables: {
-          receiverId: activeUserChat.id,
-          senderId: currentUserObj.currentUser.id,
+          channelId: generateMessageChannelByUsersId(
+            activeUserChat.id,
+            currentUserObj.currentUser.id
+          ),
         },
       });
     }
@@ -85,6 +89,9 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           content: inputRef.current.innerText,
         },
         receiverId: activeUserChat.id,
+      },
+      onCompleted: (data) => {
+        updateLastMessageOfContacts(activeUserChat.id, data.createMessage);
       },
     });
     inputRef.current.innerHTML = '';
@@ -124,7 +131,11 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
                 allowHTML={true}
               >
                 <div className='cursor-pointer'>
-                  <img src={SearchIcon} alt='Search' className='w-9 h-9' />
+                  <img
+                    src={SearchIcon}
+                    alt='Search'
+                    className='w-9 h-9 -mb-1'
+                  />
                 </div>
               </Tippy>
             }
@@ -189,7 +200,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           <MessageSkeleton isReverse={true} />
         </div>
       ) : (
-        <div className='grow p-3 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[2px]'>
+        <div className='grow p-3 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[3px]'>
           {/* <div className='flex items-center p-4 px-8'>
             <div className='grow border-t-[1px] border-slate-500'></div>
             <div className='mx-3 bg-slate-500 text-slate-300 font-medium text-sm px-2.5 py-0.5 rounded'>
@@ -198,7 +209,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
             <div className='grow border-t-[1px] border-slate-500'></div>
           </div> */}
           <div>
-            {messagesData?.messagesBySenderAndReceiver.map((item) => {
+            {messagesData?.messagesByChannel.map((item) => {
               if (
                 item.senderId === activeUserChat.id ||
                 item.senderId === currentUserObj?.currentUser.id
@@ -218,6 +229,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
               }
             })}
           </div>
+          <AlwaysScrollToBottom />
         </div>
       )}
 

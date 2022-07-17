@@ -8,6 +8,7 @@ from bson import json_util
 import crud
 import exceptions
 from core import security
+from api import deps
 from schemas import (
     Contact,
     ContactUpdate,
@@ -19,7 +20,6 @@ from utils import (
     generate_contact_requests_channel,
 )
 from db.config import broadcast
-from api import deps
 
 
 async def resolver_get_contact_request(info: Info) -> list[Contact]:
@@ -67,7 +67,6 @@ async def resolver_get_contact(
 ) -> Contact | None:
     current_user = info.context.get("current_user")
     pg_session = info.context["pg_session"]
-
     if id is not None:
         contact = await crud.contact.get(pg_session, id=id)
     else:

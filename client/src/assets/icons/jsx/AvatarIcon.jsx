@@ -1,9 +1,8 @@
-const AvatarIcon = ({ width = '38px', height = '38px', fill='#a6b0cf' }) => {
+const AvatarIcon = ({ width = '38px', height = '38px', fill = '#a6b0cf' }) => {
   return (
     <svg
       width={width}
       height={height}
-      version='1.1'
       viewBox='0 0 700 600'
       xmlns='http://www.w3.org/2000/svg'
     >

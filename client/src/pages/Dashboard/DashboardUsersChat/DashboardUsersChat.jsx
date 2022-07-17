@@ -4,7 +4,11 @@ import { useQuery, useReactiveVar } from '@apollo/client';
 import { SearchBar } from 'components/SearchBar';
 import { GET_CONTACTS } from 'graphql/contacts';
 import { UsersChatItem } from './Conversation/UsersChatItem';
-import { activeUserChatVar, contactsIdVar } from 'cache';
+import {
+  activeUserChatVar,
+  contactsIdVar,
+  contactsJustSentMessagesVar,
+} from 'cache';
 import { UsersChatSkeleton } from './Skeleton/UsersChatSkeleton';
 
 export const DashboardUsersChat = () => {
@@ -12,6 +16,7 @@ export const DashboardUsersChat = () => {
     []
   );
   const activeUserChat = useReactiveVar(activeUserChatVar);
+  const contactsJustSentMessages = useReactiveVar(contactsJustSentMessagesVar);
 
   const sortContactByLastMessage = (firstContact, secondContact) => {
     if (!firstContact.lastMessage) return 1;
@@ -65,6 +70,9 @@ export const DashboardUsersChat = () => {
               {...item}
               isActive={true}
               isChose={activeUserChat.id === item.friend.id}
+              hasJustSentMessage={contactsJustSentMessages.includes(
+                item.friend.id
+              )}
             />
           ))
         )}

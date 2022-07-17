@@ -5,17 +5,19 @@ export const GET_MESSAGES = gql`
     messages {
       _id
       senderId
+      channelId
       content
       createdAt
     }
   }
 `;
 
-export const GET_MESSAGES_BY_SENDER_AND_RECEIVER = gql`
-  query GetMessagesBySenderAndReceiver($senderId: String!, $receiverId: String!) {
-    messagesBySenderAndReceiver(senderId: $senderId, receiverId: $receiverId) {
+export const GET_MESSAGES_BY_CHANNEL = gql`
+  query GetMessagesByChannel($channelId: String!) {
+    messagesByChannel(channelId: $channelId) {
       _id
       senderId
+      channelId
       content
       createdAt
     }

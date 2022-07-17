@@ -8,6 +8,9 @@ export const currentChoseUserIdVar = makeVar(null);
 export const contactRequestsIdVar = makeVar([]);
 export const hasNewNotificationVar = makeVar(false);
 export const hasSubcribeMessageVar = makeVar(false);
+export const contactsJustSentMessagesVar = makeVar([]);
+export const subscriptionMessageChannelsVar = makeVar([]);
+export const subscriptionContactRequestChannelsVar = makeVar([]);
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -51,6 +54,21 @@ export const cache = new InMemoryCache({
         hasSubcribeMessage: {
           read() {
             return hasSubcribeMessageVar();
+          },
+        },
+        contactsJustSentMessages: {
+          read() {
+            return contactsJustSentMessagesVar();
+          },
+        },
+        subscriptionMessageChannels: {
+          read() {
+            return subscriptionMessageChannelsVar();
+          },
+        },
+        subscriptionContactRequestChannels: {
+          read() {
+            return subscriptionContactRequestChannelsVar();
           },
         },
       },

@@ -7,7 +7,6 @@ from strawberry.types import Info
 import crud
 import exceptions
 from core import security
-from api import deps
 from schemas import (
     Message,
     MessageCreate,
@@ -24,10 +23,9 @@ async def resolver_get_messages(info: Info) -> list[Message]:
     return messages
 
 
-async def resolver_get_messages_by_sender_and_receiver(
-    info: Info, sender_id: str, receiver_id: str
+async def resolver_get_messages_by_channel(
+    info: Info, channel_id: str
 ) -> list[Message]:
-    channel_id = generate_message_channel_by_users_id(sender_id, receiver_id)
     messages = await crud.message.get_multi_by_channel_id(
         info.context["mongo_db"], channel_id=channel_id
     )
@@ -90,8 +88,8 @@ class MessageQuery:
         resolver=resolver_get_messages,
         permission_classes=[security.IsAuthenticatedUser],
     )
-    messages_by_sender_and_receiver: list[Message] = strawberry.field(
-        resolver=resolver_get_messages_by_sender_and_receiver,
+    messages_by_channel: list[Message] = strawberry.field(
+        resolver=resolver_get_messages_by_channel,
         permission_classes=[security.IsAuthenticatedUser],
     )
     message: Message = strawberry.field(
@@ -118,9 +116,7 @@ class MessageMutation:
 @strawberry.type
 class MessageSubscription:
     @strawberry.subscription
-    async def message(self, info: Info, receiver_id: str) -> AsyncIterator[Message]:
-        current_user = await deps.get_current_user(info)
-        channel_id = generate_message_channel_by_users_id(current_user.id, receiver_id)
+    async def message(self, channel_id: str) -> AsyncIterator[Message]:
         async with broadcast.subscribe(channel=channel_id) as subscriber:
             async for event in subscriber:
                 data = json_util.loads(event.message)

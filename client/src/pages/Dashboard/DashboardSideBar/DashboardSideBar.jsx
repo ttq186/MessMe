@@ -20,7 +20,7 @@ import {
   PROFILE_MODE,
   SETTING_MODE,
   NOTIFICATION_MODE,
-} from 'utils/contants/TabModeContants';
+} from 'utils/contants/TabModeConstants';
 import { SideBarAccountDropdown } from './Dropdown/SideBarAccountDropdown';
 import { GET_CURRENT_USER } from 'graphql/users';
 import { hasNewNotificationVar } from 'cache';
