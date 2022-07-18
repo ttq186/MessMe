@@ -33,7 +33,6 @@ import {
 } from 'cache';
 
 import {
-  GET_MESSAGES,
   GET_MESSAGES_BY_CHANNEL,
   SUBSCRIBE_MESSAGE,
 } from 'graphql/messages';

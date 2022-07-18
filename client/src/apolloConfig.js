@@ -4,13 +4,13 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:8000/graphql',
+  uri: process.env.REACT_APP_BASE_HTTP_URL,
   credentials: 'include',
 });
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: 'ws://localhost:8000/graphql',
+    url: process.env.REACT_APP_BASE_WS_URL,
   })
 );
 

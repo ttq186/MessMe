@@ -15,6 +15,9 @@ export const DashboardUsersChat = () => {
   const [contactsByLastInteraction, setContactsByLastInteraction] = useState(
     []
   );
+  const [contactsBySearchValue, setContactsBySearchValue] = useState(
+    contactsByLastInteraction
+  );
   const activeUserChat = useReactiveVar(activeUserChatVar);
   const contactsJustSentMessages = useReactiveVar(contactsJustSentMessagesVar);
 
@@ -25,6 +28,25 @@ export const DashboardUsersChat = () => {
       new Date(secondContact.lastMessage.createdAt).getTime() -
       new Date(firstContact.lastMessage.createdAt).getTime()
     );
+  };
+
+  const handleSearchUser = (searchValue) => {
+    if (!searchValue.trim()) {
+      setContactsBySearchValue(contactsByLastInteraction);
+    }
+    const searchValueInLowerCase = searchValue.toLowerCase();
+    const contactsBySearch = contactsByLastInteraction.filter((contact) => {
+      if (
+        contact.friend.username &&
+        contact.friend.username.toLowerCase().includes(searchValueInLowerCase)
+      ) {
+        return contact;
+      }
+      if (contact.friend.email.split('@')[0].includes(searchValueInLowerCase)) {
+        return contact;
+      }
+    });
+    setContactsBySearchValue(contactsBySearch);
   };
 
   const { data } = useQuery(GET_CONTACTS, {
@@ -52,7 +74,10 @@ export const DashboardUsersChat = () => {
     <>
       <div className='p-6 pb-2'>
         <p className='text-2xl font-bold'>Chat</p>
-        <SearchBar placeholder='Search Users' />
+        <SearchBar
+          placeholder='Search Users'
+          handleSearchUser={handleSearchUser}
+        />
       </div>
 
       <p className='font-bold text ml-6 mt-5 mb-3'>Recent</p>
@@ -64,7 +89,7 @@ export const DashboardUsersChat = () => {
             <UsersChatSkeleton />
           </div>
         ) : (
-          contactsByLastInteraction.map((item) => (
+          contactsBySearchValue.map((item) => (
             <UsersChatItem
               key={item.friend.id}
               {...item}

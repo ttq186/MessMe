@@ -39,7 +39,7 @@ class CRUDMessage:
     async def create(
         self, mongo_db: AsyncIOMotorDatabase, message_in: MessageCreate
     ) -> Message:
-        message_in.created_at = datetime.now()
+        message_in.created_at = datetime.utcnow()
         new_message = await mongo_db["messages"].insert_one(message_in.__dict__)
         created_message = await mongo_db["messages"].find_one(
             {"_id": ObjectId(new_message.inserted_id)}

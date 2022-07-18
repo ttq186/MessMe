@@ -1,6 +1,6 @@
 import { SearchIcon } from 'assets/icons';
 
-export const SearchBar = ({ placeholder }) => {
+export const SearchBar = ({ placeholder, handleSearchUser }) => {
   return (
     <div className='flex my-3'>
       <span className='bg-slate-600 rounded-l'>
@@ -9,6 +9,7 @@ export const SearchBar = ({ placeholder }) => {
       <input
         placeholder={placeholder}
         className='text-slate-300 pr-4 py-3 text-sm font-medium bg-slate-600 rounded-r w-full outline-none border-none'
+        onChange={(e) => handleSearchUser(e.target.value)}
       />
     </div>
   );
