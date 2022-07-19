@@ -1,5 +1,6 @@
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { useQuery } from '@apollo/client';
 
 import { AddIcon } from 'assets/icons';
 import {
@@ -7,8 +8,14 @@ import {
   ContactByFirstLetter,
 } from 'pages/Dashboard/DashboardContact';
 import { SearchBar } from 'components/SearchBar';
+import { GET_CONTACTS } from 'graphql/contacts';
 
 export const DashboardContact = () => {
+  const { data: contactsObj } = useQuery(GET_CONTACTS);
+  if (contactsObj) {
+    console.log(contactsObj);
+  }
+
   return (
     <>
       <div className='p-6 pb-2 mb-10'>

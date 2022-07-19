@@ -36,29 +36,27 @@ export const DashboardUsersChat = () => {
     }
     const searchValueInLowerCase = searchValue.toLowerCase();
     const contactsBySearch = contactsByLastInteraction.filter((contact) => {
+      const { username, email } = contact.friend;
       if (
-        contact.friend.username &&
-        contact.friend.username.toLowerCase().includes(searchValueInLowerCase)
+        username?.toLowerCase().includes(searchValueInLowerCase) ||
+        email.toLowerCase().includes(searchValueInLowerCase)
       ) {
-        return contact;
-      }
-      if (contact.friend.email.split('@')[0].includes(searchValueInLowerCase)) {
         return contact;
       }
     });
     setContactsBySearchValue(contactsBySearch);
   };
 
-  const { data } = useQuery(GET_CONTACTS, {
+  const { data: contactsObj } = useQuery(GET_CONTACTS, {
+    variables: {
+      isEstablished: true,
+    },
     onCompleted: (data) => {
       if (data.contacts.length === 0) return;
 
       const contactsId = data.contacts.map((contact) => contact.friend.id);
       contactsIdVar(contactsId);
-      const establishedContacts = data.contacts.filter(
-        (contact) => contact.isEstablished
-      );
-      const sortedContactsByLastMessage = establishedContacts.sort(
+      const sortedContactsByLastMessage = data.contacts.sort(
         (firstContact, secondContact) =>
           sortContactByLastMessage(firstContact, secondContact)
       );
@@ -66,6 +64,7 @@ export const DashboardUsersChat = () => {
         activeUserChatVar(sortedContactsByLastMessage[0].friend);
       }
       setContactsByLastInteraction(sortedContactsByLastMessage);
+      setContactsBySearchValue(sortedContactsByLastMessage);
     },
     fetchPolicy: 'network-only',
   });
@@ -82,7 +81,7 @@ export const DashboardUsersChat = () => {
 
       <p className='font-bold text ml-6 mt-5 mb-3'>Recent</p>
       <div className='ml-3 mr-1.5 mb-3 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
-        {!data ? (
+        {!contactsObj ? (
           <div>
             <UsersChatSkeleton />
             <UsersChatSkeleton />

@@ -46,6 +46,7 @@ const AlwaysScrollToBottom = () => {
 
 export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
+  const [keysPressed, setKeysPressed] = useState([]);
   const inputRef = useRef();
 
   const activeUserChat = useReactiveVar(activeUserChatVar);
@@ -69,6 +70,16 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
       });
     }
   }, [activeUserChat, currentUserObj]);
+
+  const handleInputKeyDown = (event) => {
+    setKeysPressed(event.key);
+  };
+
+  const handleInputKeyUp = (event) => {
+    if (keysPressed === 'Enter' && event.key === 'Enter') {
+      console.log('submit');
+    }
+  };
 
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
@@ -234,7 +245,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
       )}
 
       <div className='relative bottom-0 w-full flex justify-between items-center px-5 py-3.5 border-t-2 border-slate-500'>
-        <div className='flex items-center'>
+        <div className='flex w-[150px] items-center'>
           <Tippy
             content={<b style={{ color: '#cbd5e1' }}>Attach File</b>}
             allowHTML={true}
@@ -288,7 +299,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           </div>
         </div>
 
-        <div className='relative max-w-[78.5%] grow max-h-[110px] ml-2 bg-slate-700 py-2.5 pl-5 text-[15px] text-slate-200 font-medium rounded-md'>
+        <div className='relative max-w-[78.5%] grow max-h-[110px] bg-slate-700 py-2.5 pl-5 text-[15px] text-slate-200 font-medium rounded-md'>
           {/* <input
             className='py-2.5 px-5 w-full bg-slate-700 text-[15px] text-slate-300 font-medium rounded-md outline-none'
             placeholder='Enter Message...'
@@ -298,8 +309,10 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           <div
             contentEditable='true'
             placeholder='Aa'
-            className='outline-none pr-3 mr-2 max-h-[90px] overflow-y-scroll scrollbar-transparent hover:scrollbar'
+            className='outline-none pr-3 max-h-[90px] overflow-y-scroll scrollbar-transparent hover:scrollbar'
             ref={inputRef}
+            onKeyDown={(e) => handleInputKeyDown(e)}
+            onKeyUp={(e) => handleInputKeyUp(e)}
           />
         </div>
         <Tippy
@@ -307,13 +320,13 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           allowHTML={true}
         >
           <div
-            className={`bg-blue-300 mx-5 px-3.5 py-2 rounded ${
+            className={`bg-blue-300 mr-10 ml-2 py-2 rounded ${
               activeUserChat ? 'cursor-pointer' : 'cursor-not-allowed'
             }`}
             tabIndex={0}
             onClick={handleSendMessage}
           >
-            <img src={SendIcon} alt='Send' className='w-5 h-5' />
+            <img src={SendIcon} alt='Send' className='w-12 h-5' />
           </div>
         </Tippy>
       </div>

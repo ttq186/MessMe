@@ -36,6 +36,7 @@ schema = strawberry.Schema(query=Query, mutation=Mutation, subscription=Subscrip
 
 graphql_app = GraphQLRouter(
     schema,
+    graphiql=False,
     context_getter=get_context,
     subscription_protocols=[GRAPHQL_TRANSPORT_WS_PROTOCOL],
 )

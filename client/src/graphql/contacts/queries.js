@@ -13,14 +13,13 @@ export const GET_CONTACT = gql`
         content
         createdAt
       }
-      isEstablished
     }
   }
 `;
 
 export const GET_CONTACTS = gql`
-  query GetContacts {
-    contacts {
+  query GetContacts($isEstablished: Boolean) {
+    contacts(isEstablished: $isEstablished) {
       friend {
         id
         email
@@ -31,7 +30,6 @@ export const GET_CONTACTS = gql`
         content
         createdAt
       }
-      isEstablished
     }
   }
 `;
