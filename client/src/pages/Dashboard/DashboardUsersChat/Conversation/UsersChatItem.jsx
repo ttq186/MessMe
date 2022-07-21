@@ -58,7 +58,11 @@ export const UsersChatItem = ({
           ) : (
             <p className='w-[85px] text-[13px] font-bold text-gray-400'>
               {lastMessage?.createdAt
-                ? new Date(lastMessage.createdAt).toLocaleTimeString()
+                ? new Date(
+                    lastMessage.createdAt.includes('+')
+                      ? lastMessage.createdAt
+                      : lastMessage.createdAt + '+00:00'
+                  ).toLocaleTimeString()
                 : ''}
             </p>
           )}

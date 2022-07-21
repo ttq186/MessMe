@@ -72,10 +72,16 @@ def decode_oauth2_token_id(token_id: str) -> dict:
 
 def set_access_token_on_http_only_cookie(response: Response, access_token: str) -> None:
     response.set_cookie(
-        key="Authorization",
+        key="authorization",
         value=access_token,
         expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 2,  # Token expires is enough
         httponly=True,
+    )
+    response.set_cookie(
+        key="logout",
+        value="0",
+        secure=True,
+        expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 2,
     )
 
 

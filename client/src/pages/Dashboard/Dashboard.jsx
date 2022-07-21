@@ -30,14 +30,13 @@ import {
   contactsIdVar,
   activeUserChatVar,
   contactsJustSentMessagesVar,
+  signInRequiredVar,
 } from 'cache';
 
-import {
-  GET_MESSAGES_BY_CHANNEL,
-  SUBSCRIBE_MESSAGE,
-} from 'graphql/messages';
+import { GET_MESSAGES_BY_CHANNEL, SUBSCRIBE_MESSAGE } from 'graphql/messages';
 import { generateMessageChannelByUsersId } from 'utils';
 import { client } from 'apolloConfig';
+import { useNavigate } from 'react-router-dom';
 
 const componentByTabMode = {
   CHAT_MODE: <DashboardUsersChat />,
@@ -51,6 +50,9 @@ const componentByTabMode = {
 export const updateLastMessageOfContacts = (userId, newMessage) => {
   const { contacts: currentContacts } = client.readQuery({
     query: GET_CONTACTS,
+    variables: {
+      isEstablished: true,
+    },
   });
 
   const updatedContact = currentContacts.find(
@@ -73,6 +75,9 @@ export const updateLastMessageOfContacts = (userId, newMessage) => {
     data: {
       contacts: contactsAfterUpdated,
     },
+    variables: {
+      isEstablished: true,
+    },
   });
 };
 
@@ -89,6 +94,8 @@ export const Dashboard = () => {
   const [getMessages, { subscribeToMore }] = useLazyQuery(
     GET_MESSAGES_BY_CHANNEL
   );
+
+  const navigate = useNavigate();
 
   const notifyNewMessage = () => {
     playNotificationSound();
@@ -187,6 +194,15 @@ export const Dashboard = () => {
       subcribeMessageToAllContacts();
     }
   }, [contactsId, currentUserObj]);
+
+  useEffect(() => {
+    if (!document.cookie.includes('logout=0')) {
+      signInRequiredVar(true);
+      navigate('/sign-in');
+    } else {
+      signInRequiredVar(false);
+    }
+  }, []);
 
   return (
     <div className='flex'>

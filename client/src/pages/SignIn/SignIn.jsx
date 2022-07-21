@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
-import { isSignUpSuccessVar } from 'cache';
+import { isSignUpSuccessVar, signInRequiredVar } from 'cache';
 import { AlertIcon, CoffeeCupIcon, SuccessIcon } from 'assets/icons';
 import { EmailInput, PasswordInput } from 'components/Form';
 import { MainLayout } from 'components/Layout';
@@ -16,6 +16,8 @@ export const SignIn = () => {
   const navigate = useNavigate();
   const formMethods = useForm();
   const [errorMessage, setErrorMessage] = useState(null);
+  const signInRequired = useReactiveVar(signInRequiredVar);
+  console.log(signInRequired);
 
   const [login, { loading: loginLoading, data: loginData }] = useLazyQuery(
     LOGIN,
@@ -31,6 +33,7 @@ export const SignIn = () => {
   });
 
   const onGoogleLoginSuccess = (res) => {
+    signInRequiredVar(false);
     loginViaGoogle({
       variables: {
         tokenId: res.credential,
@@ -45,6 +48,7 @@ export const SignIn = () => {
   } = formMethods;
 
   const handleFormSubmit = () => {
+    signInRequiredVar(false);
     const { email, password } = getValues();
     login({
       variables: { email, password },
@@ -76,10 +80,14 @@ export const SignIn = () => {
               className='bg-gray-800 font-bold p-6 md:p-8 pb-4 md:pb-6 rounded-md text-gray-400'
               onSubmit={handleSubmit(handleFormSubmit)}
             >
-              {errorMessage && (
+              {(errorMessage || signInRequired) && (
                 <div className='flex items-center bg-red-300 py-2.5 px-3 mb-3 font-semibold text-zinc-700 text-[13.8px] text-center rounded'>
                   <img src={AlertIcon} alt='Alert' className='w-7 h-7 mr-1' />
-                  <div>{errorMessage}</div>
+                  <div>
+                    {signInRequired
+                      ? 'You need to sign in first to continue!'
+                      : errorMessage}
+                  </div>
                 </div>
               )}
               {isSignUpSuccessVar() && (

@@ -20,8 +20,9 @@ def get_mongo_db():
 
 async def get_current_user(info: Info) -> User:
     cookies = info.context["request"].cookies
-    access_token = cookies.get("Authorization")
-    if access_token is None:
+    access_token = cookies.get("authorization")
+    logout_value = cookies.get("logout")
+    if logout_value != "0" or access_token is None:
         raise exceptions.NotAuthenticated()
 
     token_data = security.decode_access_token(access_token)

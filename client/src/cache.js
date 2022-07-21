@@ -9,6 +9,7 @@ export const contactRequestsIdVar = makeVar([]);
 export const hasNewNotificationVar = makeVar(false);
 export const hasSubcribeMessageVar = makeVar(false);
 export const contactsJustSentMessagesVar = makeVar([]);
+export const signInRequiredVar = makeVar(false);
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -57,6 +58,11 @@ export const cache = new InMemoryCache({
         contactsJustSentMessages: {
           read() {
             return contactsJustSentMessagesVar();
+          },
+        },
+        signInRequired: {
+          read() {
+            return signInRequiredVar();
           },
         },
       },
