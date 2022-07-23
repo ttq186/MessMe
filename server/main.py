@@ -9,7 +9,12 @@ from db.config import broadcast, postgres_session, postgres_engine, mongo_client
 app = FastAPI(title="MessMe", version="1.0.0", root_path="")
 
 
-allowed_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://messme.ttq186.dev",
+    "wss://messme.ttq186.dev",
+]
 
 app.add_middleware(
     CORSMiddleware,
