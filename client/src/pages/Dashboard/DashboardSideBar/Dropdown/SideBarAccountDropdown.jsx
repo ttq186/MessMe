@@ -12,7 +12,7 @@ export const SideBarAccountDropdown = ({ triggerButton, setTabMode }) => {
   const handleLogout = () => {
     navigate('/');
     client.resetStore();
-    document.cookie = 'logout=1;';
+    document.cookie = 'logout=0; max-age=0';
   };
 
   return (

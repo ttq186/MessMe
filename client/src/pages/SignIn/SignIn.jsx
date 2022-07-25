@@ -17,7 +17,6 @@ export const SignIn = () => {
   const formMethods = useForm();
   const [errorMessage, setErrorMessage] = useState(null);
   const signInRequired = useReactiveVar(signInRequiredVar);
-  console.log(signInRequired);
 
   const [login, { loading: loginLoading, data: loginData }] = useLazyQuery(
     LOGIN,
@@ -59,11 +58,20 @@ export const SignIn = () => {
     if (isSignUpSuccessVar()) {
       isSignUpSuccessVar(false);
     }
-    if (loginData || loginViaGoogleData) {
+    if (document.cookie.includes('logout=0')) {
       navigate('/dashboard');
     }
+    // if (loginData || loginViaGoogleData) {
+    //   navigate('/dashboard');
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loginData, loginViaGoogleData]);
+  }, [document.cookie]);
+
+  useEffect(() => {
+    if (document.cookie.includes('logout=0')) {
+      navigate('/dashboard');
+    }
+  });
 
   return (
     <>

@@ -77,10 +77,12 @@ def set_access_token_on_http_only_cookie(response: Response, access_token: str) 
         expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 2,  # Token expires is enough
         httponly=True,
     )
+
+
+def set_logout_detection_cookie(response: Response) -> None:
     response.set_cookie(
         key="logout",
         value="0",
-        secure=True,
         expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 2,
     )
 

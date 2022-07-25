@@ -19,9 +19,9 @@ async def resolver_login(info: Info, email: str, password: str) -> User:
         raise exceptions.InvalidLoginCredentials()
 
     access_token = security.create_access_token({"user_id": user.id})
-    security.set_access_token_on_http_only_cookie(
-        info.context["response"], access_token
-    )
+    response_obj = info.context["response"]
+    security.set_access_token_on_http_only_cookie(response_obj, access_token)
+    security.set_logout_detection_cookie(response_obj)
     return user
 
 
@@ -41,10 +41,11 @@ async def resolver_login_via_google(info: Info, tokenId: str) -> User:
             user_id = utils.generate_uuid()
         user_in.id = user_id
         user = await crud.user.create(session, obj_in=user_in)
+
     access_token = security.create_access_token({"user_id": user.id})
-    security.set_access_token_on_http_only_cookie(
-        info.context["response"], access_token
-    )
+    response_obj = info.context["response"]
+    security.set_access_token_on_http_only_cookie(response_obj, access_token)
+    security.set_logout_detection_cookie(response_obj)
     return user
 
 

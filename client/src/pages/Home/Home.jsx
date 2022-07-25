@@ -12,7 +12,12 @@ export const Home = () => {
 
   useEffect(() => {
     if (hasLoadWelcomeAnimation) {
-      navigate('/sign-in');
+      if (document.cookie.includes('logout=0')) {
+        navigate('/dashboard');
+      } else {
+        navigate('/sign-in');
+      }
+      return;
     }
     const waitForAnimationLoad = async () => {
       const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

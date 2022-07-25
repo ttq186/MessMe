@@ -7,6 +7,8 @@ services:
         restart: always
         volumes:
             - pg-data:/var/lib/postgresql/data
+        env_file:
+            - ./server/.env
         environment:
             POSTGRES_USER: ${PG_USERNAME}
             POSTGRES_PASSWORD: ${PG_PASSWORD}
@@ -25,6 +27,8 @@ services:
         image: redis:7-alpine
         container_name: redis
         restart: always
+        networks:
+            - server
 
     backend:
         build:
@@ -32,6 +36,8 @@ services:
             dockerfile: Dockerfile
         image: backend
         container_name: backend
+        ports:
+            - 8000:8000
         depends_on:
             - postgres-db
             - mongo-db
@@ -43,17 +49,13 @@ services:
             dockerfile: Dockerfile
         image: frontend
         container_name: frontend
+        restart: unless-stopped
+        ports:
+            - 3000:80
         depends_on:
             - backend
-
-    nginx:
-        build:
-            context: ./nginx
-            dockerfile: Dockerfile
-        image: nginx
-        container_name: nginx
-        depends_on:
-            - frontend
+        networks:
+            - client
 
 volumes:
     pg-data:
