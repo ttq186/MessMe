@@ -16,7 +16,6 @@ export const ForgotPassword = () => {
 
   const handleFormSubmit = () => {
     const { email } = getValues();
-    console.log(email);
   };
 
   return (

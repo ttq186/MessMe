@@ -33,7 +33,7 @@ https://user-images.githubusercontent.com/73225256/179389289-92c0ef8a-92c1-4502-
 - **Databases**
     - **PostgreSQL** - stores main data
     - **MongoDB** - stores messages
-    - **Redis** - caching && pub/sub
+    - **Redis** - caching & pub/sub
 
 ## Disclaimer
 - **MessMe** is designed to work well with laptop screens, so the UI may not be suitable on other screens.

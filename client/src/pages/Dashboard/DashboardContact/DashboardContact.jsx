@@ -11,7 +11,10 @@ import {
 import { SearchBar } from 'components/SearchBar';
 import { GET_CONTACTS } from 'graphql/contacts';
 
-const Group = ({ name, contacts }) => {
+const ContactGroup = ({ name, contacts }) => {
+  const currentGroups = contacts.map((contact) => contact.groupName);
+  if (!currentGroups.includes(name)) return;
+
   return (
     <div className='font-bold pl-10 pr-5 mb-6'>
       <h2 className='text-blue-300'>{name}</h2>
@@ -27,23 +30,47 @@ const Group = ({ name, contacts }) => {
 
 export const DashboardContact = () => {
   const [groupNames, setGroupNames] = useState([]);
-  const { data: contactsObj } = useQuery(GET_CONTACTS, {
+  const [currentContacts, setCurrentContacts] = useState([]);
+  const [contactsBySearch, setContactsBySearch] = useState(currentContacts);
+  let groups = [];
+
+  const onGetContacts = (contacts) => {
+    const contactsWithGroup = contacts.map((contact) => {
+      const { username, email, id } = contact.friend;
+      const name = username ? username : email.split('@')[0];
+      const groupName = name.charAt(0).toUpperCase();
+
+      if (!groups.includes(groupName)) {
+        groups.push(groupName);
+      }
+      setGroupNames(groups);
+      return { id, name, groupName };
+    });
+    setCurrentContacts(contactsWithGroup);
+    setContactsBySearch(contactsWithGroup);
+  };
+
+  useQuery(GET_CONTACTS, {
     variables: {
       isEstablished: true,
     },
+    onCompleted: (data) => {
+      onGetContacts(data.contacts);
+    },
   });
 
-  if (!contactsObj) return;
-
-  const contactsWithGroup = contactsObj.contacts.map((contact) => {
-    const { username, email, id } = contact.friend;
-    const name = username ? username : email.split('@')[0];
-    const groupName = name.charAt(0).toUpperCase();
-    if (!groupNames.includes(groupName)) {
-      setGroupNames([...groupNames, groupName].sort());
+  const handleSearchContacts = (searchValue) => {
+    if (!searchValue.trim()) {
+      setContactsBySearch(currentContacts);
+      return;
     }
-    return { id, name, groupName };
-  });
+
+    const searchValueInLowerCase = searchValue.toLowerCase();
+    const contactsAfterFilter = currentContacts.filter((contact) =>
+      contact.name.toLowerCase().includes(searchValueInLowerCase)
+    );
+    setContactsBySearch(contactsAfterFilter);
+  };
 
   return (
     <>
@@ -61,15 +88,19 @@ export const DashboardContact = () => {
             }
           />
         </div>
-        <SearchBar placeholder='Search Users' />
+        <SearchBar
+          placeholder='Search Contacts'
+          handleSearch={handleSearchContacts}
+        />
       </div>
 
-      <div className='overflow-y-scroll scrollbar-transparent hover:scrollbar mr-1 mb-3'>
+      <div className='h-[78%] overflow-y-scroll scrollbar-transparent hover:scrollbar mr-1 mb-3'>
         {groupNames.map((groupName) => (
-          <Group
+          <ContactGroup
             key={groupName}
             name={groupName}
-            contacts={contactsWithGroup}
+            contacts={contactsBySearch}
+            group={groupNames}
           />
         ))}
       </div>

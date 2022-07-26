@@ -33,6 +33,7 @@ export const DashboardUsersChat = () => {
   const handleSearchUser = (searchValue) => {
     if (!searchValue.trim()) {
       setContactsBySearchValue(contactsByLastInteraction);
+      return;
     }
     const searchValueInLowerCase = searchValue.toLowerCase();
     const contactsBySearch = contactsByLastInteraction.filter((contact) => {
@@ -71,10 +72,7 @@ export const DashboardUsersChat = () => {
     <>
       <div className='p-6 pb-2'>
         <p className='text-2xl font-bold'>Chat</p>
-        <SearchBar
-          placeholder='Search Users'
-          handleSearchUser={handleSearchUser}
-        />
+        <SearchBar placeholder='Search Users' handleSearch={handleSearchUser} />
       </div>
 
       <p className='font-bold text ml-6 mt-5 mb-3'>Recent</p>
