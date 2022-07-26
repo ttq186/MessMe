@@ -69,6 +69,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
         },
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeUserChat, currentUserObj]);
 
   const handleInputKeyDown = (event) => {
@@ -107,6 +108,13 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
     });
     inputRef.current.innerHTML = '';
   };
+
+  if (!activeUserChat)
+    return (
+      <div className='flex flex-col w-[40%] h-screen items-center justify-center grow bg-slate-600 text-slate-400 font-semibold'>
+        Let's add more friends to explore more!
+      </div>
+    );
 
   return (
     <div className='flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600'>
@@ -238,6 +246,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
                   />
                 );
               }
+              return <div key={item._id} />;
             })}
           </div>
           <AlwaysScrollToBottom />

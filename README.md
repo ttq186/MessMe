@@ -31,9 +31,9 @@ https://user-images.githubusercontent.com/73225256/179389289-92c0ef8a-92c1-4502-
     - **Strawberry** - builds GraphQL server
     - **Async SQLAlchemy**
 - **Databases**
-    - **PostgreSQL** - stores main datas
+    - **PostgreSQL** - stores main data
     - **MongoDB** - stores messages
-    - **Redis**
+    - **Redis** - caching && pub/sub
 
 ## Disclaimer
 - **MessMe** is designed to work well with laptop screens, so the UI may not be suitable on other screens.

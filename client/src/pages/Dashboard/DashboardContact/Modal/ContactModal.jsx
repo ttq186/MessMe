@@ -33,7 +33,7 @@ const UserItem = ({ id, avatarUrl, username, email, status }) => {
 
   return (
     <label
-      className='flex items-center p-2 mx-3 mb-2.5 opacity-80 bg-slate-500 rounded cursor-pointer transition duration-300 ease-out hover:ease-in hover:opacity-100'
+      className='flex items-center p-2 mx-3 my-3 opacity-80 bg-slate-500 rounded cursor-pointer transition duration-300 ease-out hover:ease-in hover:opacity-100'
       id='checkbox'
     >
       <div className='flex items-end p-1'>
@@ -95,7 +95,6 @@ export const ContactModal = ({ triggerButton }) => {
 
   const handleAddContact = () => {
     if (!currentChoseUserId) return;
-    console.log(currentChoseUserId)
 
     createContact({
       variables: {
@@ -160,7 +159,7 @@ export const ContactModal = ({ triggerButton }) => {
           </div>
 
           {data && (
-            <div className='bg-slate-600 py-2.5 rounded mt-2'>
+            <div className='bg-slate-600 py-1 rounded mt-2'>
               <div className='max-h-[300px] pl-1 bg-slate-600 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
                 {data.users.map((user) => {
                   if (user.id === currentUserObj?.currentUser.id) return;
@@ -176,6 +175,7 @@ export const ContactModal = ({ triggerButton }) => {
             </div>
           )}
         </div>
+
         <div className='mb-4 text-slate-300'>
           <label className='text-[15px] font-bold' htmlFor='invitation-message'>
             Invitation Message

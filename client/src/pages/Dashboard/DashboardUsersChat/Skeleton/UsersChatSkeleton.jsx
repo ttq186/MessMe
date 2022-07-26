@@ -6,8 +6,8 @@ export const UsersChatSkeleton = () => {
         <div className='flex-1 space-y-6 py-1'>
           <div className='space-y-3'>
             <div className='h-2 bg-slate-500 rounded w-1/2'></div>
-            <div className='h-2 bg-slate-500 rounded w-4/5'></div>
-            <div className='h-2 bg-slate-500 rounded w-4/5'></div>
+            <div className='h-2 bg-slate-500 rounded w-11/12'></div>
+            <div className='h-2 bg-slate-500 rounded w-11/12'></div>
           </div>
         </div>
       </div>

@@ -18,18 +18,15 @@ export const SignIn = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const signInRequired = useReactiveVar(signInRequiredVar);
 
-  const [login, { loading: loginLoading, data: loginData }] = useLazyQuery(
-    LOGIN,
+  const [login, { loading: loginLoading }] = useLazyQuery(LOGIN, {
+    onError: (error) => setErrorMessage(error.message),
+  });
+  const [loginViaGoogle, { loading: loginViaGoogleLoading }] = useLazyQuery(
+    LOGIN_VIA_GOOGLE,
     {
       onError: (error) => setErrorMessage(error.message),
     }
   );
-  const [
-    loginViaGoogle,
-    { loading: loginViaGoogleLoading, data: loginViaGoogleData },
-  ] = useLazyQuery(LOGIN_VIA_GOOGLE, {
-    onError: (error) => setErrorMessage(error.message),
-  });
 
   const onGoogleLoginSuccess = (res) => {
     signInRequiredVar(false);

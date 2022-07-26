@@ -26,7 +26,7 @@ export const Home = () => {
     waitForAnimationLoad().then(() => {
       hasLoadWelcomeAnimationVar(true);
     });
-  }, [hasLoadWelcomeAnimation]);
+  }, [hasLoadWelcomeAnimation, navigate]);
 
   return (
     <div className='bg-gray-700'>

@@ -37,12 +37,10 @@ export const DashboardUsersChat = () => {
     const searchValueInLowerCase = searchValue.toLowerCase();
     const contactsBySearch = contactsByLastInteraction.filter((contact) => {
       const { username, email } = contact.friend;
-      if (
+      return (
         username?.toLowerCase().includes(searchValueInLowerCase) ||
         email.toLowerCase().includes(searchValueInLowerCase)
-      ) {
-        return contact;
-      }
+      );
     });
     setContactsBySearchValue(contactsBySearch);
   };

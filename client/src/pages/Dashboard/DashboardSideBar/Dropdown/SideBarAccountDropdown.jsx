@@ -3,15 +3,17 @@ import { Menu } from '@headlessui/react';
 
 import { ProfileIcon, LogoutIcon } from 'assets/icons';
 import { Dropdown } from 'components/Dropdown';
-import { useApolloClient, useQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
+import { activeUserChatVar } from 'cache';
 
 export const SideBarAccountDropdown = ({ triggerButton, setTabMode }) => {
   const navigate = useNavigate();
   const client = useApolloClient();
 
   const handleLogout = () => {
+    activeUserChatVar(null);
     navigate('/');
-    client.resetStore();
+    client.clearStore();
     document.cookie = 'logout=0; max-age=0';
   };
 
