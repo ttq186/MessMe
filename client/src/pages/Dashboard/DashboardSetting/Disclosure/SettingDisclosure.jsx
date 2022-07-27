@@ -80,7 +80,7 @@ export const SettingDisclosure = () => {
           ) : (
             <input
               className='w-full p-1 px-3 mt-1 font-semibold rounded-[3px] bg-slate-600 outline-none opacity-60 cursor-auto'
-              defaultValue='tt.quang.186@gmail.com'
+              defaultValue={currentUser.email}
               readOnly
             />
           )}

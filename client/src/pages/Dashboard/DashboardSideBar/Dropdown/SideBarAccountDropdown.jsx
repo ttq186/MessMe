@@ -13,7 +13,7 @@ export const SideBarAccountDropdown = ({ triggerButton, setTabMode }) => {
   const handleLogout = () => {
     activeUserChatVar(null);
     navigate('/');
-    client.clearStore();
+    client.resetStore()
     document.cookie = 'logout=0; max-age=0';
   };
 

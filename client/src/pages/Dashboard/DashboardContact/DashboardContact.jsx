@@ -16,8 +16,8 @@ const ContactGroup = ({ name, contacts }) => {
   if (!currentGroups.includes(name)) return;
 
   return (
-    <div className='font-bold pl-10 pr-5 mb-6'>
-      <h2 className='text-blue-300'>{name}</h2>
+    <div className='font-bold pl-10 pr-5 mb-5'>
+      <h2 className='text-blue-300 text-lg'>{name}</h2>
       {contacts.map((contact) => {
         if (contact.groupName === name) {
           return <ContactByFirstLetter key={contact.id} {...contact} />;
@@ -42,6 +42,7 @@ export const DashboardContact = () => {
 
       if (!groups.includes(groupName)) {
         groups.push(groupName);
+        groups.sort();
       }
       setGroupNames(groups);
       return { id, name, groupName };
