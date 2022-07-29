@@ -10,19 +10,9 @@ import { Modal } from 'components/Modal';
 import { CREATE_CONTACT } from 'graphql/contacts';
 import { GET_CURRENT_USER, GET_USERS } from 'graphql/users';
 import { AvatarIcon } from 'assets/icons';
-import {
-  contactRequestsIdVar,
-  contactsIdVar,
-  currentChoseUserIdVar,
-} from 'cache';
+import { currentChoseUserIdVar } from 'cache';
 
-const partnerStatus = {
-  FRIEND: 'Friend',
-  REQUESTED: 'Requested',
-  STRANGER: 'Stranger',
-};
-
-const UserItem = ({ id, avatarUrl, username, email, status }) => {
+const UserItem = ({ id, avatarUrl, username, email, partnerStatus }) => {
   const handleChooseUser = (e) => {
     if (!e.target.checked) {
       currentChoseUserIdVar(null);
@@ -33,7 +23,7 @@ const UserItem = ({ id, avatarUrl, username, email, status }) => {
 
   return (
     <label
-      className='flex items-center p-2 mx-3 my-3 opacity-80 bg-slate-500 rounded cursor-pointer transition duration-300 ease-out hover:ease-in hover:opacity-100'
+      className='flex items-center p-2 mx-3 mr-2 mb-2.5 opacity-80 bg-slate-500 rounded cursor-pointer transition duration-300 ease-out hover:ease-in hover:opacity-100'
       id='checkbox'
     >
       <div className='flex items-end p-1'>
@@ -51,9 +41,9 @@ const UserItem = ({ id, avatarUrl, username, email, status }) => {
         <p className='font-bold -mt-0.5'>
           {username ? username : email.split('@')[0]}
         </p>
-        <p className='text-sm text-slate-300 font-medium'>{status}</p>
+        <p className='text-sm text-slate-300 font-medium'>{partnerStatus}</p>
       </div>
-      {status === partnerStatus.STRANGER && (
+      {partnerStatus === 'Stranger' && (
         <div className='mr-4'>
           <input
             type='checkbox'
@@ -72,13 +62,13 @@ export const ContactModal = ({ triggerButton }) => {
   const [isOpen, setOpen] = useState(false);
   const [timeOutObj, setTimeOutObj] = useState(null);
 
-  const contactsId = useReactiveVar(contactsIdVar);
   const currentChoseUserId = useReactiveVar(currentChoseUserIdVar);
-  const contactRequestsId = useReactiveVar(contactRequestsIdVar);
 
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [createContact] = useMutation(CREATE_CONTACT);
-  const [getUsers, { data }] = useLazyQuery(GET_USERS);
+  const [getUsers, { data }] = useLazyQuery(GET_USERS, {
+    fetchPolicy: 'network-only',
+  });
 
   const openModal = () => {
     setOpen(true);
@@ -104,7 +94,6 @@ export const ContactModal = ({ triggerButton }) => {
     });
     closeModal();
     currentChoseUserIdVar(null);
-    contactRequestsIdVar([...contactRequestsId, currentChoseUserId]);
     setInvitationMessage('');
   };
 
@@ -120,13 +109,6 @@ export const ContactModal = ({ triggerButton }) => {
       }
     }, 500);
     setTimeOutObj(newTimeout);
-  };
-
-  const getPartnerStatus = (partner) => {
-    const partnerId = partner.id;
-    if (contactsId.includes(partnerId)) return partnerStatus.FRIEND;
-    if (contactRequestsId.includes(partnerId)) return partnerStatus.REQUESTED;
-    return partnerStatus.STRANGER;
   };
 
   return (
@@ -159,17 +141,11 @@ export const ContactModal = ({ triggerButton }) => {
           </div>
 
           {data && (
-            <div className='bg-slate-600 py-1 rounded mt-2'>
-              <div className='max-h-[300px] pl-1 bg-slate-600 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
+            <div className='bg-slate-600 py-4 rounded mt-2'>
+              <div className='max-h-[280px] pl-1 mr-1 bg-slate-600 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
                 {data.users.map((user) => {
                   if (user.id === currentUserObj?.currentUser.id) return;
-                  return (
-                    <UserItem
-                      key={user.id}
-                      {...user}
-                      status={getPartnerStatus(user)}
-                    />
-                  );
+                  return <UserItem key={user.id} {...user} />;
                 })}
               </div>
             </div>

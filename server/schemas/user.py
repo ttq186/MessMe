@@ -8,6 +8,7 @@ class User:
     email: str | None
     id: str | None = None
     username: str | None = None
+    password: str | None = None
     avatar_url: str | None = None
     description: str | None = None
     is_female: bool | None = None
@@ -15,6 +16,7 @@ class User:
     date_of_birth: date | None = None
     created_at: datetime | None = None
     has_confirmed_email: bool | None = None
+    partner_status: str | None = None
     is_admin: bool = False
 
 

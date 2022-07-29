@@ -6,7 +6,7 @@ from api.graphql_app import graphql_app
 from db.config import broadcast, postgres_session, postgres_engine, mongo_client
 
 
-app = FastAPI(title="MessMe", version="1.0.0", root_path="")
+app = FastAPI(title="MessMe")
 
 
 allowed_origins = [

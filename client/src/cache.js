@@ -5,7 +5,6 @@ export const isSignUpSuccessVar = makeVar(false);
 export const activeUserChatVar = makeVar(null);
 export const contactsIdVar = makeVar([]);
 export const currentChoseUserIdVar = makeVar(null);
-export const contactRequestsIdVar = makeVar([]);
 export const hasNewNotificationVar = makeVar(false);
 export const hasSubcribeMessageVar = makeVar(false);
 export const contactsJustSentMessagesVar = makeVar([]);
@@ -33,11 +32,6 @@ export const cache = new InMemoryCache({
         contactsId: {
           read() {
             return contactsIdVar();
-          },
-        },
-        contactRequestsId: {
-          read() {
-            return contactRequestsIdVar();
           },
         },
         currentChoseUserId: {

@@ -9,12 +9,35 @@ from schemas import User, UserCreate, UserUpdate, UserDeleteSuccess, SignedUrl
 
 
 async def resolver_get_users(info: Info, search: str | None = None) -> list[User]:
-    users = await crud.user.get_multi(session=info.context["pg_session"], search=search)
-    return users
+    pg_session = info.context["pg_session"]
+    current_user = info.context["current_user"]
+    current_user_id = current_user.id
+
+    users = await crud.user.get_multi(pg_session, search=search)
+    contacts = await crud.contact.get_multi_by_requester_or_accepter_id(
+        pg_session, user_id=current_user_id
+    )
+
+    partners_status_by_id = {}
+    for contact in contacts:
+        [accepter_id, requester_id] = [contact.accepter_id, contact.requester_id]
+        partner_id = accepter_id if requester_id == current_user_id else requester_id
+        partners_status_by_id[partner_id] = (
+            "Friend" if contact.is_established else "Requested"
+        )
+    return [
+        User(
+            **user.to_dict(),
+            partner_status=partners_status_by_id[user.id]
+            if partners_status_by_id.get(user.id) is not None
+            else "Stranger"
+        )
+        for user in users
+    ]
 
 
 async def resolver_get_user(info: Info, id: str) -> User | None:
-    current_user = info.context.get("current_user")
+    current_user = info.context["current_user"]
     if current_user.id != id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
     user = await crud.user.get(session=info.context["pg_session"], id=id)
@@ -24,7 +47,7 @@ async def resolver_get_user(info: Info, id: str) -> User | None:
 
 
 async def resolver_get_current_user(info: Info) -> User | None:
-    current_user = info.context.get("current_user")
+    current_user = info.context["current_user"]
     return current_user
 
 
@@ -44,7 +67,7 @@ async def resolver_create_user(info: Info, user_in: UserCreate) -> User:
 
 
 async def resolver_update_user(info: Info, user_in: UserUpdate) -> User:
-    current_user: User = info.context.get("current_user")
+    current_user: User = info.context["current_user"]
     if current_user.id != user_in.id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
 
@@ -59,7 +82,7 @@ async def resolver_update_user(info: Info, user_in: UserUpdate) -> User:
 
 
 async def resolver_delete_user(info: Info, id: str) -> UserDeleteSuccess:
-    current_user = info.context.get("current_user")
+    current_user = info.context["current_user"]
     pg_session = info.context["pg_session"]
     if current_user.id != id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
