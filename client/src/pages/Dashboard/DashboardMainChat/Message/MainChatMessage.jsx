@@ -11,8 +11,8 @@ export const MainChatMessage = ({
   author,
   content,
   createdAt,
+  isHidden,
 }) => {
-  const isHidden = content === 'This message has been revoked!';
   return (
     <div className={`flex items-end ${isSender && 'flex-row-reverse'}`}>
       <div className='py-2 px-1 pb-0'>

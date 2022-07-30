@@ -5,8 +5,7 @@ import { Menu } from '@headlessui/react';
 import { ShareIcon, BlockIcon, RemoveIcon } from 'assets/icons';
 import { Dropdown } from 'components/Dropdown';
 import { Modal } from 'components/Modal';
-import { DELETE_CONTACT, GET_CONTACTS } from 'graphql/contacts';
-import { client } from 'apolloConfig';
+import { DELETE_CONTACT } from 'graphql/contacts';
 
 export const ContactDropdown = ({ triggerButton, id }) => {
   const [isOpenModal, setOpenModal] = useState(false);
@@ -21,25 +20,23 @@ export const ContactDropdown = ({ triggerButton, id }) => {
   };
 
   const handleDeleteContact = () => {
-    // deleteContact({
-    //   variables: {
-    //     id,
-    //   },
-    //   update(cache) {
-    //     console.log('before', cache);
-    //     cache.modify({
-    //       fields: {
-    //         contacts(existingContacts = []) {
-    //           const newContacts = existingContacts.filter(
-    //             (contact) => contact.id !== id
-    //           );
-    //           return newContacts;
-    //         },
-    //       },
-    //     });
-    //   },
-    // });
-    console.log('after', client);
+    deleteContact({
+      variables: {
+        id,
+      },
+      update(cache) {
+        cache.modify({
+          fields: {
+            contacts(existingContacts = []) {
+              const newContacts = existingContacts.filter(
+                (contact) => contact.__ref !== `Contact:${id}`
+              );
+              return newContacts;
+            },
+          },
+        });
+      },
+    });
     closeModal();
   };
 

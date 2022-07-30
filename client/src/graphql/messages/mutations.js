@@ -7,6 +7,7 @@ export const CREATE_MESSAGE = gql`
       senderId
       content
       createdAt
+      isHidden
     }
   }
 `;
@@ -18,6 +19,7 @@ export const UPDATE_MESSAGE = gql`
       senderId
       content
       createdAt
+      isHidden
     }
   }
 `;

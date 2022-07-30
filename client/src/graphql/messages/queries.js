@@ -8,6 +8,7 @@ export const GET_MESSAGES = gql`
       channelId
       content
       createdAt
+      isHidden
     }
   }
 `;
@@ -20,6 +21,7 @@ export const GET_MESSAGES_BY_CHANNEL = gql`
       channelId
       content
       createdAt
+      isHidden
     }
   }
 `;

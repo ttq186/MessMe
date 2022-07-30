@@ -8,6 +8,7 @@ export const SUBSCRIBE_MESSAGE = gql`
       channelId
       content
       createdAt
+      isHidden
     }
   }
 `;

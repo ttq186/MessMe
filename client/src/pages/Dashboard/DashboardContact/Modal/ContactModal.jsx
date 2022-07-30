@@ -13,6 +13,7 @@ import { AvatarIcon } from 'assets/icons';
 import { currentChoseUserIdVar } from 'cache';
 
 const UserItem = ({ id, avatarUrl, username, email, partnerStatus }) => {
+  const currentChoseUserId = useReactiveVar(currentChoseUserIdVar);
   const handleChooseUser = (e) => {
     if (!e.target.checked) {
       currentChoseUserIdVar(null);
@@ -43,7 +44,8 @@ const UserItem = ({ id, avatarUrl, username, email, partnerStatus }) => {
         </p>
         <p className='text-sm text-slate-300 font-medium'>{partnerStatus}</p>
       </div>
-      {partnerStatus === 'Stranger' && (
+      {((partnerStatus === 'Stranger' && !currentChoseUserId) ||
+        (currentChoseUserId && currentChoseUserId === id)) && (
         <div className='mr-4'>
           <input
             type='checkbox'
@@ -100,7 +102,7 @@ export const ContactModal = ({ triggerButton }) => {
   const handleContactInputChange = (currentContactInfo) => {
     clearTimeout(timeOutObj);
     const newTimeout = setTimeout(() => {
-      if (currentContactInfo.trim() !== '') {
+      if (currentContactInfo.trim()) {
         getUsers({
           variables: {
             search: currentContactInfo,
