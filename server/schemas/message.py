@@ -14,8 +14,9 @@ class Message:
     _id: ObjectIdType = strawberry.field(name="_id")
     sender_id: str
     channel_id: str
-    content: str
+    content: str | None
     created_at: datetime
+    is_hidden: bool | None = None
 
 
 @strawberry.input
@@ -30,7 +31,7 @@ class MessageCreate:
 @strawberry.input
 class MessageUpdate:
     _id: ObjectIdType = strawberry.field(name="_id")
-    content: str
+    is_hidden: bool | None = None
 
 
 @strawberry.type

@@ -18,6 +18,11 @@ from db.config import broadcast
 from utils import generate_message_channel_by_users_id
 
 
+def handle_content_for_hidden_message(message: Message) -> None:
+    if message.is_hidden:
+        message.content = "This message has been revoked!"
+
+
 async def resolver_get_messages(info: Info) -> list[Message]:
     messages = await crud.message.get_multi(info.context["mongo_db"])
     return messages
@@ -29,6 +34,8 @@ async def resolver_get_messages_by_channel(
     messages = await crud.message.get_multi_by_channel_id(
         info.context["mongo_db"], channel_id=channel_id
     )
+    for message in messages:
+        handle_content_for_hidden_message(message)
     return messages
 
 
@@ -36,6 +43,7 @@ async def resolver_get_message(info: Info, id: ObjectIdType) -> Message:
     message = await crud.message.get(info.context["mongo_db"], id=id)
     if message is None:
         raise exceptions.ResourceNotFound(resource_type="Message", id=id)
+    handle_content_for_hidden_message(message)
     return message
 
 
@@ -45,7 +53,7 @@ async def resolver_create_message(
     if receiver_id is None and message_in.channel_id is None:
         raise Exception("At least receiver_id or channel_id has to be provided!")
 
-    current_user = info.context.get("current_user")
+    current_user = info.context["current_user"]
     message_in.sender_id = current_user.id
 
     if receiver_id is not None:
@@ -64,10 +72,15 @@ async def resolver_create_message(
 
 async def resolver_update_message(info: Info, message_in: MessageUpdate) -> Message:
     mongo_db = info.context["mongo_db"]
+    current_user = info.context["current_user"]
     message = await crud.message.get(mongo_db, id=message_in._id)
     if message is None:
         raise exceptions.ResourceNotFound(resource_type="Message", id=message_in._id)
+    if message.sender_id != current_user.id:
+        raise exceptions.NotAuthorized()
+
     message = await crud.message.update(mongo_db, message_in=message_in)
+    handle_content_for_hidden_message(message)
     return message
 
 

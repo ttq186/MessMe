@@ -36,7 +36,7 @@ export const DashboardContact = () => {
 
   const onGetContacts = (contacts) => {
     const contactsWithGroup = contacts.map((contact) => {
-      const { username, email, id } = contact.friend;
+      const { username, email } = contact.friend;
       const name = username ? username : email.split('@')[0];
       const groupName = name.charAt(0).toUpperCase();
 
@@ -45,7 +45,7 @@ export const DashboardContact = () => {
         groups.sort();
       }
       setGroupNames(groups);
-      return { id, name, groupName };
+      return { id: contact.id, name, groupName };
     });
     setCurrentContacts(contactsWithGroup);
     setContactsBySearch(contactsWithGroup);
@@ -65,7 +65,6 @@ export const DashboardContact = () => {
       setContactsBySearch(currentContacts);
       return;
     }
-
     const searchValueInLowerCase = searchValue.toLowerCase();
     const contactsAfterFilter = currentContacts.filter((contact) =>
       contact.name.toLowerCase().includes(searchValueInLowerCase)

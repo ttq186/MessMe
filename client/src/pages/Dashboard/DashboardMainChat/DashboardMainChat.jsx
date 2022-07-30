@@ -38,7 +38,7 @@ import { MessageSkeleton } from './Skeleton/MessageSkeleton';
 import { generateMessageChannelByUsersId } from 'utils';
 import { updateLastMessageOfContacts } from '../Dashboard';
 
-const AlwaysScrollToBottom = () => {
+const ForceScrollToBottom = () => {
   const elementRef = useRef();
   useEffect(() => elementRef.current.scrollIntoView({ behavior: 'smooth' }));
   return <div ref={elementRef} />;
@@ -236,6 +236,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
                 return (
                   <MainChatMessage
                     key={item._id}
+                    id={item._id}
                     isSender={currentUserObj.currentUser.id === item.senderId}
                     author={
                       currentUserObj?.currentUser.id === item.senderId
@@ -249,7 +250,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
               return <div key={item._id} />;
             })}
           </div>
-          <AlwaysScrollToBottom />
+          <ForceScrollToBottom />
         </div>
       )}
 

@@ -10,3 +10,14 @@ export const CREATE_MESSAGE = gql`
     }
   }
 `;
+
+export const UPDATE_MESSAGE = gql`
+  mutation UpdateMessage($input: MessageUpdate!) {
+    updateMessage(messageIn: $input) {
+      _id
+      senderId
+      content
+      createdAt
+    }
+  }
+`;

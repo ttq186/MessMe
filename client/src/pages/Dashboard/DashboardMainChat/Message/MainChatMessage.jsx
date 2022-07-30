@@ -1,14 +1,18 @@
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Linkify from 'linkify-react';
+
 import { AvatarIcon, OptionIcon } from 'assets/icons';
 import { MessageDropdown } from 'pages/Dashboard/DashboardMainChat';
 
 export const MainChatMessage = ({
+  id,
   isSender = true,
   author,
   content,
   createdAt,
 }) => {
+  const isHidden = content === 'This message has been revoked!';
   return (
     <div className={`flex items-end ${isSender && 'flex-row-reverse'}`}>
       <div className='py-2 px-1 pb-0'>
@@ -43,14 +47,23 @@ export const MainChatMessage = ({
                 : 'bg-slate-700 text-slate-400'
             } w-[400px] text-[15px] font-medium p-3 mb-4 rounded-md`}
           >
-            {content}
+            {isHidden ? (
+              <p className='italic opacity-60'>{content}</p>
+            ) : (
+              <Linkify>{content}</Linkify>
+            )}
           </div>
         </Tippy>
-        <MessageDropdown
-          triggerButton={
-            <OptionIcon fill={`${isSender ? '#94a3b8' : '#1f2937'}`} />
-          }
-        />
+
+        {!isHidden && (
+          <MessageDropdown
+            id={id}
+            isSender={isSender}
+            triggerButton={
+              <OptionIcon fill={`${isSender ? '#94a3b8' : '#1f2937'}`} />
+            }
+          />
+        )}
       </div>
     </div>
   );

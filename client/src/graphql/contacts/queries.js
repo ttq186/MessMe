@@ -20,6 +20,7 @@ export const GET_CONTACT = gql`
 export const GET_CONTACTS = gql`
   query GetContacts($isEstablished: Boolean) {
     contacts(isEstablished: $isEstablished) {
+      id
       friend {
         id
         email
