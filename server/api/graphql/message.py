@@ -1,20 +1,15 @@
-from bson import json_util
 from typing import AsyncIterator
 
 import strawberry
+from bson import json_util
 from strawberry.types import Info
 
 import crud
 import exceptions
 from core import security
-from schemas import (
-    Message,
-    MessageCreate,
-    MessageUpdate,
-    MessageDeleteSuccess,
-    ObjectIdType,
-)
 from db.config import broadcast
+from schemas import (Message, MessageCreate, MessageDeleteSuccess,
+                     MessageUpdate, ObjectIdType)
 from utils import generate_message_channel_by_users_id
 
 

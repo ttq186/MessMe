@@ -1,8 +1,9 @@
 from datetime import datetime
 
 import strawberry
-from .user import User
+
 from .message import Message
+from .user import User
 
 
 @strawberry.type

@@ -5,7 +5,7 @@ import crud
 import exceptions
 import utils
 from core import security
-from schemas import User, UserCreate, UserUpdate, UserDeleteSuccess, SignedUrl
+from schemas import SignedUrl, User, UserCreate, UserDeleteSuccess, UserUpdate
 
 
 async def resolver_get_users(info: Info, search: str | None = None) -> list[User]:

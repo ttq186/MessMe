@@ -1,9 +1,8 @@
 from datetime import datetime
-from bson.objectid import ObjectId
 
 import strawberry
+from bson.objectid import ObjectId
 from strawberry.schema_directive import Location
-
 
 ObjectIdType = strawberry.scalar(ObjectId, serialize=str)
 

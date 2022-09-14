@@ -17,7 +17,7 @@ Deprecated==1.2.13
 dnspython==2.2.1
 ecdsa==0.17.0
 email-validator==1.2.1
-fastapi==0.78.0
+fastapi==0.83.0
 flake8==4.0.1
 google-api-core==2.8.2
 google-auth==2.8.0
@@ -67,7 +67,7 @@ six==1.16.0
 sniffio==1.2.0
 SQLAlchemy==1.4.37
 starlette==0.19.1
-strawberry-graphql==0.115.0
+strawberry-graphql==0.130.3
 toml==0.10.2
 tomli==2.0.1
 typing_extensions==4.2.0

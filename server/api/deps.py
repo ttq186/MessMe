@@ -5,7 +5,7 @@ from strawberry.types import Info
 import crud
 import exceptions
 from core import security
-from db.config import postgres_session, mongo_client
+from db.config import mongo_client, postgres_session
 from schemas import User
 
 

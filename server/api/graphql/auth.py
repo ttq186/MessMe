@@ -2,8 +2,8 @@ import strawberry
 from strawberry.types import Info
 
 import crud
-import utils
 import exceptions
+import utils
 from core import security
 from schemas import User
 

@@ -1,10 +1,12 @@
 import enum
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum, DateTime
+from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String
 from sqlalchemy.sql import func
-# from sqlalchemy.orm import relationship
 
 from db.base_class import Base
+
+# from sqlalchemy.orm import relationship
+
 
 
 class FileTypeEnum(enum.Enum):

@@ -2,24 +2,17 @@ from datetime import datetime
 from typing import AsyncIterator
 
 import strawberry
-from strawberry.types import Info
 from bson import json_util
+from strawberry.types import Info
 
 import crud
 import exceptions
-from core import security
 from api import deps
-from schemas import (
-    Contact,
-    ContactUpdate,
-    ContactCreate,
-    ContactDeleteSuccess,
-)
-from utils import (
-    generate_message_channel_by_users_id,
-    generate_contact_requests_channel,
-)
+from core import security
 from db.config import broadcast
+from schemas import Contact, ContactCreate, ContactDeleteSuccess, ContactUpdate
+from utils import (generate_contact_requests_channel,
+                   generate_message_channel_by_users_id)
 
 
 async def resolver_get_contact_request(info: Info) -> list[Contact]:

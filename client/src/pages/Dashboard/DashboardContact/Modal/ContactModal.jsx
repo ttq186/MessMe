@@ -146,7 +146,8 @@ export const ContactModal = ({ triggerButton }) => {
             <div className='bg-slate-600 py-4 rounded mt-2'>
               <div className='max-h-[280px] pl-1 mr-1 bg-slate-600 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
                 {data.users.map((user) => {
-                  if (user.id === currentUserObj?.currentUser.id) return;
+                  if (user.id === currentUserObj?.currentUser.id)
+                    return <div />;
                   return <UserItem key={user.id} {...user} />;
                 })}
               </div>

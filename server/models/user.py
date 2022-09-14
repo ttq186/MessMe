@@ -1,10 +1,12 @@
 from uuid import uuid4
 
-from sqlalchemy import Column, Date, String, DateTime, Boolean, Text
+from sqlalchemy import Boolean, Column, Date, DateTime, String, Text
 from sqlalchemy.sql import func
-# from sqlalchemy.orm import relationship
 
 from db.base_class import Base
+
+# from sqlalchemy.orm import relationship
+
 
 
 class User(Base):

@@ -1,24 +1,16 @@
 import strawberry
-from strawberry.fastapi import GraphQLRouter
-from strawberry.tools import merge_types
-from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL
 from fastapi import Depends
-from sqlalchemy.ext.asyncio import AsyncSession
 from motor.motor_asyncio import AsyncIOMotorDatabase
+from sqlalchemy.ext.asyncio import AsyncSession
+from strawberry.fastapi import GraphQLRouter
+from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL
+from strawberry.tools import merge_types
 
 from api import deps
 
-from .graphql import (
-    AuthQuery,
-    UserQuery,
-    UserMutation,
-    ContactQuery,
-    ContactMutation,
-    ContactSubscription,
-    MessageQuery,
-    MessageMutation,
-    MessageSubscription,
-)
+from .graphql import (AuthQuery, ContactMutation, ContactQuery,
+                      ContactSubscription, MessageMutation, MessageQuery,
+                      MessageSubscription, UserMutation, UserQuery)
 
 
 async def get_context(
