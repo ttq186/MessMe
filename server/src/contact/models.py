@@ -1,12 +1,11 @@
-from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
-                        Text)
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from db.base_class import Base
+from src.models import BaseModel
 
 
-class Contact(Base):
+class Contact(BaseModel):
     __tablename__ = "contact"
 
     id = Column(Integer, primary_key=True)

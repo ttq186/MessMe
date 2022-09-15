@@ -6,13 +6,13 @@ from bson import json_util
 from strawberry.types import Info
 
 import crud
+from src.message import crud as message_crud
 import exceptions
-from api import deps
-from core import security
-from db.config import broadcast
+from src.database import broadcast
 from schemas import Contact, ContactCreate, ContactDeleteSuccess, ContactUpdate
-from utils import (generate_contact_requests_channel,
-                   generate_message_channel_by_users_id)
+import utils as contact_utils
+from src import utils, deps
+from src.message import utils as message_utils
 
 
 async def resolver_get_contact_request(info: Info) -> list[Contact]:
@@ -41,9 +41,9 @@ async def resolver_get_contacts(
     return [
         Contact(
             **contact.to_dict(exclude=["requester", "accepter"]),
-            last_message=await crud.message.get_most_recent_by_channel_id(
+            last_message=await message_crud.message.get_most_recent_by_channel_id(
                 info.context["mongo_db"],
-                channel_id=generate_message_channel_by_users_id(
+                channel_id=message_utils.generate_message_channel_by_users_id(
                     contact.requester_id, contact.accepter_id
                 ),
             ),
@@ -74,7 +74,7 @@ async def resolver_get_contact(
         **contact.to_dict(exclude=["requester", "accepter"]),
         last_message=await crud.message.get_most_recent_by_channel_id(
             info.context["mongo_db"],
-            channel_id=generate_message_channel_by_users_id(
+            channel_id=message_utils.generate_message_channel_by_users_id(
                 contact.requester_id, contact.accepter_id
             ),
         ),
@@ -110,7 +110,7 @@ async def resolver_create_contact(
     contact_in.accepter_id = accepter.id
     contact = await crud.contact.create(pg_session, contact_in)
 
-    channel_id = generate_contact_requests_channel(partner_id)
+    channel_id = contact_utils.generate_contact_requests_channel(partner_id)
     pushed_message = {
         **contact.to_dict(exclude=["requester", "accepter"]),
         # "friend": accepter.to_dict(),
@@ -162,14 +162,15 @@ async def resolver_delete_contact(
 class ContactQuery:
     contacts: list[Contact] = strawberry.field(
         resolver=resolver_get_contacts,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[utils.IsAuthenticatedUser],
     )
     contactRequests: list[Contact] = strawberry.field(
         resolver=resolver_get_contact_request,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[utils.IsAuthenticatedUser],
     )
     contact: Contact = strawberry.field(
-        resolver=resolver_get_contact, permission_classes=[security.IsAuthenticatedUser]
+        resolver=resolver_get_contact,
+        permission_classes=[utils.IsAuthenticatedUser],
     )
 
 
@@ -177,15 +178,15 @@ class ContactQuery:
 class ContactMutation:
     create_contact: Contact = strawberry.field(
         resolver=resolver_create_contact,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[utils.IsAuthenticatedUser],
     )
     update_contact: Contact = strawberry.field(
         resolver=resolver_update_contact,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[utils.IsAuthenticatedUser],
     )
     delete_contact: ContactDeleteSuccess = strawberry.field(
         resolver=resolver_delete_contact,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[utils.IsAuthenticatedUser],
     )
 
 
@@ -194,7 +195,7 @@ class ContactSubscription:
     @strawberry.subscription
     async def contact_requests(self, info: Info) -> AsyncIterator[Contact]:
         current_user = await deps.get_current_user(info)
-        channel_id = generate_contact_requests_channel(current_user.id)
+        channel_id = contact_utils.generate_contact_requests_channel(current_user.id)
         async with broadcast.subscribe(channel=channel_id) as subcriber:
             async for event in subcriber:
                 data = json_util.loads(event.message)

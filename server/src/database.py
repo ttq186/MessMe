@@ -3,7 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from core.config import settings
+from src.config import settings
 
 POSTGRES_URL = (
     f"postgresql+asyncpg://{settings.PG_USERNAME}:{settings.PG_PASSWORD}"

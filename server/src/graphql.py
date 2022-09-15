@@ -6,11 +6,10 @@ from strawberry.fastapi import GraphQLRouter
 from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL
 from strawberry.tools import merge_types
 
-from api import deps
-
-from .graphql import (AuthQuery, ContactMutation, ContactQuery,
-                      ContactSubscription, MessageMutation, MessageQuery,
-                      MessageSubscription, UserMutation, UserQuery)
+import deps
+from src.auth.graphql import AuthQuery, UserQuery, UserMutation
+from src.contact.graphql import ContactQuery, ContactMutation, ContactSubscription
+from src.message.graphql import MessageQuery, MessageMutation, MessageSubscription
 
 
 async def get_context(
@@ -27,7 +26,7 @@ Subscription = merge_types("Subscription", (MessageSubscription, ContactSubscrip
 schema = strawberry.Schema(query=Query, mutation=Mutation, subscription=Subscription)
 
 graphql_app = GraphQLRouter(
-    schema,
+    schema=schema,
     graphiql=False,
     context_getter=get_context,
     subscription_protocols=[GRAPHQL_TRANSPORT_WS_PROTOCOL],

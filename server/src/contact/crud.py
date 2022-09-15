@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models import Contact as ContactModal
 from schemas import Contact as ContactSchema
 
-from .base import CRUDBase
+from src.crud import CRUDBase
 
 
 class CRUDContact(CRUDBase[ContactModal, ContactSchema]):

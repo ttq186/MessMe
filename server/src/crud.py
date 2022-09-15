@@ -5,9 +5,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from strawberry.type import StrawberryType
 
-from db.base import Base
+from src.models import BaseModel
 
-ModelType = TypeVar("ModelType", bound=Base)
+ModelType = TypeVar("ModelType", bound=BaseModel)
 SchemaType = TypeVar("SchemaType", bound=StrawberryType)
 
 

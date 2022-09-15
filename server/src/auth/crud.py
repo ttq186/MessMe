@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models import User as UserModel
 from schemas import User as UserSchema
 
-from .base import CRUDBase
+from src.crud import CRUDBase
 
 
 class CRUDUser(CRUDBase[UserModel, UserSchema]):

@@ -3,7 +3,7 @@ from datetime import datetime
 from bson.objectid import ObjectId
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
-from schemas import Message, MessageCreate, MessageUpdate, ObjectIdType
+from .schemas import Message, MessageCreate, MessageUpdate, ObjectIdType
 
 
 class CRUDMessage:

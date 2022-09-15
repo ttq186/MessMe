@@ -6,10 +6,15 @@ from strawberry.types import Info
 
 import crud
 import exceptions
-from core import security
-from db.config import broadcast
-from schemas import (Message, MessageCreate, MessageDeleteSuccess,
-                     MessageUpdate, ObjectIdType)
+from src.auth import utils as auth_utils
+from src.database import broadcast
+from .schemas import (
+    Message,
+    MessageCreate,
+    MessageDeleteSuccess,
+    MessageUpdate,
+    ObjectIdType,
+)
 from utils import generate_message_channel_by_users_id
 
 
@@ -94,14 +99,15 @@ async def resolver_delete_message(info: Info, id: ObjectIdType) -> MessageDelete
 class MessageQuery:
     messages: list[Message] = strawberry.field(
         resolver=resolver_get_messages,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[auth_utils.IsAuthenticatedUser],
     )
     messages_by_channel: list[Message] = strawberry.field(
         resolver=resolver_get_messages_by_channel,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[auth_utils.IsAuthenticatedUser],
     )
     message: Message = strawberry.field(
-        resolver=resolver_get_message, permission_classes=[security.IsAuthenticatedUser]
+        resolver=resolver_get_message,
+        permission_classes=[auth_utils.IsAuthenticatedUser],
     )
 
 
@@ -109,15 +115,15 @@ class MessageQuery:
 class MessageMutation:
     create_message: Message = strawberry.field(
         resolver=resolver_create_message,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[auth_utils.IsAuthenticatedUser],
     )
     update_message: Message = strawberry.field(
         resolver=resolver_update_message,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[auth_utils.IsAuthenticatedUser],
     )
     delete_message: MessageDeleteSuccess = strawberry.field(
         resolver=resolver_delete_message,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[auth_utils.IsAuthenticatedUser],
     )
 
 

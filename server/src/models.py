@@ -2,7 +2,7 @@ from sqlalchemy.ext.declarative import as_declarative
 
 
 @as_declarative()
-class Base:
+class BaseModel:
     def to_dict(self, exclude_unset: bool = False, exclude: list = []) -> dict:
         if exclude_unset:
             return dict(

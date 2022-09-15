@@ -3,13 +3,12 @@ from uuid import uuid4
 from sqlalchemy import Boolean, Column, Date, DateTime, String, Text
 from sqlalchemy.sql import func
 
-from db.base_class import Base
+from src.models import BaseModel
 
 # from sqlalchemy.orm import relationship
 
 
-
-class User(Base):
+class User(BaseModel):
     __tablename__ = "user"
 
     id = Column(String, primary_key=True, default=uuid4)

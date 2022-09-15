@@ -1,6 +1,3 @@
-from typing import Any
-
-
 class NotAuthorized(Exception):
     def __init__(self) -> None:
         self.message = "You don't have this privilege!"
@@ -43,15 +40,6 @@ class AccountCreatedWithoutGoogle(Exception):
         super().__init__(self.message)
 
 
-class ResourceNotFound(Exception):
-    def __init__(self, resource_type: str, id: str | int, email: str = None) -> None:
-        if email:
-            self.message = f"{resource_type} with email {email} does not exist!"
-        else:
-            self.message = f"{resource_type} with id {id} does not exist!"
-        super().__init__(self.message)
-
-
 class EmailAlreadyExists(Exception):
     def __init__(self) -> None:
         self.message = "This email already exists!"
@@ -64,25 +52,7 @@ class EmailDoesNotExist(Exception):
         super().__init__(self.message)
 
 
-class DeleteFailed(Exception):
-    def __init__(self, resource_type: str, id: Any) -> None:
-        self.message = f"Delete {resource_type} with id {id} failed!"
-        super().__init__(self.message)
-
-
 class TokenHasExpired(Exception):
     def __init__(self) -> None:
         self.message = "Token has expired!"
-        super().__init__(self.message)
-
-
-class ContactAlreadyExist(Exception):
-    def __init__(self) -> None:
-        self.message = "This contact already exists"
-        super().__init__(self.message)
-
-
-class ContactWaitForAccepting(Exception):
-    def __init__(self) -> None:
-        self.message = "This contact is wating for your partner to accept!"
         super().__init__(self.message)

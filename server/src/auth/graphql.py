@@ -3,9 +3,50 @@ from strawberry.types import Info
 
 import crud
 import exceptions
-import utils
-from core import security
+import utils as auth_utils
+from src import utils
 from schemas import SignedUrl, User, UserCreate, UserDeleteSuccess, UserUpdate
+
+
+async def resolver_login(info: Info, email: str, password: str) -> User:
+    pg_session = info.context["pg_session"]
+    user = await crud.user.get_by_email(pg_session, email=email)
+    if user is None:
+        raise exceptions.InvalidLoginCredentials()
+    if user is not None and user.password is None:
+        raise exceptions.AccountCreatedByGoogle()
+    if not auth_utils.verify_password(password, user.password):
+        raise exceptions.InvalidLoginCredentials()
+
+    access_token = auth_utils.create_access_token({"user_id": user.id})
+    response_obj = info.context["response"]
+    auth_utils.set_access_token_on_http_only_cookie(response_obj, access_token)
+    auth_utils.set_logout_detection_cookie(response_obj)
+    return user
+
+
+async def resolver_login_via_google(info: Info, tokenId: str) -> User:
+    token_data = auth_utils.decode_oauth2_token_id(tokenId)
+    email = token_data.get("email")
+
+    session = info.context["pg_session"]
+    user = await crud.user.get_by_email(session, email=email)
+    if user is not None and user.password is not None:
+        raise exceptions.AccountCreatedWithoutGoogle()
+
+    if user is None:
+        user_in = User(email=email)
+        user_id = auth_utils.generate_uuid()
+        while await crud.user.get(session, id=user_id) is not None:
+            user_id = auth_utils.generate_uuid()
+        user_in.id = user_id
+        user = await crud.user.create(session, obj_in=user_in)
+
+    access_token = auth_utils.create_access_token({"user_id": user.id})
+    response_obj = info.context["response"]
+    auth_utils.set_access_token_on_http_only_cookie(response_obj, access_token)
+    auth_utils.set_logout_detection_cookie(response_obj)
+    return user
 
 
 async def resolver_get_users(info: Info, search: str | None = None) -> list[User]:
@@ -57,11 +98,11 @@ async def resolver_create_user(info: Info, user_in: UserCreate) -> User:
     if user is not None:
         raise exceptions.EmailAlreadyExists()
 
-    user_id = utils.generate_uuid()
+    user_id = auth_utils.generate_uuid()
     while await crud.user.get(pg_session, user_id) is not None:
-        user_id = utils.generate_uuid()
+        user_id = auth_utils.generate_uuid()
     user_in.id = user_id
-    user_in.password = security.get_hashed_password(user_in.password)
+    user_in.password = auth_utils.get_hashed_password(user_in.password)
     user = await crud.user.create(pg_session, obj_in=user_in)
     return user
 
@@ -76,7 +117,7 @@ async def resolver_update_user(info: Info, user_in: UserUpdate) -> User:
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=user_in.id)
     if user_in.password is not None:
-        user_in.password = security.get_hashed_password(user_in.password)
+        user_in.password = auth_utils.get_hashed_password(user_in.password)
     user = await crud.user.update(pg_session, db_obj=user, obj_in=user_in)
     return user
 
@@ -94,27 +135,33 @@ async def resolver_delete_user(info: Info, id: str) -> UserDeleteSuccess:
 
 
 async def resolver_get_signed_url(blob_type: str, blob_name: str) -> SignedUrl:
-    signed_url = security.generate_signed_url(
+    signed_url = auth_utils.generate_signed_url(
         bucket_name="messme", blob_type=blob_type, blob_name=blob_name
     )
     return SignedUrl(signed_url)
 
 
 @strawberry.type
+class AuthQuery:
+    login: User = strawberry.field(resolver=resolver_login)
+    login_via_google: User = strawberry.field(resolver=resolver_login_via_google)
+
+
+@strawberry.type
 class UserQuery:
     users: list[User] = strawberry.field(
-        resolver=resolver_get_users, permission_classes=[security.IsAuthenticatedUser]
+        resolver=resolver_get_users, permission_classes=[utils.IsAuthenticatedUser]
     )
     user: User = strawberry.field(
-        resolver=resolver_get_user, permission_classes=[security.IsAuthenticatedUser]
+        resolver=resolver_get_user, permission_classes=[utils.IsAuthenticatedUser]
     )
     current_user: User = strawberry.field(
         resolver=resolver_get_current_user,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[utils.IsAuthenticatedUser],
     )
     signed_url: SignedUrl = strawberry.field(
         resolver=resolver_get_signed_url,
-        permission_classes=[security.IsAuthenticatedUser],
+        permission_classes=[utils.IsAuthenticatedUser],
     )
 
 
@@ -122,9 +169,10 @@ class UserQuery:
 class UserMutation:
     create_user: User = strawberry.field(resolver=resolver_create_user)
     update_user: User = strawberry.field(
-        resolver=resolver_update_user, permission_classes=[security.IsAuthenticatedUser]
+        resolver=resolver_update_user,
+        permission_classes=[utils.IsAuthenticatedUser],
     )
     delete_user: UserDeleteSuccess = strawberry.field(
         resolver=resolver_delete_user,
-        permission_classes=[security.IsAuthenticatedAdmin],
+        permission_classes=[utils.IsAuthenticatedAdmin],
     )
