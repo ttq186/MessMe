@@ -1,13 +1,13 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import Contact as ContactModal
-from schemas import Contact as ContactSchema
+from src.crud import BaseCRUD
 
-from src.crud import CRUDBase
+from .models import Contact as ContactModal
+from .schemas import Contact as ContactSchema
 
 
-class CRUDContact(CRUDBase[ContactModal, ContactSchema]):
+class ContactCRUD(BaseCRUD[ContactModal, ContactSchema]):
     async def get_multi_by_requester_or_accepter_id(
         self, session: AsyncSession, user_id: str, is_established: bool | None = None
     ) -> list[ContactModal]:
@@ -44,4 +44,4 @@ class CRUDContact(CRUDBase[ContactModal, ContactSchema]):
         return result.scalars().all()
 
 
-contact = CRUDContact(ContactModal)
+contact_crud = ContactCRUD(ContactModal)

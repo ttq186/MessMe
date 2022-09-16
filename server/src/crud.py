@@ -11,7 +11,7 @@ ModelType = TypeVar("ModelType", bound=BaseModel)
 SchemaType = TypeVar("SchemaType", bound=StrawberryType)
 
 
-class CRUDBase(Generic[ModelType, SchemaType]):
+class BaseCRUD(Generic[ModelType, SchemaType]):
     def __init__(self, model: ModelType):
         """
         CRUD object with default Create, Read, Update, Delete methods.

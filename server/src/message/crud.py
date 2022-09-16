@@ -6,7 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from .schemas import Message, MessageCreate, MessageUpdate, ObjectIdType
 
 
-class CRUDMessage:
+class MessageCRUD:
     async def get_multi(self, mongo_db: AsyncIOMotorDatabase) -> list[Message]:
         messages = await mongo_db["messages"].find().to_list(None)
         return [Message(**message) for message in messages]
@@ -62,4 +62,4 @@ class CRUDMessage:
         return deleted_message.deleted_count == 1
 
 
-message = CRUDMessage()
+message_crud = MessageCRUD()

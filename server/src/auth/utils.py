@@ -7,9 +7,9 @@ from google.oauth2 import id_token, service_account
 from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
 
-import exceptions
 from src.config import settings
 
+from . import exceptions
 
 pwd_context = CryptContext(schemes=["bcrypt"])
 

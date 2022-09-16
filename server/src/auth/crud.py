@@ -1,13 +1,13 @@
+from schemas import User as UserSchema
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import User as UserModel
-from schemas import User as UserSchema
+from src.crud import BaseCRUD
 
-from src.crud import CRUDBase
+from .models import User as UserModel
 
 
-class CRUDUser(CRUDBase[UserModel, UserSchema]):
+class UserCRUD(BaseCRUD[UserModel, UserSchema]):
     async def get_by_email(self, session: AsyncSession, email: str) -> UserModel | None:
         user = await session.execute(select(UserModel).where(UserModel.email == email))
         return user.scalars().first()
@@ -20,19 +20,13 @@ class CRUDUser(CRUDBase[UserModel, UserSchema]):
         search: str | None = None,
     ) -> list[UserModel]:
         if search:
-            stmt = (
-                select(UserModel)
-                .where(
-                    (UserModel.email.ilike(f"%{search}%"))
-                    | (UserModel.username.ilike(f"%{search}%"))
-                )
-                .offset(skip)
-                .limit(limit)
+            stmt = select(UserModel).where(
+                (UserModel.email.ilike(f"%{search}%"))
+                | (UserModel.username.ilike(f"%{search}%"))
             )
-        else:
-            stmt = select(UserModel).offset(skip).limit(limit)
+        stmt = stmt.offset(skip).limit(limit)
         result = await session.execute(stmt)
         return result.scalars().all()
 
 
-user = CRUDUser(UserModel)
+user_crud = UserCRUD(UserModel)

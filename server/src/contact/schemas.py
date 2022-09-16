@@ -2,8 +2,8 @@ from datetime import datetime
 
 import strawberry
 
-from .message import Message
-from .user import User
+from src.auth.schemas import User
+from src.message.schemas import Message
 
 
 @strawberry.type

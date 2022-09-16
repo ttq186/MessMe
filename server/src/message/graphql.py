@@ -8,14 +8,10 @@ import crud
 import exceptions
 from src.auth import utils as auth_utils
 from src.database import broadcast
-from .schemas import (
-    Message,
-    MessageCreate,
-    MessageDeleteSuccess,
-    MessageUpdate,
-    ObjectIdType,
-)
-from utils import generate_message_channel_by_users_id
+
+from .schemas import (Message, MessageCreate, MessageDeleteSuccess,
+                      MessageUpdate, ObjectIdType)
+from .utils import generate_message_channel_by_users_id
 
 
 def handle_content_for_hidden_message(message: Message) -> None:
