@@ -1,7 +1,6 @@
 # import crud
 # import exceptions
 import strawberry
-from schemas import SignedUrl, User, UserCreate, UserDeleteSuccess, UserUpdate
 from strawberry.types import Info
 
 from src import exceptions, utils
@@ -10,6 +9,7 @@ from src.contact.crud import contact_crud
 
 from . import exceptions as auth_exceptions
 from . import utils as auth_utils
+from .schemas import SignedUrl, User, UserCreate, UserDeleteSuccess, UserUpdate
 
 
 async def resolver_login(info: Info, email: str, password: str) -> User:

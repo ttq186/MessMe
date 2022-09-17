@@ -2,10 +2,10 @@ from typing import AsyncGenerator
 
 from strawberry.types import Info
 
-from src.auth import crud as auth_crud
 from src.auth import exceptions as auth_exceptions
 from src.auth import schemas as auth_schemas
 from src.auth import utils as auth_utils
+from src.auth.crud import user_crud
 from src.database import mongo_client, postgres_session
 
 
@@ -27,7 +27,7 @@ async def get_current_user(info: Info) -> auth_schemas.User:
 
     token_data = auth_utils.decode_access_token(access_token)
     pg_session = info.context["pg_session"]
-    user = await auth_crud.user.get(pg_session, id=token_data["user_id"])
+    user = await user_crud.get(pg_session, id=token_data["user_id"])
     return user
 
 

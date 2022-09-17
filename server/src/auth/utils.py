@@ -26,9 +26,10 @@ def create_access_token(
     payload: dict, expires_date: datetime | None = None, secret_key: str | None = None
 ) -> str:
     expire = datetime.now() + (
-        expires_date or timedelta(settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        expires_date or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     )
-    payload.update({"expire": expire})
+    payload.update({"exp": expire})
+    print(payload)
     jwt_token = jwt.encode(
         payload,
         key=secret_key or settings.JWT_SECRET_KEY,
