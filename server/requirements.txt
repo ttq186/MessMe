@@ -34,7 +34,7 @@ httptools==0.4.0
 idna==3.3
 itsdangerous==2.1.2
 Jinja2==3.1.2
-Mako==1.2.0
+Mako==1.2.2
 MarkupSafe==2.1.1
 mccabe==0.6.1
 motor==3.0.0
