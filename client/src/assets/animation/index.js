@@ -1,3 +1,3 @@
-import WelcomeAnimation from 'assets/animation/welcome.json';
+import WelcomeAnimation from "assets/animation/welcome.json";
 
 export { WelcomeAnimation };

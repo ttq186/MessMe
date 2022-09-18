@@ -1,15 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
-import 'emoji-mart/css/emoji-mart.css';
-import { default as EmojiData } from 'emoji-mart/data/facebook.json';
-import { NimblePicker } from 'emoji-mart';
+import { useState, useRef, useEffect } from "react";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "emoji-mart/css/emoji-mart.css";
+import { default as EmojiData } from "emoji-mart/data/facebook.json";
+import { NimblePicker } from "emoji-mart";
 import {
   useLazyQuery,
   useMutation,
   useQuery,
   useReactiveVar,
-} from '@apollo/client';
+} from "@apollo/client";
 
 import {
   AvatarIcon,
@@ -22,25 +22,25 @@ import {
   AttachIcon,
   GalleryIcon,
   SendIcon,
-} from 'assets/icons';
+} from "assets/icons";
 import {
   MainChatMessage,
   MainChatAudioCallModal,
   MainChatVideoCallModal,
   OthersDropdown,
   SearchDropdown,
-} from 'pages/Dashboard/DashboardMainChat';
-import { CREATE_MESSAGE, GET_MESSAGES_BY_CHANNEL } from 'graphql/messages';
-import { GET_CURRENT_USER } from 'graphql/users';
-import { activeUserChatVar } from 'cache';
-import { CurrentUserSkeleton } from './Skeleton/CurrentUserSkeleton';
-import { MessageSkeleton } from './Skeleton/MessageSkeleton';
-import { generateMessageChannelByUsersId } from 'utils';
-import { updateLastMessageOfContacts } from '../Dashboard';
+} from "pages/Dashboard/DashboardMainChat";
+import { CREATE_MESSAGE, GET_MESSAGES_BY_CHANNEL } from "graphql/messages";
+import { GET_CURRENT_USER } from "graphql/users";
+import { activeUserChatVar } from "cache";
+import { CurrentUserSkeleton } from "./Skeleton/CurrentUserSkeleton";
+import { MessageSkeleton } from "./Skeleton/MessageSkeleton";
+import { generateMessageChannelByUsersId } from "utils";
+import { updateLastMessageOfContacts } from "../Dashboard";
 
 const ForceScrollToBottom = () => {
   const elementRef = useRef();
-  useEffect(() => elementRef.current.scrollIntoView({ behavior: 'smooth' }));
+  useEffect(() => elementRef.current.scrollIntoView({ behavior: "smooth" }));
   return <div ref={elementRef} />;
 };
 
@@ -54,7 +54,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [getMessages, { data: messagesData, loading }] = useLazyQuery(
     GET_MESSAGES_BY_CHANNEL,
-    { fetchPolicy: 'network-only' }
+    { fetchPolicy: "network-only" }
   );
   const [createMessage] = useMutation(CREATE_MESSAGE);
 
@@ -77,8 +77,8 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   };
 
   const handleInputKeyUp = (event) => {
-    if (keysPressed === 'Enter' && event.key === 'Enter') {
-      console.log('submit');
+    if (keysPressed === "Enter" && event.key === "Enter") {
+      console.log("submit");
     }
   };
 
@@ -92,7 +92,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
 
   const handleSendMessage = () => {
     if (!inputRef.current.innerText.trim() || !activeUserChat) {
-      inputRef.current.innerHTML = '';
+      inputRef.current.innerHTML = "";
       return;
     }
     createMessage({
@@ -106,54 +106,54 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
         updateLastMessageOfContacts(activeUserChat.id, data.createMessage);
       },
     });
-    inputRef.current.innerHTML = '';
+    inputRef.current.innerHTML = "";
   };
 
   if (!activeUserChat)
     return (
-      <div className='flex flex-col w-[40%] h-screen items-center justify-center grow bg-slate-600 text-slate-400 font-semibold'>
+      <div className="flex flex-col w-[40%] h-screen items-center justify-center grow bg-slate-600 text-slate-400 font-semibold">
         Let's add more friends to explore more!
       </div>
     );
 
   return (
-    <div className='flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600'>
-      <div className='flex justify-between border-b-2 border-slate-500'>
+    <div className="flex flex-col w-[40%] h-screen justify-between py-1 grow bg-slate-600">
+      <div className="flex justify-between border-b-2 border-slate-500">
         {!currentUserObj ? (
           <CurrentUserSkeleton />
         ) : (
-          <div className='flex items-center p-4'>
+          <div className="flex items-center p-4">
             {!activeUserChat?.avatarUrl ? (
-              <AvatarIcon width='40px' height='40px' />
+              <AvatarIcon width="40px" height="40px" />
             ) : (
               <img
                 src={activeUserChat.avatarUrl}
-                alt='Profile'
-                className='w-10 h-10 rounded-full border-2 border-slate-500'
+                alt="Profile"
+                className="w-10 h-10 rounded-full border-2 border-slate-500"
               />
             )}
-            <div className='font-bold'>
-              <p className='ml-2 text-slate-100 cursor-pointer'>
+            <div className="font-bold">
+              <p className="ml-2 text-slate-100 cursor-pointer">
                 {activeUserChat?.username
                   ? activeUserChat.username
-                  : activeUserChat?.email.split('@')[0]}
+                  : activeUserChat?.email.split("@")[0]}
               </p>
-              <p className='ml-2 text-xs text-green-300'>Online</p>
+              <p className="ml-2 text-xs text-green-300">Online</p>
             </div>
           </div>
         )}
-        <div className='flex justify-evenly w-80 items-center'>
+        <div className="flex justify-evenly w-80 items-center">
           <SearchDropdown
             triggerButton={
               <Tippy
-                content={<b style={{ color: '#cbd5e1' }}>Search Message</b>}
+                content={<b style={{ color: "#cbd5e1" }}>Search Message</b>}
                 allowHTML={true}
               >
-                <div className='cursor-pointer'>
+                <div className="cursor-pointer">
                   <img
                     src={SearchIcon}
-                    alt='Search'
-                    className='w-9 h-9 -mb-1'
+                    alt="Search"
+                    className="w-9 h-9 -mb-1"
                   />
                 </div>
               </Tippy>
@@ -162,10 +162,10 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           <MainChatAudioCallModal
             triggerButton={
               <Tippy
-                content={<b style={{ color: '#cbd5e1' }}>Call</b>}
+                content={<b style={{ color: "#cbd5e1" }}>Call</b>}
                 allowHTML={true}
               >
-                <div className='cursor-pointer'>
+                <div className="cursor-pointer">
                   <PhoneIcon />
                 </div>
               </Tippy>
@@ -174,34 +174,34 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           <MainChatVideoCallModal
             triggerButton={
               <Tippy
-                content={<b style={{ color: '#cbd5e1' }}>Video Call</b>}
+                content={<b style={{ color: "#cbd5e1" }}>Video Call</b>}
                 allowHTML={true}
               >
-                <div className='cursor-pointer'>
+                <div className="cursor-pointer">
                   <VideoCallIcon />
                 </div>
               </Tippy>
             }
           />
           <Tippy
-            content={<b style={{ color: '#cbd5e1' }}>Friend's Profile</b>}
+            content={<b style={{ color: "#cbd5e1" }}>Friend's Profile</b>}
             allowHTML={true}
           >
             <div
-              className='cursor-pointer'
+              className="cursor-pointer"
               onClick={() => setOpenFriendProfile(true)}
             >
-              <img src={FriendProfileIcon} alt='Profile' className='w-6 h-6' />
+              <img src={FriendProfileIcon} alt="Profile" className="w-6 h-6" />
             </div>
           </Tippy>
           <OthersDropdown
             triggerButton={
               <Tippy
-                content={<b style={{ color: '#cbd5e1' }}>Others</b>}
+                content={<b style={{ color: "#cbd5e1" }}>Others</b>}
                 allowHTML={true}
               >
-                <div className='cursor-pointer -ml-1'>
-                  <img src={OtherIcon} alt='Other' className='w-6 h-6' />
+                <div className="cursor-pointer -ml-1">
+                  <img src={OtherIcon} alt="Other" className="w-6 h-6" />
                 </div>
               </Tippy>
             }
@@ -219,7 +219,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           <MessageSkeleton isReverse={true} />
         </div>
       ) : (
-        <div className='grow p-3 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[3px]'>
+        <div className="grow p-3 overflow-y-scroll scrollbar-transparent hover:scrollbar mr-[3px]">
           {/* <div className='flex items-center p-4 px-8'>
             <div className='grow border-t-[1px] border-slate-500'></div>
             <div className='mx-3 bg-slate-500 text-slate-300 font-medium text-sm px-2.5 py-0.5 rounded'>
@@ -254,54 +254,54 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
         </div>
       )}
 
-      <div className='relative bottom-0 w-full flex justify-between items-center px-5 py-3.5 border-t-2 border-slate-500'>
-        <div className='flex w-[150px] items-center'>
+      <div className="relative bottom-0 w-full flex justify-between items-center px-5 py-3.5 border-t-2 border-slate-500">
+        <div className="flex w-[150px] items-center">
           <Tippy
-            content={<b style={{ color: '#cbd5e1' }}>Attach File</b>}
+            content={<b style={{ color: "#cbd5e1" }}>Attach File</b>}
             allowHTML={true}
           >
-            <div className='mx-4 cursor-pointer'>
-              <label htmlFor='file-input' className='cursor-pointer'>
-                <AttachIcon width='28px' height='28px' fill='#cbd5e1' />
+            <div className="mx-4 cursor-pointer">
+              <label htmlFor="file-input" className="cursor-pointer">
+                <AttachIcon width="28px" height="28px" fill="#cbd5e1" />
               </label>
-              <input id='file-input' type='file' className='hidden' />
+              <input id="file-input" type="file" className="hidden" />
             </div>
           </Tippy>
           <Tippy
-            content={<b style={{ color: '#cbd5e1' }}>Images</b>}
+            content={<b style={{ color: "#cbd5e1" }}>Images</b>}
             allowHTML={true}
           >
-            <div className='mr-4 cursor-pointer'>
-              <label htmlFor='image-input' className='cursor-pointer'>
-                <GalleryIcon fill='#cbd5e1' />
+            <div className="mr-4 cursor-pointer">
+              <label htmlFor="image-input" className="cursor-pointer">
+                <GalleryIcon fill="#cbd5e1" />
               </label>
-              <input id='image-input' type='file' className='hidden' />
+              <input id="image-input" type="file" className="hidden" />
             </div>
           </Tippy>
           <Tippy
-            content={<b style={{ color: '#cbd5e1' }}>Emoji</b>}
+            content={<b style={{ color: "#cbd5e1" }}>Emoji</b>}
             allowHTML={true}
           >
-            <div className='mr-4 cursor-pointer'>
+            <div className="mr-4 cursor-pointer">
               <img
                 src={EmojiIcon}
-                alt='Emoji'
-                className='w-[30px] h-[30px]'
+                alt="Emoji"
+                className="w-[30px] h-[30px]"
                 onClick={toggleEmojiPicker}
               />
             </div>
           </Tippy>
-          <div className='relative bg-slate-500'>
+          <div className="relative bg-slate-500">
             {isOpenEmojiPicker && (
-              <div className='absolute -left-2 bottom-6 p-1 bg-slate-800 z-10 border border-slate-700 rounded'>
+              <div className="absolute -left-2 bottom-6 p-1 bg-slate-800 z-10 border border-slate-700 rounded">
                 <NimblePicker
-                  set='facebook'
+                  set="facebook"
                   data={EmojiData}
-                  title='MessMe Emoji'
+                  title="MessMe Emoji"
                   showPreview={false}
                   showSkinTones={false}
-                  color='#64748b'
-                  theme='dark'
+                  color="#64748b"
+                  theme="dark"
                   onSelect={(e) => handleChooseIcon(e)}
                 />
               </div>
@@ -309,7 +309,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           </div>
         </div>
 
-        <div className='relative max-w-[78.5%] grow max-h-[110px] bg-slate-700 py-2.5 pl-5 text-[15px] text-slate-200 font-medium rounded-md'>
+        <div className="relative max-w-[78.5%] grow max-h-[110px] bg-slate-700 py-2.5 pl-5 text-[15px] text-slate-200 font-medium rounded-md">
           {/* <input
             className='py-2.5 px-5 w-full bg-slate-700 text-[15px] text-slate-300 font-medium rounded-md outline-none'
             placeholder='Enter Message...'
@@ -317,26 +317,26 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
             ref={inputRef}
           /> */}
           <div
-            contentEditable='true'
-            placeholder='Aa'
-            className='outline-none pr-3 max-h-[90px] overflow-y-scroll scrollbar-transparent hover:scrollbar'
+            contentEditable="true"
+            placeholder="Aa"
+            className="outline-none pr-3 max-h-[90px] overflow-y-scroll scrollbar-transparent hover:scrollbar"
             ref={inputRef}
             onKeyDown={(e) => handleInputKeyDown(e)}
             onKeyUp={(e) => handleInputKeyUp(e)}
           />
         </div>
         <Tippy
-          content={<b style={{ color: '#cbd5e1' }}>Send Message</b>}
+          content={<b style={{ color: "#cbd5e1" }}>Send Message</b>}
           allowHTML={true}
         >
           <div
             className={`bg-blue-300 mr-10 ml-2 py-2 rounded ${
-              activeUserChat ? 'cursor-pointer' : 'cursor-not-allowed'
+              activeUserChat ? "cursor-pointer" : "cursor-not-allowed"
             }`}
             tabIndex={0}
             onClick={handleSendMessage}
           >
-            <img src={SendIcon} alt='Send' className='w-12 h-5' />
+            <img src={SendIcon} alt="Send" className="w-12 h-5" />
           </div>
         </Tippy>
       </div>

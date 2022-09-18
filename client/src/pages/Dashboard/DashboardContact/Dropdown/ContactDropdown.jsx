@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { Menu } from '@headlessui/react';
+import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { Menu } from "@headlessui/react";
 
-import { ShareIcon, BlockIcon, RemoveIcon } from 'assets/icons';
-import { Dropdown } from 'components/Dropdown';
-import { Modal } from 'components/Modal';
-import { DELETE_CONTACT } from 'graphql/contacts';
+import { ShareIcon, BlockIcon, RemoveIcon } from "assets/icons";
+import { Dropdown } from "components/Dropdown";
+import { Modal } from "components/Modal";
+import { DELETE_CONTACT } from "graphql/contacts";
 
 export const ContactDropdown = ({ triggerButton, id }) => {
   const [isOpenModal, setOpenModal] = useState(false);
@@ -47,18 +47,18 @@ export const ContactDropdown = ({ triggerButton, id }) => {
         openModal={() => setOpenModal(true)}
         closeModal={() => setOpenModal(false)}
       >
-        <p className='text-[17.5px] font-semibold text-slate-300'>
+        <p className="text-[17.5px] font-semibold text-slate-300">
           Are you sure you want to delete this contact?
         </p>
-        <div className='mb-5 mt-6'>
+        <div className="mb-5 mt-6">
           <button
-            className='float-right bg-blue-300 font-semibold text-gray-700 rounded-[3px] py-1.5 px-3 text-sm hover:opacity-90'
+            className="float-right bg-blue-300 font-semibold text-gray-700 rounded-[3px] py-1.5 px-3 text-sm hover:opacity-90"
             onClick={handleDeleteContact}
           >
             Confirm
           </button>
           <button
-            className='float-right text-blue-300 font-semibold rounded py-1.5 px-3 mr-3 text-sm hover:opacity-90'
+            className="float-right text-blue-300 font-semibold rounded py-1.5 px-3 mr-3 text-sm hover:opacity-90"
             onClick={closeModal}
           >
             Cancel
@@ -68,23 +68,23 @@ export const ContactDropdown = ({ triggerButton, id }) => {
 
       <Dropdown triggerButton={triggerButton}>
         <Menu.Item>
-          <button className='font-semibold group flex w-full items-center rounded px-3 py-2 text-sm opacity-40 cursor-not-allowed'>
-            <img src={ShareIcon} alt='Share' className='w-4 h-4 mr-3' />
+          <button className="font-semibold group flex w-full items-center rounded px-3 py-2 text-sm opacity-40 cursor-not-allowed">
+            <img src={ShareIcon} alt="Share" className="w-4 h-4 mr-3" />
             Share
           </button>
         </Menu.Item>
         <Menu.Item>
-          <button className='font-semibold group flex w-full items-center rounded px-3 py-2 text-sm opacity-40 cursor-not-allowed'>
-            <img src={BlockIcon} alt='Block' className='w-4 h-4 mr-3' />
+          <button className="font-semibold group flex w-full items-center rounded px-3 py-2 text-sm opacity-40 cursor-not-allowed">
+            <img src={BlockIcon} alt="Block" className="w-4 h-4 mr-3" />
             Block
           </button>
         </Menu.Item>
         <Menu.Item>
           <button
-            className='font-semibold group flex w-full items-center rounded px-3 py-2 text-sm hover:bg-slate-500'
+            className="font-semibold group flex w-full items-center rounded px-3 py-2 text-sm hover:bg-slate-500"
             onClick={openModal}
           >
-            <img src={RemoveIcon} alt='Remove' className='w-4 h-4 mr-3' />
+            <img src={RemoveIcon} alt="Remove" className="w-4 h-4 mr-3" />
             Delete
           </button>
         </Menu.Item>

@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
-import { useQuery } from '@apollo/client';
+import { useState } from "react";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import { useQuery } from "@apollo/client";
 
-import { AddIcon } from 'assets/icons';
+import { AddIcon } from "assets/icons";
 import {
   ContactModal,
   ContactByFirstLetter,
-} from 'pages/Dashboard/DashboardContact';
-import { SearchBar } from 'components/SearchBar';
-import { GET_CONTACTS } from 'graphql/contacts';
+} from "pages/Dashboard/DashboardContact";
+import { SearchBar } from "components/SearchBar";
+import { GET_CONTACTS } from "graphql/contacts";
 
 const ContactGroup = ({ name, contacts }) => {
   const currentGroups = contacts.map((contact) => contact.groupName);
   if (!currentGroups.includes(name)) return;
 
   return (
-    <div className='font-bold pl-10 pr-5 mb-5'>
-      <h2 className='text-blue-300 text-lg'>{name}</h2>
+    <div className="font-bold pl-10 pr-5 mb-5">
+      <h2 className="text-blue-300 text-lg">{name}</h2>
       {contacts.map((contact) => {
         if (contact.groupName === name) {
           return <ContactByFirstLetter key={contact.id} {...contact} />;
@@ -37,7 +37,7 @@ export const DashboardContact = () => {
   const onGetContacts = (contacts) => {
     const contactsWithGroup = contacts.map((contact) => {
       const { username, email } = contact.friend;
-      const name = username ? username : email.split('@')[0];
+      const name = username ? username : email.split("@")[0];
       const groupName = name.charAt(0).toUpperCase();
 
       if (!groups.includes(groupName)) {
@@ -74,27 +74,27 @@ export const DashboardContact = () => {
 
   return (
     <>
-      <div className='p-6 pb-2 mb-10'>
-        <div className='flex justify-between'>
-          <p className='text-2xl font-bold'>Contacts</p>
+      <div className="p-6 pb-2 mb-10">
+        <div className="flex justify-between">
+          <p className="text-2xl font-bold">Contacts</p>
           <ContactModal
             triggerButton={
               <Tippy
-                content={<b style={{ color: '#cbd5e1' }}>Add Contact</b>}
+                content={<b style={{ color: "#cbd5e1" }}>Add Contact</b>}
                 allowHTML={true}
               >
-                <img src={AddIcon} alt='Add Contact' className='w-7' />
+                <img src={AddIcon} alt="Add Contact" className="w-7" />
               </Tippy>
             }
           />
         </div>
         <SearchBar
-          placeholder='Search Contacts'
+          placeholder="Search Contacts"
           handleSearch={handleSearchContacts}
         />
       </div>
 
-      <div className='h-[78%] overflow-y-scroll scrollbar-transparent hover:scrollbar mr-1 mb-3'>
+      <div className="h-[78%] overflow-y-scroll scrollbar-transparent hover:scrollbar mr-1 mb-3">
         {groupNames.map((groupName) => (
           <ContactGroup
             key={groupName}

@@ -1,4 +1,4 @@
-import { LazyMotion, domAnimation, m } from 'framer-motion';
+import { LazyMotion, domAnimation, m } from "framer-motion";
 
 export const TransitionScale = (props) => {
   return (

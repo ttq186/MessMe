@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { useForm, FormProvider } from 'react-hook-form';
-import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useLazyQuery, useReactiveVar } from "@apollo/client";
+import { useForm, FormProvider } from "react-hook-form";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
-import { isSignUpSuccessVar, signInRequiredVar } from 'cache';
-import { AlertIcon, CoffeeCupIcon, SuccessIcon } from 'assets/icons';
-import { EmailInput, PasswordInput } from 'components/Form';
-import { MainLayout } from 'components/Layout';
-import { LOGIN, LOGIN_VIA_GOOGLE } from 'graphql/auth';
-import { TransitionSlide } from 'components/Transition/TransitionSlide';
-import { Spinner } from 'components/Spinner/Spinner';
+import { isSignUpSuccessVar, signInRequiredVar } from "cache";
+import { AlertIcon, CoffeeCupIcon, SuccessIcon } from "assets/icons";
+import { EmailInput, PasswordInput } from "components/Form";
+import { MainLayout } from "components/Layout";
+import { LOGIN, LOGIN_VIA_GOOGLE } from "graphql/auth";
+import { TransitionSlide } from "components/Transition/TransitionSlide";
+import { Spinner } from "components/Spinner/Spinner";
 
 export const SignIn = () => {
   const navigate = useNavigate();
@@ -55,8 +55,8 @@ export const SignIn = () => {
     if (isSignUpSuccessVar()) {
       isSignUpSuccessVar(false);
     }
-    if (document.cookie.includes('logout=0')) {
-      navigate('/dashboard');
+    if (document.cookie.includes("logout=0")) {
+      navigate("/dashboard");
     }
     // if (loginData || loginViaGoogleData) {
     //   navigate('/dashboard');
@@ -65,8 +65,8 @@ export const SignIn = () => {
   }, [document.cookie]);
 
   useEffect(() => {
-    if (document.cookie.includes('logout=0')) {
-      navigate('/dashboard');
+    if (document.cookie.includes("logout=0")) {
+      navigate("/dashboard");
     }
   });
 
@@ -74,44 +74,44 @@ export const SignIn = () => {
     <>
       {(loginLoading || loginViaGoogleLoading) && <Spinner />}
       <MainLayout>
-        <h4 className='text-2xl mb-2'>Sign In</h4>
-        <p className='font-normal text-gray-400 mb-5 text-sm md:text-base'>
+        <h4 className="text-2xl mb-2">Sign In</h4>
+        <p className="font-normal text-gray-400 mb-5 text-sm md:text-base">
           Sign in to continue to MessMe
         </p>
 
         <TransitionSlide>
           <FormProvider {...formMethods}>
             <form
-              className='bg-gray-800 font-bold p-6 md:p-8 pb-4 md:pb-6 rounded-md text-gray-400'
+              className="bg-gray-800 font-bold p-6 md:p-8 pb-4 md:pb-6 rounded-md text-gray-400"
               onSubmit={handleSubmit(handleFormSubmit)}
             >
               {(errorMessage || signInRequired) && (
-                <div className='flex items-center bg-red-300 py-2.5 px-3 mb-3 font-semibold text-zinc-700 text-[13.8px] text-center rounded'>
-                  <img src={AlertIcon} alt='Alert' className='w-7 h-7 mr-1' />
+                <div className="flex items-center bg-red-300 py-2.5 px-3 mb-3 font-semibold text-zinc-700 text-[13.8px] text-center rounded">
+                  <img src={AlertIcon} alt="Alert" className="w-7 h-7 mr-1" />
                   <div>
                     {signInRequired
-                      ? 'You need to sign in first to continue!'
+                      ? "You need to sign in first to continue!"
                       : errorMessage}
                   </div>
                 </div>
               )}
               {isSignUpSuccessVar() && (
-                <div className='flex items-center bg-green-300 py-2.5 px-3 mb-3 font-semibold text-zinc-700 text-[13.7px] text-center rounded'>
-                  <img src={SuccessIcon} alt='Alert' className='w-7 h-7 mr-1' />
+                <div className="flex items-center bg-green-300 py-2.5 px-3 mb-3 font-semibold text-zinc-700 text-[13.7px] text-center rounded">
+                  <img src={SuccessIcon} alt="Alert" className="w-7 h-7 mr-1" />
                   <div>Account has been created successfully!</div>
                 </div>
               )}
               <EmailInput error={errors.email} />
               <PasswordInput error={errors.password} />
-              <button className='bg-blue-400 w-full p-2 rounded mt-3 text-sm md:text-base text-slate-50 font-bold hover:bg-blue-500 hover:text-gray-50'>
+              <button className="bg-blue-400 w-full p-2 rounded mt-3 text-sm md:text-base text-slate-50 font-bold hover:bg-blue-500 hover:text-gray-50">
                 Sign In
               </button>
-              <div className='flex py-3 md:py-[12.9px] items-center'>
-                <div className='flex-grow border-t border-gray-400'></div>
-                <span className='flex-shrink mx-2 md:mx-4 text-gray-300 text-sm md:text-base'>
+              <div className="flex py-3 md:py-[12.9px] items-center">
+                <div className="flex-grow border-t border-gray-400"></div>
+                <span className="flex-shrink mx-2 md:mx-4 text-gray-300 text-sm md:text-base">
                   OR
                 </span>
-                <div className='flex-grow border-t border-gray-400'></div>
+                <div className="flex-grow border-t border-gray-400"></div>
               </div>
 
               {!loginLoading && !loginViaGoogleLoading && (
@@ -121,18 +121,18 @@ export const SignIn = () => {
                   <GoogleLogin
                     onSuccess={onGoogleLoginSuccess}
                     onError={(err) => console.log(err)}
-                    locale='EN'
+                    locale="EN"
                     cancel_on_tap_outside={false}
                     useOneTap
                   />
                 </GoogleOAuthProvider>
               )}
 
-              <div className='flex justify-between mt-5 text-sm md:text-base'>
-                <Link to='/forgot-password' className='cursor-pointer'>
+              <div className="flex justify-between mt-5 text-sm md:text-base">
+                <Link to="/forgot-password" className="cursor-pointer">
                   Forgot Password?
                 </Link>
-                <Link to='/sign-up' className='cursor-pointer'>
+                <Link to="/sign-up" className="cursor-pointer">
                   Sign Up
                 </Link>
               </div>
@@ -140,14 +140,14 @@ export const SignIn = () => {
           </FormProvider>
         </TransitionSlide>
 
-        <div className='flex items-center text-sm md:text-base text-slate-400 pt-10 pb-2'>
+        <div className="flex items-center text-sm md:text-base text-slate-400 pt-10 pb-2">
           <p>
             &copy; 2022 <b>MessMe</b>. Made with
           </p>
           <img
             src={CoffeeCupIcon}
-            alt='coffee'
-            className='w-[1.4rem] h-5 md:w-7 mx-1'
+            alt="coffee"
+            className="w-[1.4rem] h-5 md:w-7 mx-1"
           />
           <p>
             by <b>TTQ186</b>

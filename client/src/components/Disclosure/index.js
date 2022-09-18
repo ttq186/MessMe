@@ -1,3 +1,3 @@
-import Disclosure from 'components/Disclosure/Disclosure';
+import Disclosure from "components/Disclosure/Disclosure";
 
 export { Disclosure };

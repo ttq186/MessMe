@@ -23,7 +23,6 @@ class ContactCRUD(BaseCRUD[ContactModal, ContactSchema]):
     async def get_by_requester_and_accepter_id(
         self, session: AsyncSession, requester_id: str, accepter_id: str
     ) -> ContactModal | None:
-        print(requester_id, accepter_id)
         stmt = select(ContactModal).where(
             ContactModal.requester_id.in_([requester_id, accepter_id]),
             ContactModal.accepter_id.in_([requester_id, accepter_id]),

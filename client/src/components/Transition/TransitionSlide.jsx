@@ -1,4 +1,4 @@
-import { LazyMotion, domAnimation, m } from 'framer-motion';
+import { LazyMotion, domAnimation, m } from "framer-motion";
 
 export const TransitionSlide = (props) => {
   return (
@@ -6,7 +6,7 @@ export const TransitionSlide = (props) => {
       <m.div
         animate={{ y: [20, 0] }}
         transition={{ duration: 0.5 }}
-        className='w-[89%]'
+        className="w-[89%]"
       >
         {props.children}
       </m.div>

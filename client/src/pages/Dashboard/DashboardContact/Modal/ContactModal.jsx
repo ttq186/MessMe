@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   useLazyQuery,
   useMutation,
   useQuery,
   useReactiveVar,
-} from '@apollo/client';
+} from "@apollo/client";
 
-import { Modal } from 'components/Modal';
-import { CREATE_CONTACT } from 'graphql/contacts';
-import { GET_CURRENT_USER, GET_USERS } from 'graphql/users';
-import { AvatarIcon } from 'assets/icons';
-import { currentChoseUserIdVar } from 'cache';
+import { Modal } from "components/Modal";
+import { CREATE_CONTACT } from "graphql/contacts";
+import { GET_CURRENT_USER, GET_USERS } from "graphql/users";
+import { AvatarIcon } from "assets/icons";
+import { currentChoseUserIdVar } from "cache";
 
 const UserItem = ({ id, avatarUrl, username, email, partnerStatus }) => {
   const currentChoseUserId = useReactiveVar(currentChoseUserIdVar);
@@ -24,33 +24,33 @@ const UserItem = ({ id, avatarUrl, username, email, partnerStatus }) => {
 
   return (
     <label
-      className='flex items-center p-2 mx-3 mr-2 mb-2.5 opacity-80 bg-slate-500 rounded cursor-pointer transition duration-300 ease-out hover:ease-in hover:opacity-100'
-      id='checkbox'
+      className="flex items-center p-2 mx-3 mr-2 mb-2.5 opacity-80 bg-slate-500 rounded cursor-pointer transition duration-300 ease-out hover:ease-in hover:opacity-100"
+      id="checkbox"
     >
-      <div className='flex items-end p-1'>
+      <div className="flex items-end p-1">
         {!avatarUrl ? (
-          <AvatarIcon width='40px' height='40px' />
+          <AvatarIcon width="40px" height="40px" />
         ) : (
           <img
             src={avatarUrl}
-            alt='Friend'
-            className='w-10 h-10 rounded-full'
+            alt="Friend"
+            className="w-10 h-10 rounded-full"
           />
         )}
       </div>
-      <div className='grow ml-2'>
-        <p className='font-bold -mt-0.5'>
-          {username ? username : email.split('@')[0]}
+      <div className="grow ml-2">
+        <p className="font-bold -mt-0.5">
+          {username ? username : email.split("@")[0]}
         </p>
-        <p className='text-sm text-slate-300 font-medium'>{partnerStatus}</p>
+        <p className="text-sm text-slate-300 font-medium">{partnerStatus}</p>
       </div>
-      {((partnerStatus === 'Stranger' && !currentChoseUserId) ||
+      {((partnerStatus === "Stranger" && !currentChoseUserId) ||
         (currentChoseUserId && currentChoseUserId === id)) && (
-        <div className='mr-4'>
+        <div className="mr-4">
           <input
-            type='checkbox'
-            id='checkbox'
-            className='scale-125'
+            type="checkbox"
+            id="checkbox"
+            className="scale-125"
             onChange={(e) => handleChooseUser(e)}
           />
         </div>
@@ -60,7 +60,7 @@ const UserItem = ({ id, avatarUrl, username, email, partnerStatus }) => {
 };
 
 export const ContactModal = ({ triggerButton }) => {
-  const [invitationMessage, setInvitationMessage] = useState('');
+  const [invitationMessage, setInvitationMessage] = useState("");
   const [isOpen, setOpen] = useState(false);
   const [timeOutObj, setTimeOutObj] = useState(null);
 
@@ -69,7 +69,7 @@ export const ContactModal = ({ triggerButton }) => {
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [createContact] = useMutation(CREATE_CONTACT);
   const [getUsers, { data }] = useLazyQuery(GET_USERS, {
-    fetchPolicy: 'network-only',
+    fetchPolicy: "network-only",
   });
 
   const openModal = () => {
@@ -80,7 +80,7 @@ export const ContactModal = ({ triggerButton }) => {
     setOpen(false);
     getUsers({
       variables: {
-        search: '1862002',
+        search: "1862002",
       },
     });
   };
@@ -96,7 +96,7 @@ export const ContactModal = ({ triggerButton }) => {
     });
     closeModal();
     currentChoseUserIdVar(null);
-    setInvitationMessage('');
+    setInvitationMessage("");
   };
 
   const handleContactInputChange = (currentContactInfo) => {
@@ -121,30 +121,30 @@ export const ContactModal = ({ triggerButton }) => {
       closeModal={closeModal}
     >
       <div
-        className='text-xl font-bold text-gray-200 pb-2 border-b-[0.5px]
-        border-gray-300'
+        className="text-xl font-bold text-gray-200 pb-2 border-b-[0.5px]
+        border-gray-300"
       >
         Add Contact
       </div>
 
-      <div className='mt-5'>
-        <div className='mb-4 text-slate-300'>
-          <label className='text-[15px] font-bold' htmlFor='email'>
+      <div className="mt-5">
+        <div className="mb-4 text-slate-300">
+          <label className="text-[15px] font-bold" htmlFor="email">
             Name or Email
           </label>
-          <div className='my-1'>
+          <div className="my-1">
             <input
-              type='text'
-              id='email'
-              placeholder='Enter name or email'
-              className='w-full p-2.5 md:px-4 bg-gray-600 rounded font-medium text-sm md:text-[15px] focus:outline-none'
+              type="text"
+              id="email"
+              placeholder="Enter name or email"
+              className="w-full p-2.5 md:px-4 bg-gray-600 rounded font-medium text-sm md:text-[15px] focus:outline-none"
               onChange={(e) => handleContactInputChange(e.target.value)}
             />
           </div>
 
           {data && (
-            <div className='bg-slate-600 py-4 rounded mt-2'>
-              <div className='max-h-[280px] pl-1 mr-1 bg-slate-600 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
+            <div className="bg-slate-600 py-4 rounded mt-2">
+              <div className="max-h-[280px] pl-1 mr-1 bg-slate-600 overflow-y-scroll scrollbar-transparent hover:scrollbar">
                 {data.users.map((user) => {
                   if (user.id === currentUserObj?.currentUser.id)
                     return <div />;
@@ -155,29 +155,29 @@ export const ContactModal = ({ triggerButton }) => {
           )}
         </div>
 
-        <div className='mb-4 text-slate-300'>
-          <label className='text-[15px] font-bold' htmlFor='invitation-message'>
+        <div className="mb-4 text-slate-300">
+          <label className="text-[15px] font-bold" htmlFor="invitation-message">
             Invitation Message
           </label>
-          <div className='my-1'>
+          <div className="my-1">
             <textarea
-              id='invitation-message'
-              className='w-full bg-gray-600 text-sm p-2 px-4 font-medium focus:outline-none rounded'
-              placeholder='Enter message'
+              id="invitation-message"
+              className="w-full bg-gray-600 text-sm p-2 px-4 font-medium focus:outline-none rounded"
+              placeholder="Enter message"
               rows={4}
               onChange={(e) => setInvitationMessage(e.target.value)}
             />
           </div>
         </div>
-        <div className='my-5'>
+        <div className="my-5">
           <button
-            className='float-right bg-blue-300 font-semibold text-gray-700 rounded-[3px] py-1.5 px-3 text-[15px] hover:opacity-90'
+            className="float-right bg-blue-300 font-semibold text-gray-700 rounded-[3px] py-1.5 px-3 text-[15px] hover:opacity-90"
             onClick={handleAddContact}
           >
             Send Request
           </button>
           <button
-            className='float-right text-blue-300 font-semibold rounded py-1.5 px-3 mr-3 text-[15px] hover:opacity-90'
+            className="float-right text-blue-300 font-semibold rounded py-1.5 px-3 mr-3 text-[15px] hover:opacity-90"
             onClick={closeModal}
           >
             Cancel

@@ -1,4 +1,4 @@
-import { makeVar, InMemoryCache } from '@apollo/client';
+import { makeVar, InMemoryCache } from "@apollo/client";
 
 export const hasLoadWelcomeAnimationVar = makeVar(false);
 export const isSignUpSuccessVar = makeVar(false);

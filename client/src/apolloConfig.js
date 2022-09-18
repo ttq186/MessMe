@@ -1,11 +1,11 @@
-import { createClient } from 'graphql-ws';
-import { getMainDefinition } from '@apollo/client/utilities';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
+import { createClient } from "graphql-ws";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { ApolloClient, InMemoryCache, split, HttpLink } from "@apollo/client";
 
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_BASE_HTTP_URL,
-  credentials: 'include',
+  credentials: "include",
 });
 
 const wsLink = new GraphQLWsLink(
@@ -18,8 +18,8 @@ const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
     );
   },
   wsLink,

@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   useQuery,
   useSubscription,
   useLazyQuery,
   useReactiveVar,
-} from '@apollo/client';
-import useSound from 'use-sound';
+} from "@apollo/client";
+import useSound from "use-sound";
 
 import {
   DashboardGroup,
@@ -16,27 +16,27 @@ import {
   DashboardMainChat,
   DashboardUsersChat,
   DashboardNotification,
-} from 'pages/Dashboard';
-import { CHAT_MODE } from 'utils/contants/TabModeConstants';
-import { GET_CURRENT_USER } from 'graphql/users';
-import { GET_CONTACTS } from 'graphql/contacts';
-import { NotificationSound } from 'assets/sounds';
+} from "pages/Dashboard";
+import { CHAT_MODE } from "utils/contants/TabModeConstants";
+import { GET_CURRENT_USER } from "graphql/users";
+import { GET_CONTACTS } from "graphql/contacts";
+import { NotificationSound } from "assets/sounds";
 import {
   GET_CONTACT_REQUESTS,
   SUBCRIBE_CONTACT_REQUESTS,
-} from 'graphql/contacts';
+} from "graphql/contacts";
 import {
   hasNewNotificationVar,
   contactsIdVar,
   activeUserChatVar,
   contactsJustSentMessagesVar,
   signInRequiredVar,
-} from 'cache';
+} from "cache";
 
-import { GET_MESSAGES_BY_CHANNEL, SUBSCRIBE_MESSAGE } from 'graphql/messages';
-import { generateMessageChannelByUsersId } from 'utils';
-import { client } from 'apolloConfig';
-import { useNavigate } from 'react-router-dom';
+import { GET_MESSAGES_BY_CHANNEL, SUBSCRIBE_MESSAGE } from "graphql/messages";
+import { generateMessageChannelByUsersId } from "utils";
+import { client } from "apolloConfig";
+import { useNavigate } from "react-router-dom";
 
 const componentByTabMode = {
   CHAT_MODE: <DashboardUsersChat />,
@@ -99,15 +99,15 @@ export const Dashboard = () => {
 
   const notifyNewMessage = () => {
     playNotificationSound();
-    document.title = 'New Message!';
+    document.title = "New Message!";
     setTimeout(() => {
-      document.title = 'MessMe';
+      document.title = "MessMe";
     }, 10000);
   };
 
   const notifyNewContactRequest = () => {
     playNotificationSound();
-    document.title = 'New Friend Request!';
+    document.title = "New Friend Request!";
     hasNewNotificationVar(true);
   };
 
@@ -196,26 +196,26 @@ export const Dashboard = () => {
   }, [contactsId, currentUserObj]);
 
   useEffect(() => {
-    if (!document.cookie.includes('logout=0')) {
+    if (!document.cookie.includes("logout=0")) {
       signInRequiredVar(true);
-      navigate('/sign-in');
+      navigate("/sign-in");
     } else {
       signInRequiredVar(false);
     }
   }, []);
 
   return (
-    <div className='flex'>
+    <div className="flex">
       <DashboardSideBar tabMode={tabMode} setTabMode={setTabMode} />
 
-      <div className='flex flex-col w-[400px] h-screen bg-gray-700 text-slate-200'>
+      <div className="flex flex-col w-[400px] h-screen bg-gray-700 text-slate-200">
         {componentByTabMode[tabMode]}
       </div>
 
       <DashboardMainChat setOpenFriendProfile={setOpenFriendProfile} />
 
       {isOpenFriendProfile && (
-        <div className='flex flex-col w-[380px] h-screen bg-gray-700 text-slate-200 border-l-2 border-slate-500'>
+        <div className="flex flex-col w-[380px] h-screen bg-gray-700 text-slate-200 border-l-2 border-slate-500">
           <DashboardProfile
             isOpenFriendProfile={isOpenFriendProfile}
             setOpenFriendProfile={setOpenFriendProfile}

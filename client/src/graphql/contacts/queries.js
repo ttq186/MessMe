@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const GET_CONTACT = gql`
   query GetContact($id: ID, $partnerId: String) {

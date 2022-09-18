@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { useState } from "react";
+import { useQuery, useReactiveVar } from "@apollo/client";
 
-import { SearchBar } from 'components/SearchBar';
-import { GET_CONTACTS } from 'graphql/contacts';
-import { UsersChatItem } from './Conversation/UsersChatItem';
+import { SearchBar } from "components/SearchBar";
+import { GET_CONTACTS } from "graphql/contacts";
+import { UsersChatItem } from "./Conversation/UsersChatItem";
 import {
   activeUserChatVar,
   contactsIdVar,
   contactsJustSentMessagesVar,
-} from 'cache';
-import { UsersChatSkeleton } from './Skeleton/UsersChatSkeleton';
+} from "cache";
+import { UsersChatSkeleton } from "./Skeleton/UsersChatSkeleton";
 
 export const DashboardUsersChat = () => {
   const [contactsByLastInteraction, setContactsByLastInteraction] = useState(
@@ -65,18 +65,18 @@ export const DashboardUsersChat = () => {
       setContactsByLastInteraction(sortedContactsByLastMessage);
       setContactsBySearchValue(sortedContactsByLastMessage);
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: "network-only",
   });
 
   return (
     <>
-      <div className='p-6 pb-2'>
-        <p className='text-2xl font-bold'>Chat</p>
-        <SearchBar placeholder='Search Users' handleSearch={handleSearchUser} />
+      <div className="p-6 pb-2">
+        <p className="text-2xl font-bold">Chat</p>
+        <SearchBar placeholder="Search Users" handleSearch={handleSearchUser} />
       </div>
 
-      <p className='font-bold text ml-6 mt-5 mb-3'>Recent</p>
-      <div className='ml-3 mr-1.5 mb-3 overflow-y-scroll scrollbar-transparent hover:scrollbar'>
+      <p className="font-bold text ml-6 mt-5 mb-3">Recent</p>
+      <div className="ml-3 mr-1.5 mb-3 overflow-y-scroll scrollbar-transparent hover:scrollbar">
         {!contactsObj ? (
           <div>
             <UsersChatSkeleton />

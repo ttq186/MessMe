@@ -2,8 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware import cors, gzip
 from sqlalchemy import text
 
-from src.database import (broadcast, mongo_client, postgres_engine,
-                          postgres_session)
+from src.database import broadcast, mongo_client, postgres_engine, postgres_session
 from src.graphql import graphql_app
 
 app = FastAPI(title="MessMe")

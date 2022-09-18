@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import Lottie from 'lottie-react';
-import { useNavigate } from 'react-router-dom';
-import { useReactiveVar } from '@apollo/client';
+import { useEffect } from "react";
+import Lottie from "lottie-react";
+import { useNavigate } from "react-router-dom";
+import { useReactiveVar } from "@apollo/client";
 
-import { WelcomeAnimation } from 'assets/animation';
-import { hasLoadWelcomeAnimationVar } from 'cache';
+import { WelcomeAnimation } from "assets/animation";
+import { hasLoadWelcomeAnimationVar } from "cache";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -12,10 +12,10 @@ export const Home = () => {
 
   useEffect(() => {
     if (hasLoadWelcomeAnimation) {
-      if (document.cookie.includes('logout=0')) {
-        navigate('/dashboard');
+      if (document.cookie.includes("logout=0")) {
+        navigate("/dashboard");
       } else {
-        navigate('/sign-in');
+        navigate("/sign-in");
       }
       return;
     }
@@ -29,8 +29,8 @@ export const Home = () => {
   }, [hasLoadWelcomeAnimation, navigate]);
 
   return (
-    <div className='bg-gray-700'>
-      <Lottie animationData={WelcomeAnimation} style={{ height: '100vh' }} />
+    <div className="bg-gray-700">
+      <Lottie animationData={WelcomeAnimation} style={{ height: "100vh" }} />
     </div>
   );
 };
