@@ -1,12 +1,11 @@
 from typing import AsyncGenerator
 
-from strawberry.types import Info
-
 from src.auth import exceptions as auth_exceptions
 from src.auth import schemas as auth_schemas
 from src.auth import utils as auth_utils
 from src.auth.crud import user_crud
 from src.database import mongo_client, postgres_session
+from strawberry.types import Info
 
 
 async def get_postgres_session() -> AsyncGenerator:

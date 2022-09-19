@@ -3,13 +3,12 @@ from typing import AsyncIterator
 
 import strawberry
 from bson import json_util
-from strawberry.types import Info
-
 from src import deps, exceptions, utils
 from src.auth.crud import user_crud
 from src.database import broadcast
 from src.message import utils as message_utils
 from src.message.crud import message_crud
+from strawberry.types import Info
 
 from . import exceptions as contact_exceptions
 from . import utils as contact_utils

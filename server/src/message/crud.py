@@ -29,7 +29,6 @@ class MessageCRUD:
             .limit(1)
             .to_list(1)
         )
-
         return Message(**message[0]) if len(message) != 0 else None
 
     async def get(self, mongo_db: AsyncIOMotorDatabase, id: ObjectId) -> Message | None:

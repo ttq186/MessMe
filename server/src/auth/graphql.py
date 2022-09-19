@@ -1,11 +1,10 @@
 # import crud
 # import exceptions
 import strawberry
-from strawberry.types import Info
-
 from src import exceptions, utils
 from src.auth.crud import user_crud
 from src.contact.crud import contact_crud
+from strawberry.types import Info
 
 from . import exceptions as auth_exceptions
 from . import utils as auth_utils

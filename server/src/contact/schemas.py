@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import strawberry
-
 from src.auth.schemas import User
 from src.message.schemas import Message
 

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
+import { Howl } from "howler";
 import {
   useQuery,
   useSubscription,
   useLazyQuery,
   useReactiveVar,
 } from "@apollo/client";
-import useSound from "use-sound";
 
 import {
   DashboardGroup,
@@ -31,6 +31,7 @@ import {
   activeUserChatVar,
   contactsJustSentMessagesVar,
   signInRequiredVar,
+  subscribedChannelIdsVar,
 } from "cache";
 
 import { GET_MESSAGES_BY_CHANNEL, SUBSCRIBE_MESSAGE } from "graphql/messages";
@@ -84,18 +85,24 @@ export const updateLastMessageOfContacts = (userId, newMessage) => {
 export const Dashboard = () => {
   const [isOpenFriendProfile, setOpenFriendProfile] = useState(false);
   const [tabMode, setTabMode] = useState(CHAT_MODE);
-  const [playNotificationSound] = useSound(NotificationSound);
 
   const contactsId = useReactiveVar(contactsIdVar);
   const activeUserChat = useReactiveVar(activeUserChatVar);
 
   const contactsJustSentMessages = useReactiveVar(contactsJustSentMessagesVar);
+  const subscribedChannelIds = useReactiveVar(subscribedChannelIdsVar);
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [getMessages, { subscribeToMore }] = useLazyQuery(
     GET_MESSAGES_BY_CHANNEL
   );
-
   const navigate = useNavigate();
+  
+  const playNotificationSound = () => {
+    const notificationSound = new Howl({
+      src: NotificationSound,
+    });
+    notificationSound.play();
+  };
 
   const notifyNewMessage = () => {
     playNotificationSound();
@@ -118,6 +125,9 @@ export const Dashboard = () => {
         contactId
       );
 
+      if (subscribedChannelIds.includes(channelId)) return;
+      subscribedChannelIdsVar([...subscribedChannelIds, channelId]);
+
       subscribeToMore({
         document: SUBSCRIBE_MESSAGE,
         variables: {
@@ -127,29 +137,20 @@ export const Dashboard = () => {
           if (!subscriptionData) return prev;
           const subscriptionMessage = subscriptionData.data.message;
           const messageSenderId = subscriptionMessage.senderId;
-          const cachedMessages = client.readQuery({
-            query: GET_MESSAGES_BY_CHANNEL,
-            variables: {
-              channelId,
-            },
-          });
-          const foundMessage = cachedMessages.messagesByChannel?.find(
-            (message) => message._id === subscriptionMessage._id
-          );
-          if (foundMessage) return prev;
 
           if (messageSenderId !== currentUserObj.currentUser.id) {
             updateLastMessageOfContacts(messageSenderId, subscriptionMessage);
             notifyNewMessage();
-            if (messageSenderId !== activeUserChat.id) {
-              if (!contactsJustSentMessages.includes(messageSenderId)) {
-                contactsJustSentMessagesVar([
-                  ...contactsJustSentMessages,
-                  messageSenderId,
-                ]);
-              }
-              return prev;
+            if (
+              messageSenderId !== activeUserChat.id &&
+              !contactsJustSentMessages.includes(messageSenderId)
+            ) {
+              contactsJustSentMessagesVar([
+                ...contactsJustSentMessages,
+                messageSenderId,
+              ]);
             }
+            //   return prev;
           }
           return {
             messagesByChannel: [...prev.messagesByChannel, subscriptionMessage],

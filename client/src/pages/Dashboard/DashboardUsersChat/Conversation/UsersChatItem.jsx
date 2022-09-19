@@ -10,7 +10,6 @@ export const UsersChatItem = ({
   hasJustSentMessage,
 }) => {
   const contactsJustSentMessages = useReactiveVar(contactsJustSentMessagesVar);
-
   const handleUserChatClick = () => {
     if (contactsJustSentMessages.includes(friend.id)) {
       const contactIdIndex = contactsJustSentMessages.indexOf(friend.id);

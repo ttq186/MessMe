@@ -5,19 +5,19 @@ import strawberry
 
 @strawberry.type
 class User:
-    email: str | None
-    id: str | None = None
-    username: str | None = None
-    password: str | None = None
-    avatar_url: str | None = None
-    description: str | None = None
-    is_female: bool | None = None
-    phone_number: str | None = None
-    date_of_birth: date | None = None
-    created_at: datetime | None = None
-    has_confirmed_email: bool | None = None
-    partner_status: str | None = None
-    is_admin: bool = False
+    email: str
+    id: str | None
+    username: str | None
+    password: str | None
+    avatar_url: str | None
+    description: str | None
+    is_female: bool | None
+    phone_number: str | None
+    date_of_birth: date | None
+    created_at: datetime | None
+    has_confirmed_email: bool | None
+    partner_status: str | None
+    is_admin: bool
 
 
 @strawberry.input
@@ -30,14 +30,14 @@ class UserCreate:
 @strawberry.input
 class UserUpdate:
     id: str
-    password: str | None = None
-    username: str | None = None
-    avatar_url: str | None = None
-    description: str | None = None
-    is_female: bool | None = None
-    phone_number: str | None = None
-    date_of_birth: date | None = None
-    has_confirmed_email: bool | None = None
+    password: str | None
+    username: str | None
+    avatar_url: str | None
+    description: str | None
+    is_female: bool | None
+    phone_number: str | None
+    date_of_birth: date | None
+    has_confirmed_email: bool | None
 
 
 @strawberry.type

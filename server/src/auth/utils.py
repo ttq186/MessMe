@@ -6,7 +6,6 @@ from google.cloud import storage
 from google.oauth2 import id_token, service_account
 from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
-
 from src.config import settings
 
 from . import exceptions

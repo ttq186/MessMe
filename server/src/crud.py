@@ -3,9 +3,8 @@ from typing import Any, Dict, Generic, TypeVar
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from strawberry.type import StrawberryType
-
 from src.models import BaseModel
+from strawberry.type import StrawberryType
 
 ModelType = TypeVar("ModelType", bound=BaseModel)
 SchemaType = TypeVar("SchemaType", bound=StrawberryType)
