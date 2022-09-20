@@ -21,7 +21,9 @@ class Settings(BaseSettings):
 
     # JWT
     ACCESS_TOKEN_EXPIRE_MINUTES: int
-    JWT_SECRET_KEY: str
+    REFRESH_TOKEN_EXPIRE_MINUTES: int
+    ACCESS_SECRET_KEY: str
+    REFRESH_SECRET_KEY: str
     JWT_ALGORITHM: str
 
     # Google OAuth2

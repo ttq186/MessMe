@@ -96,7 +96,7 @@ export const Dashboard = () => {
     GET_MESSAGES_BY_CHANNEL
   );
   const navigate = useNavigate();
-  
+
   const playNotificationSound = () => {
     const notificationSound = new Howl({
       src: NotificationSound,

@@ -1,4 +1,4 @@
-from uuid import uuid4
+import uuid
 
 from sqlalchemy import Boolean, Column, Date, DateTime, String, Text
 from sqlalchemy.sql import func
@@ -10,7 +10,7 @@ from src.models import BaseModel
 class User(BaseModel):
     __tablename__ = "user"
 
-    id = Column(String, primary_key=True, default=uuid4)
+    id = Column(String, primary_key=True, default=uuid.uuid4)
     username = Column(String(20))
     email = Column(String, index=True, nullable=False, unique=True)
     password = Column(String)

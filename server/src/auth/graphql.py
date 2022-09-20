@@ -1,14 +1,29 @@
-# import crud
-# import exceptions
+from datetime import timedelta
+
 import strawberry
+from strawberry.types import Info
+from fastapi import Response
 from src import exceptions, utils
 from src.auth.crud import user_crud
 from src.contact.crud import contact_crud
-from strawberry.types import Info
+from src.config import settings
 
 from . import exceptions as auth_exceptions
 from . import utils as auth_utils
 from .schemas import SignedUrl, User, UserCreate, UserDeleteSuccess, UserUpdate
+
+
+def set_credentials_after_logging(response: Response, user_id: str):
+    access_token = auth_utils.create_token(payload={"user_id": user_id})
+    refresh_token = auth_utils.create_token(
+        payload={"user_id": user_id},
+        expires_in=timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES),
+        secret_key=settings.REFRESH_SECRET_KEY,
+    )
+    auth_utils.set_tokens_on_cookie(
+        response=response, access_token=access_token, refresh_token=refresh_token
+    )
+    auth_utils.set_logout_detection_cookie(response)
 
 
 async def resolver_login(info: Info, email: str, password: str) -> User:
@@ -16,15 +31,11 @@ async def resolver_login(info: Info, email: str, password: str) -> User:
     user = await user_crud.get_by_email(pg_session, email=email)
     if user is None:
         raise auth_exceptions.InvalidLoginCredentials()
-    if user is not None and user.password is None:
+    if user.password is None:
         raise auth_exceptions.AccountCreatedByGoogle()
     if not auth_utils.verify_password(password, user.password):
         raise auth_exceptions.InvalidLoginCredentials()
-
-    access_token = auth_utils.create_access_token({"user_id": user.id})
-    response_obj = info.context["response"]
-    auth_utils.set_access_token_on_http_only_cookie(response_obj, access_token)
-    auth_utils.set_logout_detection_cookie(response_obj)
+    set_credentials_after_logging(response=info.context["response"], user_id=user.id)
     return user
 
 
@@ -36,19 +47,9 @@ async def resolver_login_via_google(info: Info, tokenId: str) -> User:
     user = await user_crud.get_by_email(session, email=email)
     if user is not None and user.password is not None:
         raise auth_exceptions.AccountCreatedWithoutGoogle()
-
     if user is None:
-        user_in = User(email=email)
-        user_id = utils.generate_uuid()
-        while await user_crud.get(session, id=user_id) is not None:
-            user_id = utils.generate_uuid()
-        user_in.id = user_id
-        user = await user_crud.create(session, obj_in=user_in)
-
-    access_token = auth_utils.create_access_token({"user_id": user.id})
-    response_obj = info.context["response"]
-    auth_utils.set_access_token_on_http_only_cookie(response_obj, access_token)
-    auth_utils.set_logout_detection_cookie(response_obj)
+        user = await user_crud.create(session, obj_in=User(email=email))
+    set_credentials_after_logging(response=info.context["response"], user_id=user.id)
     return user
 
 

@@ -21,17 +21,16 @@ def get_hashed_password(plain_pwd: str) -> str:
     return pwd_context.hash(plain_pwd)
 
 
-def create_access_token(
-    payload: dict, expires_date: datetime | None = None, secret_key: str | None = None
+def create_token(
+    payload: dict, expires_in: timedelta | None = None, secret_key: str | None = None
 ) -> str:
     expire = datetime.now() + (
-        expires_date or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        expires_in or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     )
     payload.update({"exp": expire})
-    print(payload)
     jwt_token = jwt.encode(
         payload,
-        key=secret_key or settings.JWT_SECRET_KEY,
+        key=secret_key or settings.ACCESS_SECRET_KEY,
         algorithm=settings.JWT_ALGORITHM,
     )
     return jwt_token
@@ -41,7 +40,7 @@ def decode_access_token(token: str, secret_key: str | None = None) -> dict:
     try:
         token_data = jwt.decode(
             token,
-            key=secret_key or settings.JWT_SECRET_KEY,
+            key=secret_key or settings.ACCESS_SECRET_KEY,
             algorithms=settings.JWT_ALGORITHM,
         )
         return token_data
@@ -62,21 +61,27 @@ def decode_oauth2_token_id(token_id: str) -> dict:
         raise exceptions.InvalidGoogleCredentials()
 
 
-def set_access_token_on_http_only_cookie(response: Response, access_token: str) -> None:
+def set_tokens_on_cookie(
+    response: Response, access_token: str, refresh_token: str
+) -> None:
     response.set_cookie(
-        key="authorization",
+        key="actk",
         value=access_token,
-        expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 2,  # Token expires is enough
+        expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
         httponly=True,
+        secure=True,
+    )
+    response.set_cookie(
+        key="rftk",
+        value=refresh_token,
+        expires=settings.REFRESH_TOKEN_EXPIRE_MINUTES,
+        httponly=True,
+        secure=True,
     )
 
 
 def set_logout_detection_cookie(response: Response) -> None:
-    response.set_cookie(
-        key="logout",
-        value="0",
-        expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 2,
-    )
+    response.set_cookie(key="logout", value="0")
 
 
 def generate_signed_url(bucket_name: str, blob_type: str, blob_name: str) -> str:

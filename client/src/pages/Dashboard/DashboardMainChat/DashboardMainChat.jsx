@@ -313,7 +313,6 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           {/* <input
             className='py-2.5 px-5 w-full bg-slate-700 text-[15px] text-slate-300 font-medium rounded-md outline-none'
             placeholder='Enter Message...'
-            contentEditable='true'
             ref={inputRef}
           /> */}
           <div
@@ -321,8 +320,6 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
             placeholder="Aa"
             className="outline-none pr-3 max-h-[90px] overflow-y-scroll scrollbar-transparent hover:scrollbar"
             ref={inputRef}
-            onKeyDown={(e) => handleInputKeyDown(e)}
-            onKeyUp={(e) => handleInputKeyUp(e)}
           />
         </div>
         <Tippy

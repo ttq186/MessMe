@@ -1,6 +1,6 @@
 from typing import AsyncGenerator
 
-from src.auth import exceptions as auth_exceptions
+from src import exceptions
 from src.auth import schemas as auth_schemas
 from src.auth import utils as auth_utils
 from src.auth.crud import user_crud
@@ -19,10 +19,10 @@ def get_mongo_db():
 
 async def get_current_user(info: Info) -> auth_schemas.User:
     cookies = info.context["request"].cookies
-    access_token = cookies.get("authorization")
+    access_token = cookies.get("actk")
     logout_value = cookies.get("logout")
     if logout_value != "0" or access_token is None:
-        raise auth_exceptions.NotAuthenticated()
+        raise exceptions.NotAuthenticated()
 
     token_data = auth_utils.decode_access_token(access_token)
     pg_session = info.context["pg_session"]
@@ -33,5 +33,5 @@ async def get_current_user(info: Info) -> auth_schemas.User:
 async def get_current_superuser(info: Info) -> auth_schemas.User:
     current_user = await get_current_user(info)
     if not current_user.is_admin:
-        raise auth_exceptions.NotAuthorized()
+        raise exceptions.NotAuthorized()
     return current_user

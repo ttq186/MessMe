@@ -58,17 +58,8 @@ export const SignIn = () => {
     if (document.cookie.includes("logout=0")) {
       navigate("/dashboard");
     }
-    // if (loginData || loginViaGoogleData) {
-    //   navigate('/dashboard');
-    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [document.cookie]);
-
-  useEffect(() => {
-    if (document.cookie.includes("logout=0")) {
-      navigate("/dashboard");
-    }
-  });
 
   return (
     <>
