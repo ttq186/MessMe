@@ -10,7 +10,7 @@ from src.config import settings
 
 from . import exceptions as auth_exceptions
 from . import utils as auth_utils
-from .schemas import SignedUrl, User, UserCreate, UserDeleteSuccess, UserUpdate
+from .schemas import SasToken, User, UserCreate, UserDeleteSuccess, UserUpdate
 
 
 def set_credentials_after_logging(response: Response, user_id: str):
@@ -102,10 +102,6 @@ async def resolver_create_user(info: Info, user_in: UserCreate) -> User:
     if user is not None:
         raise exceptions.EmailAlreadyExists()
 
-    user_id = utils.generate_uuid()
-    while await user_crud.get(pg_session, user_id) is not None:
-        user_id = utils.generate_uuid()
-    user_in.id = user_id
     user_in.password = auth_utils.get_hashed_password(user_in.password)
     user = await user_crud.create(pg_session, obj_in=user_in)
     return user
@@ -138,11 +134,9 @@ async def resolver_delete_user(info: Info, id: str) -> UserDeleteSuccess:
     return UserDeleteSuccess(message="Deleted Successfully!")
 
 
-async def resolver_get_signed_url(blob_type: str, blob_name: str) -> SignedUrl:
-    signed_url = auth_utils.generate_signed_url(
-        bucket_name="messme", blob_type=blob_type, blob_name=blob_name
-    )
-    return SignedUrl(signed_url)
+async def resolver_get_sas_token() -> SasToken:
+    sas_token = auth_utils.generate_sas_token()
+    return SasToken(token=sas_token)
 
 
 @strawberry.type
@@ -163,8 +157,8 @@ class UserQuery:
         resolver=resolver_get_current_user,
         permission_classes=[utils.IsAuthenticatedUser],
     )
-    signed_url: SignedUrl = strawberry.field(
-        resolver=resolver_get_signed_url,
+    sas_token: SasToken = strawberry.field(
+        resolver=resolver_get_sas_token,
         permission_classes=[utils.IsAuthenticatedUser],
     )
 

@@ -41,10 +41,10 @@ export const GET_CURRENT_USER = gql`
   }
 `;
 
-export const GET_SIGNED_URL = gql`
-  query SignedUrl($blobType: String!, $blobName: String!) {
-    signedUrl(blobType: $blobType, blobName: $blobName) {
-      url
+export const GET_SAS_TOKEN = gql`
+  query SasToken {
+    sasToken {
+      token
     }
   }
 `;

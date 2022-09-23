@@ -30,6 +30,10 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str
     GOOGLE_APPLICATION_CREDENTIALS: str
 
+    # Azure Blob Storage
+    AZURE_STORAGE_ACCOUNT_NAME: str
+    AZURE_ACCESS_KEY: str
+
     class Config:
         env_file = ".env"
 

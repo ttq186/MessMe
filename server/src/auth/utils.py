@@ -2,11 +2,16 @@ from datetime import datetime, timedelta
 
 from fastapi import Response
 from google.auth.transport import requests
-from google.cloud import storage
-from google.oauth2 import id_token, service_account
+from google.oauth2 import id_token
 from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
 from src.config import settings
+
+from azure.storage.blob import (
+    generate_account_sas,
+    AccountSasPermissions,
+    ResourceTypes,
+)
 
 from . import exceptions
 
@@ -45,9 +50,9 @@ def decode_access_token(token: str, secret_key: str | None = None) -> dict:
         )
         return token_data
     except ExpiredSignatureError:
-        raise Exception("Token has expired!")
+        raise exceptions.TokenHasExpired()
     except JWTError:
-        raise Exception("Could not validate user credentials!")
+        raise exceptions.InvalidToken()
 
 
 def decode_oauth2_token_id(token_id: str) -> dict:
@@ -67,35 +72,29 @@ def set_tokens_on_cookie(
     response.set_cookie(
         key="actk",
         value=access_token,
-        expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
+        expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         httponly=True,
         secure=True,
     )
     response.set_cookie(
         key="rftk",
+        expires=settings.REFRESH_TOKEN_EXPIRE_MINUTES * 60,
         value=refresh_token,
-        expires=settings.REFRESH_TOKEN_EXPIRE_MINUTES,
         httponly=True,
         secure=True,
     )
 
 
 def set_logout_detection_cookie(response: Response) -> None:
-    response.set_cookie(key="logout", value="0")
+    response.set_cookie(key="logout", value="0", secure=True)
 
 
-def generate_signed_url(bucket_name: str, blob_type: str, blob_name: str) -> str:
-    credentials = service_account.Credentials.from_service_account_file(
-        filename=settings.GOOGLE_APPLICATION_CREDENTIALS,
-        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+def generate_sas_token() -> str:
+    sas_token = generate_account_sas(
+        account_name=settings.AZURE_STORAGE_ACCOUNT_NAME,
+        resource_types=ResourceTypes(object=True),
+        account_key=settings.AZURE_ACCESS_KEY,
+        permission=AccountSasPermissions(read=True, write=True),
+        expiry=datetime.now() + timedelta(minutes=30),
     )
-    storage_client = storage.Client(credentials=credentials)
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_name)
-    signed_url = blob.generate_signed_url(
-        version="v4",
-        expiration=timedelta(minutes=15),
-        method="PUT",
-        content_type=blob_type,
-    )
-    return signed_url
+    return sas_token

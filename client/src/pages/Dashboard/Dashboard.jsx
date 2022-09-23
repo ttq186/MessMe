@@ -18,7 +18,7 @@ import {
   DashboardNotification,
 } from "pages/Dashboard";
 import { CHAT_MODE } from "utils/contants/TabModeConstants";
-import { GET_CURRENT_USER } from "graphql/users";
+import { GET_CURRENT_USER, GET_SAS_TOKEN } from "graphql/users";
 import { GET_CONTACTS } from "graphql/contacts";
 import { NotificationSound } from "assets/sounds";
 import {
@@ -96,6 +96,7 @@ export const Dashboard = () => {
     GET_MESSAGES_BY_CHANNEL
   );
   const navigate = useNavigate();
+  useQuery(GET_SAS_TOKEN);
 
   const playNotificationSound = () => {
     const notificationSound = new Howl({

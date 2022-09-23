@@ -15,7 +15,6 @@ postgres_session = sessionmaker(
     postgres_engine, class_=AsyncSession, expire_on_commit=False
 )
 
-
 MONGO_URL = f"mongodb://{settings.MONGO_HOSTNAME}:{settings.MONGO_PORT}"
 mongo_client = AsyncIOMotorClient(MONGO_URL)
 

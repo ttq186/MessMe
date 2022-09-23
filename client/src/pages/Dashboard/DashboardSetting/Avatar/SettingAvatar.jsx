@@ -3,43 +3,48 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 import { PencilIcon, AvatarIcon } from "assets/icons";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { GET_CURRENT_USER, GET_SIGNED_URL, UPDATE_USER } from "graphql/users";
-import { uploadFileToGoogleStorage } from "utils/fileUtils";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_CURRENT_USER, GET_SAS_TOKEN, UPDATE_USER } from "graphql/users";
+import { uploadFileToAzureStorage } from "utils/fileUtils";
+import { client } from "apolloConfig";
 
 export const SettingAvatar = () => {
   const {
     data: { currentUser },
   } = useQuery(GET_CURRENT_USER);
   const [avatarUrl, setAvatarUrl] = useState(currentUser.avatarUrl);
-  const [getSignedUrl] = useLazyQuery(GET_SIGNED_URL);
   const [updateCurrentUser] = useMutation(UPDATE_USER);
+  const {
+    data: { sasToken },
+  } = useQuery(GET_SAS_TOKEN);
 
-  const handleUploadFile = (file) => {
+  const handleUploadAvatar = async (file) => {
     if (file.type.split("/")[0] !== "image") return;
-    const fileNameSplit = file.name.split(".");
-    const fileName = `${fileNameSplit[0]}-${file.size}.${fileNameSplit[1]}`;
-    getSignedUrl({
-      variables: {
-        blobName: fileName,
-        blobType: file.type,
-      },
-      onCompleted: async (data) => {
-        const res = await uploadFileToGoogleStorage(file, data.signedUrl.url);
-        if (res) {
-          const newAvatarUrl = `https://storage.googleapis.com/messme/${fileName}`;
-          updateCurrentUser({
-            variables: {
-              input: {
-                id: currentUser.id,
-                avatarUrl: newAvatarUrl,
-              },
-            },
-            onCompleted: () => setAvatarUrl(newAvatarUrl),
-          });
-        }
-      },
-    });
+    let newAvatarUrl = await uploadFileToAzureStorage(
+      file,
+      sasToken.token,
+      "images"
+    );
+    if (!newAvatarUrl) {
+      client.refetchQueries({
+        include: [GET_SAS_TOKEN],
+      });
+      newAvatarUrl = await uploadFileToAzureStorage(
+        file,
+        sasToken.token,
+        "images"
+      );
+    } else {
+      updateCurrentUser({
+        variables: {
+          input: {
+            id: currentUser.id,
+            avatarUrl: newAvatarUrl,
+          },
+        },
+        onCompleted: () => setAvatarUrl(newAvatarUrl),
+      });
+    }
   };
 
   return (
@@ -61,7 +66,7 @@ export const SettingAvatar = () => {
             accept="image/*"
             id="update-avatar"
             className="hidden"
-            onChange={(e) => handleUploadFile(e.target.files[0])}
+            onChange={(e) => handleUploadAvatar(e.target.files[0])}
           />
           <Tippy
             content={<b style={{ color: "#cbd5e1" }}>Update Avatar</b>}

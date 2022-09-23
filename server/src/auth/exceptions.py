@@ -28,6 +28,12 @@ class AccountCreatedWithoutGoogle(Exception):
         super().__init__(self.message)
 
 
+class InvalidToken(Exception):
+    def __init__(self) -> None:
+        self.message = "Invalid token!"
+        super().__init__(self.message)
+
+
 class TokenHasExpired(Exception):
     def __init__(self) -> None:
         self.message = "Token has expired!"

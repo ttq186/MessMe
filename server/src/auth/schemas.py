@@ -30,14 +30,14 @@ class UserCreate:
 @strawberry.input
 class UserUpdate:
     id: str
-    password: str | None
-    username: str | None
-    avatar_url: str | None
-    description: str | None
-    is_female: bool | None
-    phone_number: str | None
-    date_of_birth: date | None
-    has_confirmed_email: bool | None
+    password: str | None = None
+    username: str | None = None
+    avatar_url: str | None = None
+    description: str | None = None
+    is_female: bool | None = None
+    phone_number: str | None = None
+    date_of_birth: date | None = None
+    has_confirmed_email: bool | None = None
 
 
 @strawberry.type
@@ -46,5 +46,5 @@ class UserDeleteSuccess:
 
 
 @strawberry.type
-class SignedUrl:
-    url: str
+class SasToken:
+    token: str

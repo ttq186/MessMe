@@ -46,7 +46,6 @@ const ForceScrollToBottom = () => {
 
 export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const [isOpenEmojiPicker, setOpenEmojiPicker] = useState(false);
-  const [keysPressed, setKeysPressed] = useState([]);
   const inputRef = useRef();
 
   const activeUserChat = useReactiveVar(activeUserChatVar);
@@ -54,9 +53,18 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [getMessages, { data: messagesData, loading }] = useLazyQuery(
     GET_MESSAGES_BY_CHANNEL,
-    { fetchPolicy: "network-only" }
+    // { fetchPolicy: "network-only" }
   );
   const [createMessage] = useMutation(CREATE_MESSAGE);
+
+  const handleInputKeyUp = (event) => {
+    console.log(event);
+    if (event.key === "Enter" && event.shiftKey) {
+      console.log("Shift Enter");
+    } else {
+      console.log("Enter");
+    }
+  };
 
   useEffect(() => {
     if (activeUserChat && currentUserObj) {
@@ -71,16 +79,6 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeUserChat, currentUserObj]);
-
-  const handleInputKeyDown = (event) => {
-    setKeysPressed(event.key);
-  };
-
-  const handleInputKeyUp = (event) => {
-    if (keysPressed === "Enter" && event.key === "Enter") {
-      console.log("submit");
-    }
-  };
 
   const toggleEmojiPicker = () => {
     setOpenEmojiPicker(!isOpenEmojiPicker);
@@ -320,6 +318,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
             placeholder="Aa"
             className="outline-none pr-3 max-h-[90px] overflow-y-scroll scrollbar-transparent hover:scrollbar"
             ref={inputRef}
+            onKeyUp={(e) => handleInputKeyUp(e)}
           />
         </div>
         <Tippy
