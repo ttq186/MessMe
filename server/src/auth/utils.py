@@ -86,7 +86,12 @@ def set_tokens_on_cookie(
 
 
 def set_logout_detection_cookie(response: Response) -> None:
-    response.set_cookie(key="logout", value="0", secure=True)
+    response.set_cookie(
+        key="logout",
+        value="0",
+        secure=True,
+        expires=settings.REFRESH_TOKEN_EXPIRE_MINUTES * 60,
+    )
 
 
 def generate_sas_token() -> str:

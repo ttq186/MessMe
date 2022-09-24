@@ -4,12 +4,7 @@ import "tippy.js/dist/tippy.css";
 import "emoji-mart/css/emoji-mart.css";
 import { default as EmojiData } from "emoji-mart/data/facebook.json";
 import { NimblePicker } from "emoji-mart";
-import {
-  useLazyQuery,
-  useMutation,
-  useQuery,
-  useReactiveVar,
-} from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery, useReactiveVar } from "@apollo/client";
 
 import {
   AvatarIcon,
@@ -52,13 +47,12 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
 
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [getMessages, { data: messagesData, loading }] = useLazyQuery(
-    GET_MESSAGES_BY_CHANNEL,
+    GET_MESSAGES_BY_CHANNEL
     // { fetchPolicy: "network-only" }
   );
-  const [createMessage] = useMutation(CREATE_MESSAGE);
+  const [createMessage] = useMutation(CREATE_MESSAGE, { fetchPolicy: "no-cache" });
 
   const handleInputKeyUp = (event) => {
-    console.log(event);
     if (event.key === "Enter" && event.shiftKey) {
       console.log("Shift Enter");
     } else {
@@ -148,11 +142,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
                 allowHTML={true}
               >
                 <div className="cursor-pointer">
-                  <img
-                    src={SearchIcon}
-                    alt="Search"
-                    className="w-9 h-9 -mb-1"
-                  />
+                  <img src={SearchIcon} alt="Search" className="w-9 h-9 -mb-1" />
                 </div>
               </Tippy>
             }
@@ -185,10 +175,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
             content={<b style={{ color: "#cbd5e1" }}>Friend's Profile</b>}
             allowHTML={true}
           >
-            <div
-              className="cursor-pointer"
-              onClick={() => setOpenFriendProfile(true)}
-            >
+            <div className="cursor-pointer" onClick={() => setOpenFriendProfile(true)}>
               <img src={FriendProfileIcon} alt="Profile" className="w-6 h-6" />
             </div>
           </Tippy>
@@ -227,20 +214,14 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
           </div> */}
           <div>
             {messagesData?.messagesByChannel.map((item) => {
-              if (
-                item.senderId === activeUserChat.id ||
-                item.senderId === currentUserObj?.currentUser.id
-              ) {
+              const isSender = currentUserObj?.currentUser.id === item.senderId;
+              if (item.senderId === activeUserChat.id || isSender) {
                 return (
                   <MainChatMessage
                     key={item._id}
                     id={item._id}
-                    isSender={currentUserObj.currentUser.id === item.senderId}
-                    author={
-                      currentUserObj?.currentUser.id === item.senderId
-                        ? currentUserObj.currentUser
-                        : activeUserChat
-                    }
+                    isSender={isSender}
+                    author={isSender ? currentUserObj.currentUser : activeUserChat}
                     {...item}
                   />
                 );
@@ -265,10 +246,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
               <input id="file-input" type="file" className="hidden" />
             </div>
           </Tippy>
-          <Tippy
-            content={<b style={{ color: "#cbd5e1" }}>Images</b>}
-            allowHTML={true}
-          >
+          <Tippy content={<b style={{ color: "#cbd5e1" }}>Images</b>} allowHTML={true}>
             <div className="mr-4 cursor-pointer">
               <label htmlFor="image-input" className="cursor-pointer">
                 <GalleryIcon fill="#cbd5e1" />
@@ -276,10 +254,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
               <input id="image-input" type="file" className="hidden" />
             </div>
           </Tippy>
-          <Tippy
-            content={<b style={{ color: "#cbd5e1" }}>Emoji</b>}
-            allowHTML={true}
-          >
+          <Tippy content={<b style={{ color: "#cbd5e1" }}>Emoji</b>} allowHTML={true}>
             <div className="mr-4 cursor-pointer">
               <img
                 src={EmojiIcon}

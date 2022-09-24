@@ -9,8 +9,13 @@ from strawberry.types import Info
 
 from . import utils as message_utils
 from .crud import message_crud
-from .schemas import (Message, MessageCreate, MessageDeleteSuccess,
-                      MessageUpdate, ObjectIdType)
+from .schemas import (
+    Message,
+    MessageCreate,
+    MessageDeleteSuccess,
+    MessageUpdate,
+    ObjectIdType,
+)
 
 
 def handle_content_for_hidden_message(message: Message) -> None:

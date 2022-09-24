@@ -21,10 +21,7 @@ import { CHAT_MODE } from "utils/contants/TabModeConstants";
 import { GET_CURRENT_USER, GET_SAS_TOKEN } from "graphql/users";
 import { GET_CONTACTS } from "graphql/contacts";
 import { NotificationSound } from "assets/sounds";
-import {
-  GET_CONTACT_REQUESTS,
-  SUBCRIBE_CONTACT_REQUESTS,
-} from "graphql/contacts";
+import { GET_CONTACT_REQUESTS, SUBCRIBE_CONTACT_REQUESTS } from "graphql/contacts";
 import {
   hasNewNotificationVar,
   contactsIdVar,
@@ -88,25 +85,16 @@ export const Dashboard = () => {
 
   const contactsId = useReactiveVar(contactsIdVar);
   const activeUserChat = useReactiveVar(activeUserChatVar);
-
   const contactsJustSentMessages = useReactiveVar(contactsJustSentMessagesVar);
-  const subscribedChannelIds = useReactiveVar(subscribedChannelIdsVar);
+  const notificationSound = new Howl({ src: NotificationSound });
+
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
-  const [getMessages, { subscribeToMore }] = useLazyQuery(
-    GET_MESSAGES_BY_CHANNEL
-  );
+  const [getMessages, { subscribeToMore }] = useLazyQuery(GET_MESSAGES_BY_CHANNEL);
   const navigate = useNavigate();
   useQuery(GET_SAS_TOKEN);
 
-  const playNotificationSound = () => {
-    const notificationSound = new Howl({
-      src: NotificationSound,
-    });
-    notificationSound.play();
-  };
-
   const notifyNewMessage = () => {
-    playNotificationSound();
+    notificationSound.play();
     document.title = "New Message!";
     setTimeout(() => {
       document.title = "MessMe";
@@ -114,51 +102,9 @@ export const Dashboard = () => {
   };
 
   const notifyNewContactRequest = () => {
-    playNotificationSound();
+    notificationSound.play();
     document.title = "New Friend Request!";
     hasNewNotificationVar(true);
-  };
-
-  const subcribeMessageToAllContacts = () => {
-    for (let contactId of contactsId) {
-      const channelId = generateMessageChannelByUsersId(
-        currentUserObj.currentUser.id,
-        contactId
-      );
-
-      if (subscribedChannelIds.includes(channelId)) return;
-      subscribedChannelIdsVar([...subscribedChannelIds, channelId]);
-
-      subscribeToMore({
-        document: SUBSCRIBE_MESSAGE,
-        variables: {
-          channelId,
-        },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData) return prev;
-          const subscriptionMessage = subscriptionData.data.message;
-          const messageSenderId = subscriptionMessage.senderId;
-
-          if (messageSenderId !== currentUserObj.currentUser.id) {
-            updateLastMessageOfContacts(messageSenderId, subscriptionMessage);
-            notifyNewMessage();
-            if (
-              messageSenderId !== activeUserChat.id &&
-              !contactsJustSentMessages.includes(messageSenderId)
-            ) {
-              contactsJustSentMessagesVar([
-                ...contactsJustSentMessages,
-                messageSenderId,
-              ]);
-            }
-            //   return prev;
-          }
-          return {
-            messagesByChannel: [...prev.messagesByChannel, subscriptionMessage],
-          };
-        },
-      });
-    }
   };
 
   useSubscription(SUBCRIBE_CONTACT_REQUESTS, {
@@ -189,12 +135,42 @@ export const Dashboard = () => {
         },
       });
     }
-  }, [activeUserChat, currentUserObj]);
+  }, [activeUserChat, currentUserObj, getMessages]);
 
   useEffect(() => {
     if (contactsId.length !== 0 && currentUserObj) {
-      subcribeMessageToAllContacts();
+      const currentUserId = currentUserObj.currentUser.id;
+      for (let contactId of contactsId) {
+        const channelId = generateMessageChannelByUsersId(currentUserId, contactId);
+        if (subscribedChannelIdsVar().includes(channelId)) continue;
+        subscribedChannelIdsVar([...subscribedChannelIdsVar(), channelId]);
+
+        subscribeToMore({
+          document: SUBSCRIBE_MESSAGE,
+          variables: { channelId },
+          updateQuery: (prev, { subscriptionData }) => {
+            if (!subscriptionData) return prev;
+            const subscriptionMessage = subscriptionData.data.message;
+            const messageSenderId = subscriptionMessage.senderId;
+
+            if (messageSenderId !== currentUserId) {
+              updateLastMessageOfContacts(messageSenderId, subscriptionMessage);
+              notifyNewMessage();
+              if (!contactsJustSentMessages.includes(messageSenderId)) {
+                contactsJustSentMessagesVar([
+                  ...contactsJustSentMessages,
+                  messageSenderId,
+                ]);
+              }
+            }
+            return {
+              messagesByChannel: [...prev.messagesByChannel, subscriptionMessage],
+            };
+          },
+        });
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactsId, currentUserObj]);
 
   useEffect(() => {
@@ -204,7 +180,7 @@ export const Dashboard = () => {
     } else {
       signInRequiredVar(false);
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="flex">

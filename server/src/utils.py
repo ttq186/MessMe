@@ -19,12 +19,16 @@ def to_camel(string: str) -> str:
 class IsAuthenticatedUser(BasePermission):
     async def has_permission(self, source: Any, info: Info, **kwargs) -> bool:
         current_user = await deps.get_current_user(info)
-        info.context["current_user"] = current_user
-        return True
+        if current_user is not None:
+            info.context["current_user"] = current_user
+            return True
+        return False
 
 
 class IsAuthenticatedAdmin(BasePermission):
     async def has_permission(self, source: Any, info: Info, **kwargs) -> bool:
         current_user = await deps.get_current_superuser(info)
-        info.context["current_user"] = current_user
-        return True
+        if current_user is not None:
+            info.context["current_user"] = current_user
+            return True
+        return False
