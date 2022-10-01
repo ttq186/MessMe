@@ -4,14 +4,13 @@ import strawberry
 from strawberry.types import Info
 
 from src import exceptions, utils
+from src.auth import exceptions as auth_exceptions
+from src.auth import utils as auth_utils
 from src.auth.crud import user_crud
+from src.auth.schemas import (AuthToken, SasToken, User, UserCreate,
+                              UserDeleteSuccess, UserUpdate)
 from src.config import settings
 from src.contact.crud import contact_crud
-
-from . import exceptions as auth_exceptions
-from . import utils as auth_utils
-from .schemas import (AuthToken, SasToken, User, UserCreate, UserDeleteSuccess,
-                      UserUpdate)
 
 
 class ContactStatus(str, Enum):

@@ -1,6 +1,5 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from redis import asyncio as aioredis
-from redis.client import PubSub
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 

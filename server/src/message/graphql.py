@@ -78,6 +78,10 @@ async def resolver_update_message(info: Info, message_in: MessageUpdate) -> Mess
 
     message = await message_crud.update(mongo_db, message_in=message_in)
     handle_content_for_hidden_message(message)
+    if message.is_hidden:
+        await redis.publish(
+            channel=message.channel_id, message=json_util.dumps(message.__dict__)
+        )
     return message
 
 

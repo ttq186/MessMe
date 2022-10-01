@@ -4,7 +4,7 @@ from typing import Any
 from strawberry import BasePermission
 from strawberry.types import Info
 
-from . import deps
+from src import deps
 
 
 def generate_uuid() -> str:

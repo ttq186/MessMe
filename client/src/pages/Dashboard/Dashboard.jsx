@@ -150,6 +150,19 @@ export const Dashboard = () => {
           updateQuery: (prev, { subscriptionData }) => {
             if (!subscriptionData) return prev;
             const subscriptionMessage = subscriptionData.data.message;
+            const indexOfDuplicatedMessage = prev.messagesByChannel.findIndex(
+              (message) => message._id === subscriptionMessage._id
+            );
+            const currentMessages = prev.messagesByChannel;
+            if (indexOfDuplicatedMessage !== -1) {
+              return {
+                messagesByChannel: [
+                  ...currentMessages.slice(0, indexOfDuplicatedMessage),
+                  subscriptionMessage,
+                  ...currentMessages.slice(indexOfDuplicatedMessage + 1),
+                ],
+              };
+            }
             const messageSenderId = subscriptionMessage.senderId;
 
             if (messageSenderId !== currentUserId) {
@@ -163,7 +176,7 @@ export const Dashboard = () => {
               }
             }
             return {
-              messagesByChannel: [...prev.messagesByChannel, subscriptionMessage],
+              messagesByChannel: [...currentMessages, subscriptionMessage],
             };
           },
         });

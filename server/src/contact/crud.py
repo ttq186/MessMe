@@ -1,10 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.contact.models import Contact as ContactModal
+from src.contact.schemas import Contact as ContactSchema
 from src.crud import BaseCRUD
-
-from .models import Contact as ContactModal
-from .schemas import Contact as ContactSchema
 
 
 class ContactCRUD(BaseCRUD[ContactModal, ContactSchema]):
