@@ -1,4 +1,3 @@
-import { useReactiveVar } from "@apollo/client";
 import { AvatarIcon } from "assets/icons";
 import { activeUserChatVar, contactsJustSentMessagesVar } from "cache";
 
@@ -9,13 +8,13 @@ export const UsersChatItem = ({
   lastMessage,
   hasJustSentMessage,
 }) => {
-  const contactsJustSentMessages = useReactiveVar(contactsJustSentMessagesVar);
   const handleUserChatClick = () => {
-    if (contactsJustSentMessages.includes(friend.id)) {
-      const contactIdIndex = contactsJustSentMessages.indexOf(friend.id);
-      contactsJustSentMessages.pop(contactIdIndex);
+    if (contactsJustSentMessagesVar().includes(friend.id)) {
+      contactsJustSentMessagesVar(
+        contactsJustSentMessagesVar().filter((contactId) => contactId !== friend.id)
+      );
     }
-    if (activeUserChatVar.id !== friend.id) {
+    if (activeUserChatVar().id !== friend.id) {
       activeUserChatVar(friend);
     }
   };
@@ -35,11 +34,7 @@ export const UsersChatItem = ({
         {!friend.avatarUrl ? (
           <AvatarIcon width="40px" height="40px" />
         ) : (
-          <img
-            src={friend.avatarUrl}
-            alt="Friend"
-            className="w-10 h-10 rounded-full"
-          />
+          <img src={friend.avatarUrl} alt="Friend" className="w-10 h-10 rounded-full" />
         )}
         {isActive && (
           <span className="w-3 h-3 rounded-full  bg-green-500 -ml-2 border-slate-200 border-2"></span>

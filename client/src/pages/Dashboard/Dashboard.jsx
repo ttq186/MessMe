@@ -85,7 +85,6 @@ export const Dashboard = () => {
 
   const contactsId = useReactiveVar(contactsIdVar);
   const activeUserChat = useReactiveVar(activeUserChatVar);
-  const contactsJustSentMessages = useReactiveVar(contactsJustSentMessagesVar);
   const notificationSound = new Howl({ src: NotificationSound });
 
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
@@ -156,9 +155,9 @@ export const Dashboard = () => {
             if (messageSenderId !== currentUserId) {
               updateLastMessageOfContacts(messageSenderId, subscriptionMessage);
               notifyNewMessage();
-              if (!contactsJustSentMessages.includes(messageSenderId)) {
+              if (!contactsJustSentMessagesVar().includes(messageSenderId)) {
                 contactsJustSentMessagesVar([
-                  ...contactsJustSentMessages,
+                  ...contactsJustSentMessagesVar(),
                   messageSenderId,
                 ]);
               }

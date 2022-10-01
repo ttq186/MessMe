@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import strawberry
+
 from src.auth.schemas import User
 from src.message.schemas import Message
 
@@ -12,8 +13,8 @@ class Contact:
     accepter_id: str | None
     created_at: datetime | None
     invitation_message: str | None
-    friend: User | None
     is_established: bool | None
+    friend: User | None = None
     last_message: Message | None = None
 
 

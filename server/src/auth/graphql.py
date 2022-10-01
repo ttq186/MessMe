@@ -1,29 +1,23 @@
-from datetime import timedelta
+from enum import Enum
 
 import strawberry
 from strawberry.types import Info
-from fastapi import Response
+
 from src import exceptions, utils
 from src.auth.crud import user_crud
-from src.contact.crud import contact_crud
 from src.config import settings
+from src.contact.crud import contact_crud
 
 from . import exceptions as auth_exceptions
 from . import utils as auth_utils
-from .schemas import SasToken, User, UserCreate, UserDeleteSuccess, UserUpdate
+from .schemas import (AuthToken, SasToken, User, UserCreate, UserDeleteSuccess,
+                      UserUpdate)
 
 
-def set_credentials_after_logging(response: Response, user_id: str):
-    access_token = auth_utils.create_token(payload={"user_id": user_id})
-    refresh_token = auth_utils.create_token(
-        payload={"user_id": user_id},
-        expires_in=timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES),
-        secret_key=settings.REFRESH_SECRET_KEY,
-    )
-    auth_utils.set_tokens_on_cookie(
-        response=response, access_token=access_token, refresh_token=refresh_token
-    )
-    auth_utils.set_logout_detection_cookie(response)
+class ContactStatus(str, Enum):
+    STRANGER = "Stranger"
+    FRIEND = "Friend"
+    REQUESTED = "Requested"
 
 
 async def resolver_login(info: Info, email: str, password: str) -> User:
@@ -35,7 +29,14 @@ async def resolver_login(info: Info, email: str, password: str) -> User:
         raise auth_exceptions.AccountCreatedByGoogle()
     if not auth_utils.verify_password(password, user.password):
         raise auth_exceptions.InvalidLoginCredentials()
-    set_credentials_after_logging(response=info.context["response"], user_id=user.id)
+
+    access_token = auth_utils.create_access_token(user.id)
+    refresh_token = auth_utils.create_refresh_token(user.id)
+    auth_utils.set_credentials_after_logging(
+        response=info.context["response"],
+        access_token=access_token,
+        refresh_token=refresh_token,
+    )
     return user
 
 
@@ -49,7 +50,14 @@ async def resolver_login_via_google(info: Info, tokenId: str) -> User:
         raise auth_exceptions.AccountCreatedWithoutGoogle()
     if user is None:
         user = await user_crud.create(session, obj_in=User(email=email))
-    set_credentials_after_logging(response=info.context["response"], user_id=user.id)
+
+    access_token = auth_utils.create_access_token(user.id)
+    refresh_token = auth_utils.create_refresh_token(user.id)
+    auth_utils.set_credentials_after_logging(
+        response=info.context["response"],
+        access_token=access_token,
+        refresh_token=refresh_token,
+    )
     return user
 
 
@@ -134,7 +142,26 @@ async def resolver_delete_user(info: Info, id: str) -> UserDeleteSuccess:
     return UserDeleteSuccess(message="Deleted Successfully!")
 
 
-async def resolver_get_sas_token() -> SasToken:
+async def resolver_refresh_token(info: Info) -> AuthToken:
+    refresh_token = info.context.cookies.get("rftk")
+    token_data = auth_utils.decode_token(
+        token=refresh_token, secret_key=settings.REFRESH_SECRET_KEY
+    )
+    user = await user_crud.get(info.context["pg_session"], id=token_data.get("user_id"))
+    if user is None:
+        raise auth_exceptions.InvalidToken()
+    payload = {"user_id": user.id}
+    new_access_token = auth_utils.create_access_token(payload)
+    new_refresh_token = auth_utils.create_refresh_token(payload)
+    auth_utils.set_credentials_after_logging(
+        info.context.response,
+        access_token=new_access_token,
+        refresh_token=new_refresh_token,
+    )
+    return AuthToken(access_token=new_access_token, refresh_token=new_refresh_token)
+
+
+def resolver_get_sas_token() -> SasToken:
     sas_token = auth_utils.generate_sas_token()
     return SasToken(token=sas_token)
 
@@ -143,6 +170,7 @@ async def resolver_get_sas_token() -> SasToken:
 class AuthQuery:
     login: User = strawberry.field(resolver=resolver_login)
     login_via_google: User = strawberry.field(resolver=resolver_login_via_google)
+    refresh_token: AuthToken = strawberry.field(resolver=resolver_refresh_token)
 
 
 @strawberry.type

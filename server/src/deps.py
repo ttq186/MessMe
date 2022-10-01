@@ -1,11 +1,12 @@
 from typing import AsyncGenerator
 
+from strawberry.types import Info
+
 from src import exceptions
 from src.auth import schemas as auth_schemas
 from src.auth import utils as auth_utils
 from src.auth.crud import user_crud
 from src.database import mongo_client, postgres_session
-from strawberry.types import Info
 
 
 async def get_postgres_session() -> AsyncGenerator:
@@ -24,7 +25,7 @@ async def get_current_user(info: Info) -> auth_schemas.User:
     if logout_value != "0" or access_token is None:
         raise exceptions.NotAuthenticated()
 
-    token_data = auth_utils.decode_access_token(access_token)
+    token_data = auth_utils.decode_token(access_token)
     pg_session = info.context["pg_session"]
     user = await user_crud.get(pg_session, id=token_data["user_id"])
     return user

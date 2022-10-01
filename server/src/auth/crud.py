@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from src.crud import BaseCRUD
 
 from .models import User as UserModel

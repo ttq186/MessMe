@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  useLazyQuery,
-  useMutation,
-  useQuery,
-  useReactiveVar,
-} from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery, useReactiveVar } from "@apollo/client";
 
 import { Modal } from "components/Modal";
 import { CREATE_CONTACT } from "graphql/contacts";
@@ -31,17 +26,11 @@ const UserItem = ({ id, avatarUrl, username, email, partnerStatus }) => {
         {!avatarUrl ? (
           <AvatarIcon width="40px" height="40px" />
         ) : (
-          <img
-            src={avatarUrl}
-            alt="Friend"
-            className="w-10 h-10 rounded-full"
-          />
+          <img src={avatarUrl} alt="Friend" className="w-10 h-10 rounded-full" />
         )}
       </div>
       <div className="grow ml-2">
-        <p className="font-bold -mt-0.5">
-          {username ? username : email.split("@")[0]}
-        </p>
+        <p className="font-bold -mt-0.5">{username ? username : email.split("@")[0]}</p>
         <p className="text-sm text-slate-300 font-medium">{partnerStatus}</p>
       </div>
       {((partnerStatus === "Stranger" && !currentChoseUserId) ||
@@ -147,7 +136,7 @@ export const ContactModal = ({ triggerButton }) => {
               <div className="max-h-[280px] pl-1 mr-1 bg-slate-600 overflow-y-scroll scrollbar-transparent hover:scrollbar">
                 {data.users.map((user) => {
                   if (user.id === currentUserObj?.currentUser.id)
-                    return <div />;
+                    return <div key={user.id} />;
                   return <UserItem key={user.id} {...user} />;
                 })}
               </div>

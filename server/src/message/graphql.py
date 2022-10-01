@@ -1,21 +1,18 @@
+import asyncio
 from typing import AsyncIterator
 
 import strawberry
 from bson import json_util
-from src import exceptions, utils
-from src.auth.crud import user_crud
-from src.database import broadcast
+from redis.client import PubSub
 from strawberry.types import Info
 
-from . import utils as message_utils
-from .crud import message_crud
-from .schemas import (
-    Message,
-    MessageCreate,
-    MessageDeleteSuccess,
-    MessageUpdate,
-    ObjectIdType,
-)
+from src import exceptions, utils
+from src.auth.crud import user_crud
+from src.database import redis
+from src.message import utils as message_utils
+from src.message.crud import message_crud
+from src.message.schemas import (Message, MessageCreate, MessageDeleteSuccess,
+                                 MessageUpdate, ObjectIdType)
 
 
 def handle_content_for_hidden_message(message: Message) -> None:
@@ -64,7 +61,7 @@ async def resolver_create_message(
             current_user.id, receiver_id
         )
     message = await message_crud.create(info.context["mongo_db"], message_in)
-    await broadcast.publish(
+    await redis.publish(
         channel=message_in.channel_id, message=json_util.dumps(message.__dict__)
     )
     return message
@@ -131,7 +128,16 @@ class MessageMutation:
 class MessageSubscription:
     @strawberry.subscription
     async def message(self, channel_id: str) -> AsyncIterator[Message]:
-        async with broadcast.subscribe(channel=channel_id) as subscriber:
-            async for event in subscriber:
-                data = json_util.loads(event.message)
-                yield Message(**data)
+        pubsub: PubSub
+        async with redis.pubsub() as pubsub:
+            if channel_id not in pubsub.channels:
+                await pubsub.subscribe(channel_id)
+            while True:
+                try:
+                    message = await pubsub.get_message(ignore_subscribe_messages=True)
+                    if message is not None:
+                        data = json_util.loads(message["data"])
+                        yield Message(**data)
+                    await asyncio.sleep(0.01)
+                except asyncio.TimeoutError:
+                    pass

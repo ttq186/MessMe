@@ -1,13 +1,7 @@
 import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import {
-  ApolloClient,
-  InMemoryCache,
-  split,
-  HttpLink,
-  from,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, split, HttpLink, from } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 
 const httpLink = new HttpLink({
@@ -33,16 +27,10 @@ const splitLink = split(
   httpLink
 );
 
-const errorLink = onError(
-  ({ graphQLErrors, networkError, operation, forward }) => {
-    if (graphQLErrors) {
-      console.log(graphQLErrors);
-    }
-    if (networkError) {
-      console.log(`[Network error]: ${networkError}`);
-    }
+const errorLink = onError(({ networkError, operation, forward }) => {
+  if (networkError?.message === "Not authenticated!") {
   }
-);
+});
 
 export const client = new ApolloClient({
   link: from([errorLink, splitLink]),

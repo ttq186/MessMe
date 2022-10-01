@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware import cors, gzip
-from sqlalchemy import text
-from src.database import (broadcast, mongo_client, postgres_engine,
-                          postgres_session)
+
+from src.database import postgres_engine, postgres_session
 from src.graphql import graphql_app
 
 app = FastAPI(title="MessMe")
@@ -27,19 +26,13 @@ app.add_middleware(gzip.GZipMiddleware, minimum_size=1000)
 
 @app.on_event("startup")
 async def startup_event():
-    await broadcast.connect()
-
-    # Test postgresql connection
-    async with postgres_engine.connect() as conn:
-        await conn.execute(text("SELECT 1"))
-
-    # # Test mongodb connection
-    await mongo_client.start_session()
+    # await broadcast.connect()
+    pass
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    await broadcast.disconnect()
+    # await broadcast.disconnect()
     postgres_session.close_all()
     await postgres_engine.dispose()
 

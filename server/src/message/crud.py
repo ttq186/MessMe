@@ -29,7 +29,7 @@ class MessageCRUD:
             .limit(1)
             .to_list(1)
         )
-        return Message(**message[0]) if message != 0 else None
+        return Message(**message[0]) if message else None
 
     async def get(self, mongo_db: AsyncIOMotorDatabase, id: ObjectId) -> Message | None:
         message = await mongo_db["messages"].find_one({"_id": id})

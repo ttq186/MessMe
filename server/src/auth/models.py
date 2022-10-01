@@ -2,6 +2,7 @@ import uuid
 
 from sqlalchemy import Boolean, Column, Date, DateTime, String, Text
 from sqlalchemy.sql import func
+
 from src.models import BaseModel
 
 # from sqlalchemy.orm import relationship

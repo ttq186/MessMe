@@ -48,9 +48,8 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [getMessages, { data: messagesData, loading }] = useLazyQuery(
     GET_MESSAGES_BY_CHANNEL
-    // { fetchPolicy: "network-only" }
   );
-  const [createMessage] = useMutation(CREATE_MESSAGE, { fetchPolicy: "no-cache" });
+  const [createMessage] = useMutation(CREATE_MESSAGE);
 
   const handleInputKeyUp = (event) => {
     if (event.key === "Enter" && event.shiftKey) {

@@ -1,20 +1,22 @@
+import asyncio
 from datetime import datetime
 from typing import AsyncIterator
 
 import strawberry
 from bson import json_util
-from src import deps, exceptions, utils
-from src.auth.crud import user_crud
-from src.database import broadcast
-from src.message import utils as message_utils
-from src.message.crud import message_crud
+from redis.client import PubSub
 from strawberry.types import Info
 
-from . import exceptions as contact_exceptions
-from . import utils as contact_utils
-from .crud import contact_crud
-from .schemas import (Contact, ContactCreate, ContactDeleteSuccess,
-                      ContactUpdate)
+from src import deps, exceptions, utils
+from src.auth.crud import user_crud
+from src.contact import exceptions as contact_exceptions
+from src.contact import utils as contact_utils
+from src.contact.crud import contact_crud
+from src.contact.schemas import (Contact, ContactCreate, ContactDeleteSuccess,
+                                 ContactUpdate)
+from src.database import redis
+from src.message import utils as message_utils
+from src.message.crud import message_crud
 
 
 async def resolver_get_contact_request(info: Info) -> list[Contact]:
@@ -113,11 +115,8 @@ async def resolver_create_contact(
     contact_in.accepter_id = accepter.id
     contact = await contact_crud.create(pg_session, contact_in)
 
-    pushed_message = {
-        **contact.to_dict(exclude=["requester", "accepter"]),
-        # "friend": accepter.to_dict(),
-    }
-    await broadcast.publish(
+    pushed_message = contact.to_dict(exclude=["requester", "accepter"])
+    await redis.publish(
         channel=contact_utils.generate_contact_requests_channel(partner_id),
         message=json_util.dumps(pushed_message),
     )
@@ -174,6 +173,7 @@ class ContactQuery:
         resolver=resolver_get_contact,
         permission_classes=[utils.IsAuthenticatedUser],
     )
+    online_contact_ids: Contact
 
 
 @strawberry.type
@@ -198,7 +198,15 @@ class ContactSubscription:
     async def contact_requests(self, info: Info) -> AsyncIterator[Contact]:
         current_user = await deps.get_current_user(info)
         channel_id = contact_utils.generate_contact_requests_channel(current_user.id)
-        async with broadcast.subscribe(channel=channel_id) as subcriber:
-            async for event in subcriber:
-                data = json_util.loads(event.message)
-                yield Contact(**data)
+        pubsub: PubSub
+        async with redis.pubsub() as pubsub:
+            await pubsub.subscribe(channel_id)
+            while True:
+                try:
+                    message = await pubsub.get_message(ignore_subscribe_messages=True)
+                    if message is not None:
+                        data = json_util.loads(message["data"])
+                        yield Contact(**data)
+                    await asyncio.sleep(0.01)
+                except asyncio.TimeoutError:
+                    pass

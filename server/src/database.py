@@ -1,7 +1,9 @@
-from broadcaster import Broadcast
 from motor.motor_asyncio import AsyncIOMotorClient
+from redis import asyncio as aioredis
+from redis.client import PubSub
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+
 from src.config import settings
 
 POSTGRES_URL = (
@@ -19,4 +21,4 @@ MONGO_URL = f"mongodb://{settings.MONGO_HOSTNAME}:{settings.MONGO_PORT}"
 mongo_client = AsyncIOMotorClient(MONGO_URL)
 
 REDIS_URL = f"redis://{settings.REDIS_HOSTNAME}:{settings.REDIS_PORT}"
-broadcast = Broadcast(REDIS_URL)
+redis = aioredis.Redis.from_url(url=REDIS_URL)
