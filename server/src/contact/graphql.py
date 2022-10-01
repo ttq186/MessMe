@@ -8,7 +8,6 @@ from redis.client import PubSub
 from strawberry.types import Info
 
 from src import deps, exceptions, utils
-from src.auth.crud import user_crud
 from src.contact import exceptions as contact_exceptions
 from src.contact import utils as contact_utils
 from src.contact.crud import contact_crud
@@ -17,6 +16,7 @@ from src.contact.schemas import (Contact, ContactCreate, ContactDeleteSuccess,
 from src.database import redis
 from src.message import utils as message_utils
 from src.message.crud import message_crud
+from src.user.crud import user_crud
 
 
 async def resolver_get_contact_request(info: Info) -> list[Contact]:

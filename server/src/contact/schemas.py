@@ -1,9 +1,16 @@
 from datetime import datetime
+from enum import Enum
 
 import strawberry
 
-from src.auth.schemas import User
 from src.message.schemas import Message
+from src.user.schemas import User
+
+
+class ContactStatus(str, Enum):
+    STRANGER = "Stranger"
+    FRIEND = "Friend"
+    REQUESTED = "Requested"
 
 
 @strawberry.type

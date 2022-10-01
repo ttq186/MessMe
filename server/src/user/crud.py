@@ -1,9 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.auth.models import User as UserModel
-from src.auth.schemas import User as UserSchema
 from src.crud import BaseCRUD
+from src.user.models import User as UserModel
+from src.user.schemas import User as UserSchema
 
 
 class UserCRUD(BaseCRUD[UserModel, UserSchema]):

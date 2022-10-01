@@ -1,5 +1,4 @@
 import uuid
-from typing import Any
 
 from strawberry import BasePermission
 from strawberry.types import Info
@@ -17,7 +16,7 @@ def to_camel(string: str) -> str:
 
 
 class IsAuthenticatedUser(BasePermission):
-    async def has_permission(self, source: Any, info: Info, **kwargs) -> bool:
+    async def has_permission(self, _, info: Info, **kwargs) -> bool:
         current_user = await deps.get_current_user(info)
         if current_user is not None:
             info.context["current_user"] = current_user
@@ -26,7 +25,7 @@ class IsAuthenticatedUser(BasePermission):
 
 
 class IsAuthenticatedAdmin(BasePermission):
-    async def has_permission(self, source: Any, info: Info, **kwargs) -> bool:
+    async def has_permission(self, _, info: Info, **kwargs) -> bool:
         current_user = await deps.get_current_superuser(info)
         if current_user is not None:
             info.context["current_user"] = current_user

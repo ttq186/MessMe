@@ -7,12 +7,12 @@ from redis.client import PubSub
 from strawberry.types import Info
 
 from src import exceptions, utils
-from src.auth.crud import user_crud
 from src.database import redis
 from src.message import utils as message_utils
 from src.message.crud import message_crud
 from src.message.schemas import (Message, MessageCreate, MessageDeleteSuccess,
                                  MessageUpdate, ObjectIdType)
+from src.user.crud import user_crud
 
 
 def handle_content_for_hidden_message(message: Message) -> None:
@@ -134,7 +134,7 @@ class MessageSubscription:
     async def message(self, channel_id: str) -> AsyncIterator[Message]:
         pubsub: PubSub
         async with redis.pubsub() as pubsub:
-            if channel_id not in pubsub.channels:
+            if channel_id.encode() not in pubsub.channels:
                 await pubsub.subscribe(channel_id)
             while True:
                 try:

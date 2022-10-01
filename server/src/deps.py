@@ -3,10 +3,10 @@ from typing import AsyncGenerator
 from strawberry.types import Info
 
 from src import exceptions
-from src.auth import schemas as auth_schemas
 from src.auth import utils as auth_utils
-from src.auth.crud import user_crud
 from src.database import mongo_client, postgres_session
+from src.user.crud import user_crud
+from src.user.schemas import User
 
 
 async def get_postgres_session() -> AsyncGenerator:
@@ -18,7 +18,7 @@ def get_mongo_db():
     return mongo_client.messme
 
 
-async def get_current_user(info: Info) -> auth_schemas.User:
+async def get_current_user(info: Info) -> User:
     cookies = info.context["request"].cookies
     access_token = cookies.get("actk")
     logout_value = cookies.get("logout")
@@ -31,7 +31,7 @@ async def get_current_user(info: Info) -> auth_schemas.User:
     return user
 
 
-async def get_current_superuser(info: Info) -> auth_schemas.User:
+async def get_current_superuser(info: Info) -> User:
     current_user = await get_current_user(info)
     if not current_user.is_admin:
         raise exceptions.NotAuthorized()

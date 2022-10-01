@@ -7,11 +7,12 @@ from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL
 from strawberry.tools import merge_types
 
 from src import deps
-from src.auth.graphql import AuthQuery, UserMutation, UserQuery
+from src.auth.graphql import AuthQuery
 from src.contact.graphql import (ContactMutation, ContactQuery,
                                  ContactSubscription)
 from src.message.graphql import (MessageMutation, MessageQuery,
                                  MessageSubscription)
+from src.user.graphql import UserMutation, UserQuery
 
 
 async def get_context(
