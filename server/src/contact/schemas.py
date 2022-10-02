@@ -41,3 +41,8 @@ class ContactUpdate:
 @strawberry.type
 class ContactDeleteSuccess:
     message: str
+
+
+@strawberry.type
+class OnlineContact:
+    id: str

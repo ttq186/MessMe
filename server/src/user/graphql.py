@@ -7,6 +7,7 @@ from src.contact.crud import contact_crud
 from src.contact.schemas import ContactStatus
 from src.user.crud import user_crud
 from src.user.schemas import User, UserCreate, UserDeleteSuccess, UserUpdate
+from src.database import redis
 
 
 async def resolver_get_users(info: Info, search: str | None = None) -> list[User]:
@@ -31,7 +32,7 @@ async def resolver_get_users(info: Info, search: str | None = None) -> list[User
             **user.to_dict(),
             partner_status=partners_status_by_id[user.id]
             if partners_status_by_id.get(user.id) is not None
-            else ContactStatus.STRANGER
+            else ContactStatus.STRANGER,
         )
         for user in users
     ]
@@ -50,6 +51,23 @@ async def resolver_get_user(info: Info, id: str) -> User | None:
 async def resolver_get_current_user(info: Info) -> User | None:
     current_user = info.context["current_user"]
     return current_user
+
+
+async def resolver_get_online_user_ids(info: Info) -> list[strawberry.ID]:
+    current_user = info.context["current_user"]
+    contacts = await contact_crud.get_multi_by_requester_or_accepter_id(
+        info.context["pg_session"], user_id=current_user.id, is_established=True
+    )
+    user_ids = [
+        contact.accepter_id
+        if contact.accepter_id != current_user.id
+        else contact.requester_id
+        for contact in contacts
+    ]
+    async with redis.client() as conn:
+        await conn.set(f"user:{current_user.id}", "online", ex=5)
+        statuses = await conn.mget(*[f"user:{user_id}" for user_id in user_ids])
+    return [id for id, status in zip(user_ids, statuses) if status == b"online"]
 
 
 async def resolver_create_user(info: Info, user_in: UserCreate) -> User:
@@ -99,6 +117,10 @@ class UserQuery:
     )
     current_user: User = strawberry.field(
         resolver=resolver_get_current_user,
+        permission_classes=[utils.IsAuthenticatedUser],
+    )
+    online_user_ids: list[strawberry.ID] = strawberry.field(
+        resolver=resolver_get_online_user_ids,
         permission_classes=[utils.IsAuthenticatedUser],
     )
 

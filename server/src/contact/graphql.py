@@ -11,8 +11,12 @@ from src import deps, exceptions, utils
 from src.contact import exceptions as contact_exceptions
 from src.contact import utils as contact_utils
 from src.contact.crud import contact_crud
-from src.contact.schemas import (Contact, ContactCreate, ContactDeleteSuccess,
-                                 ContactUpdate)
+from src.contact.schemas import (
+    Contact,
+    ContactCreate,
+    ContactDeleteSuccess,
+    ContactUpdate,
+)
 from src.database import redis
 from src.message import utils as message_utils
 from src.message.crud import message_crud
@@ -62,7 +66,7 @@ async def resolver_get_contacts(
 async def resolver_get_contact(
     info: Info, id: strawberry.ID | None = None, partner_id: str | None = None
 ) -> Contact | None:
-    current_user = info.context.get("current_user")
+    current_user = info.context["current_user"]
     pg_session = info.context["pg_session"]
     if id is not None:
         contact = await contact_crud.get(pg_session, id=id)
@@ -92,7 +96,7 @@ async def resolver_get_contact(
 async def resolver_create_contact(
     info: Info, partner_id: str | None, contact_in: ContactCreate | None
 ) -> Contact:
-    current_user = info.context.get("current_user")
+    current_user = info.context["current_user"]
     pg_session = info.context["pg_session"]
 
     if current_user.id == partner_id:
@@ -134,7 +138,7 @@ async def resolver_update_contact(
     if contact is None:
         raise exceptions.ResourceNotFound(resource_type="Contact", id=id)
 
-    current_user = info.context.get("current_user")
+    current_user = info.context["current_user"]
     if current_user.id not in [contact.requester_id, contact.accepter_id]:
         raise exceptions.NotAuthorized()
     contact = await contact_crud.update(pg_session, db_obj=contact, obj_in=contact_in)
@@ -152,7 +156,7 @@ async def resolver_delete_contact(
     if contact is None:
         raise exceptions.ResourceNotFound(resource_type="Contact", id=id)
 
-    current_user = info.context.get("current_user")
+    current_user = info.context["current_user"]
     if current_user.id not in [contact.requester_id, contact.accepter_id]:
         raise exceptions.NotAuthorized()
     await contact_crud.delete(pg_session, id=id)
@@ -173,7 +177,6 @@ class ContactQuery:
         resolver=resolver_get_contact,
         permission_classes=[utils.IsAuthenticatedUser],
     )
-    online_contact_ids: Contact
 
 
 @strawberry.type

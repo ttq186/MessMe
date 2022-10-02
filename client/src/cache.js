@@ -10,6 +10,7 @@ export const hasSubcribeMessageVar = makeVar(false);
 export const contactsJustSentMessagesVar = makeVar([]);
 export const signInRequiredVar = makeVar(false);
 export const subscribedChannelIdsVar = makeVar([]);
+export const onlineUserIdsVar = makeVar([]);
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -63,6 +64,11 @@ export const cache = new InMemoryCache({
         subscribedChannelIds: {
           read() {
             return subscribedChannelIdsVar();
+          },
+        },
+        onlineUserIds: {
+          read() {
+            return onlineUserIdsVar();
           },
         },
       },

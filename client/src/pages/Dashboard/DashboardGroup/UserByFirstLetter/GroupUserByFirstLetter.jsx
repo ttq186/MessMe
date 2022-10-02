@@ -7,7 +7,7 @@ export const ContactByFirstLetter = () => {
           type="checkbox"
           className="mx-2 rounded-[3px] bg-gray-500 text-gray-600 focus:ring-0"
         />
-        Albert Rodarte
+        Lorem Ipsum
       </label>
 
       <br />
@@ -17,7 +17,7 @@ export const ContactByFirstLetter = () => {
           type="checkbox"
           className="mx-2 rounded-[3px] bg-gray-500 text-gray-600 focus:ring-0"
         />
-        Albert Rodarte
+        Lorem Ipsum
       </label>
     </div>
   );

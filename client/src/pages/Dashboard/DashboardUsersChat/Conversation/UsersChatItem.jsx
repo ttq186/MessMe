@@ -36,9 +36,11 @@ export const UsersChatItem = ({
         ) : (
           <img src={friend.avatarUrl} alt="Friend" className="w-10 h-10 rounded-full" />
         )}
-        {isActive && (
-          <span className="w-3 h-3 rounded-full  bg-green-500 -ml-2 border-slate-200 border-2"></span>
-        )}
+        <span
+          className={`w-3 h-3 rounded-full -ml-2 border-slate-200 border-2 ${
+            isActive ? "bg-green-500" : "bg-red-400 opacity-80"
+          }`}
+        />
       </div>
       <div className="grow">
         <div className="flex justify-between">

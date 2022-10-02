@@ -19,8 +19,9 @@ const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+      (definition.kind === "OperationDefinition" &&
+        definition.operation === "subscription") ||
+      definition.name.value === "OnlineUserIds"
     );
   },
   wsLink,

@@ -41,6 +41,12 @@ export const GET_CURRENT_USER = gql`
   }
 `;
 
+export const GET_ONLINE_USER_IDS = gql`
+  query OnlineUserIds {
+    onlineUserIds
+  }
+`;
+
 export const GET_SAS_TOKEN = gql`
   query SasToken {
     sasToken {

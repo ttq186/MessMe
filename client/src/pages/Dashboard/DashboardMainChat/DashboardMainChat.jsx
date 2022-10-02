@@ -26,8 +26,8 @@ import {
   SearchDropdown,
 } from "pages/Dashboard/DashboardMainChat";
 import { CREATE_MESSAGE, GET_MESSAGES_BY_CHANNEL } from "graphql/messages";
-import { GET_CURRENT_USER } from "graphql/users";
-import { activeUserChatVar } from "cache";
+import { GET_CURRENT_USER, GET_ONLINE_USER_IDS } from "graphql/users";
+import { activeUserChatVar, onlineUserIdsVar } from "cache";
 import { CurrentUserSkeleton } from "./Skeleton/CurrentUserSkeleton";
 import { MessageSkeleton } from "./Skeleton/MessageSkeleton";
 import { generateMessageChannelByUsersId } from "utils";
@@ -44,12 +44,17 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
   const inputRef = useRef();
 
   const activeUserChat = useReactiveVar(activeUserChatVar);
+  const onlineUserIds = useReactiveVar(onlineUserIdsVar);
 
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [getMessages, { data: messagesData, loading }] = useLazyQuery(
     GET_MESSAGES_BY_CHANNEL
   );
   const [createMessage] = useMutation(CREATE_MESSAGE);
+  useQuery(GET_ONLINE_USER_IDS, {
+    pollInterval: 5000,
+    onCompleted: ({ onlineUserIds }) => onlineUserIdsVar(onlineUserIds),
+  });
 
   const handleInputKeyUp = (event) => {
     if (event.key === "Enter" && event.shiftKey) {
@@ -129,7 +134,11 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
                   ? activeUserChat.username
                   : activeUserChat?.email.split("@")[0]}
               </p>
-              <p className="ml-2 text-xs text-green-300">Online</p>
+              {onlineUserIds.includes(activeUserChat.id) ? (
+                <p className="ml-2 text-xs text-green-300">Online</p>
+              ) : (
+                <p className="ml-2 text-xs text-red-400 opacity-90">Offline</p>
+              )}
             </div>
           </div>
         )}

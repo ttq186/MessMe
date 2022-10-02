@@ -8,18 +8,18 @@ import {
   activeUserChatVar,
   contactsIdVar,
   contactsJustSentMessagesVar,
+  onlineUserIdsVar,
 } from "cache";
 import { UsersChatSkeleton } from "./Skeleton/UsersChatSkeleton";
 
 export const DashboardUsersChat = () => {
-  const [contactsByLastInteraction, setContactsByLastInteraction] = useState(
-    []
-  );
+  const [contactsByLastInteraction, setContactsByLastInteraction] = useState([]);
   const [contactsBySearchValue, setContactsBySearchValue] = useState(
     contactsByLastInteraction
   );
   const activeUserChat = useReactiveVar(activeUserChatVar);
   const contactsJustSentMessages = useReactiveVar(contactsJustSentMessagesVar);
+  const onlineUserIds = useReactiveVar(onlineUserIdsVar);
 
   const sortContactByLastMessage = (firstContact, secondContact) => {
     if (!firstContact.lastMessage) return 1;
@@ -88,11 +88,9 @@ export const DashboardUsersChat = () => {
             <UsersChatItem
               key={item.friend.id}
               {...item}
-              isActive={true}
+              isActive={onlineUserIds.includes(item.friend.id)}
               isChose={activeUserChat.id === item.friend.id}
-              hasJustSentMessage={contactsJustSentMessages.includes(
-                item.friend.id
-              )}
+              hasJustSentMessage={contactsJustSentMessages.includes(item.friend.id)}
             />
           ))
         )}
