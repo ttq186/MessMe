@@ -29,8 +29,13 @@ const splitLink = split(
 );
 
 const errorLink = onError(({ networkError, operation, forward }) => {
-  if (networkError?.message === "Not authenticated!") {
+  if (networkError) {
+    if (operation.operationName === "OnlineUserIds") {
+      console.log(operation);
+    }
   }
+  // if (networkError?.message === "Not authenticated!") {
+  // }
 });
 
 export const client = new ApolloClient({

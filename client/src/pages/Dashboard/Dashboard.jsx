@@ -18,7 +18,7 @@ import {
   DashboardNotification,
 } from "pages/Dashboard";
 import { CHAT_MODE } from "utils/contants/TabModeConstants";
-import { GET_CURRENT_USER, GET_SAS_TOKEN } from "graphql/users";
+import { GET_CURRENT_USER, GET_SAS_TOKEN, GET_ONLINE_USER_IDS } from "graphql/users";
 import { GET_CONTACTS } from "graphql/contacts";
 import { NotificationSound } from "assets/sounds";
 import { GET_CONTACT_REQUESTS, SUBCRIBE_CONTACT_REQUESTS } from "graphql/contacts";
@@ -29,6 +29,7 @@ import {
   contactsJustSentMessagesVar,
   signInRequiredVar,
   subscribedChannelIdsVar,
+  onlineUserIdsVar,
 } from "cache";
 
 import { GET_MESSAGES_BY_CHANNEL, SUBSCRIBE_MESSAGE } from "graphql/messages";
@@ -85,12 +86,34 @@ export const Dashboard = () => {
 
   const contactsId = useReactiveVar(contactsIdVar);
   const activeUserChat = useReactiveVar(activeUserChatVar);
+
   const notificationSound = new Howl({ src: NotificationSound });
 
   const { data: currentUserObj } = useQuery(GET_CURRENT_USER);
   const [getMessages, { subscribeToMore }] = useLazyQuery(GET_MESSAGES_BY_CHANNEL);
   const navigate = useNavigate();
+
+  useSubscription(SUBCRIBE_CONTACT_REQUESTS, {
+    onSubscriptionData: () => {
+      notifyNewContactRequest();
+    },
+    shouldResubscribe: false,
+  });
+
+  useQuery(GET_ONLINE_USER_IDS, {
+    pollInterval: 5000,
+    onCompleted: ({ onlineUserIds }) => onlineUserIdsVar(onlineUserIds),
+  });
   useQuery(GET_SAS_TOKEN);
+  useQuery(GET_CONTACT_REQUESTS, {
+    onCompleted: (data) => {
+      if (data.contactRequests.length !== 0) {
+        hasNewNotificationVar(true);
+      } else {
+        hasNewNotificationVar(false);
+      }
+    },
+  });
 
   const notifyNewMessage = () => {
     notificationSound.play();
@@ -105,23 +128,6 @@ export const Dashboard = () => {
     document.title = "New Friend Request!";
     hasNewNotificationVar(true);
   };
-
-  useSubscription(SUBCRIBE_CONTACT_REQUESTS, {
-    onSubscriptionData: () => {
-      notifyNewContactRequest();
-    },
-    shouldResubscribe: false,
-  });
-
-  useQuery(GET_CONTACT_REQUESTS, {
-    onCompleted: (data) => {
-      if (data.contactRequests.length !== 0) {
-        hasNewNotificationVar(true);
-      } else {
-        hasNewNotificationVar(false);
-      }
-    },
-  });
 
   useEffect(() => {
     if (activeUserChat && currentUserObj) {

@@ -26,7 +26,7 @@ import {
   SearchDropdown,
 } from "pages/Dashboard/DashboardMainChat";
 import { CREATE_MESSAGE, GET_MESSAGES_BY_CHANNEL } from "graphql/messages";
-import { GET_CURRENT_USER, GET_ONLINE_USER_IDS } from "graphql/users";
+import { GET_CURRENT_USER } from "graphql/users";
 import { activeUserChatVar, onlineUserIdsVar } from "cache";
 import { CurrentUserSkeleton } from "./Skeleton/CurrentUserSkeleton";
 import { MessageSkeleton } from "./Skeleton/MessageSkeleton";
@@ -51,10 +51,6 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
     GET_MESSAGES_BY_CHANNEL
   );
   const [createMessage] = useMutation(CREATE_MESSAGE);
-  useQuery(GET_ONLINE_USER_IDS, {
-    pollInterval: 5000,
-    onCompleted: ({ onlineUserIds }) => onlineUserIdsVar(onlineUserIds),
-  });
 
   const handleInputKeyUp = (event) => {
     if (event.key === "Enter" && event.shiftKey) {
@@ -137,7 +133,7 @@ export const DashboardMainChat = ({ setOpenFriendProfile }) => {
               {onlineUserIds.includes(activeUserChat.id) ? (
                 <p className="ml-2 text-xs text-green-300">Online</p>
               ) : (
-                <p className="ml-2 text-xs text-red-400 opacity-90">Offline</p>
+                <p className="ml-2 text-xs text-gray-400 opacity-90">Offline</p>
               )}
             </div>
           </div>

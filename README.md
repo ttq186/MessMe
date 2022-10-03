@@ -16,7 +16,7 @@ https://user-images.githubusercontent.com/73225256/179389289-92c0ef8a-92c1-4502-
 - [x] Users suggestions
 - [x] User's profile update
 - [x] Message revoking
-- [ ] Online status indicator
+- [x] Online status indicator
 - [ ] Typing indicator
 - [ ] File attaching
 - [ ] Audio calling

@@ -22,7 +22,7 @@ async def resolver_get_users(info: Info, search: str | None = None) -> list[User
 
     partners_status_by_id = {}
     for contact in contacts:
-        [accepter_id, requester_id] = [contact.accepter_id, contact.requester_id]
+        accepter_id, requester_id = contact.accepter_id, contact.requester_id
         partner_id = accepter_id if requester_id == current_user_id else requester_id
         partners_status_by_id[partner_id] = (
             ContactStatus.FRIEND if contact.is_established else ContactStatus.REQUESTED
@@ -30,9 +30,7 @@ async def resolver_get_users(info: Info, search: str | None = None) -> list[User
     return [
         User(
             **user.to_dict(),
-            partner_status=partners_status_by_id[user.id]
-            if partners_status_by_id.get(user.id) is not None
-            else ContactStatus.STRANGER,
+            partner_status=partners_status_by_id.get(user.id) or ContactStatus.STRANGER,
         )
         for user in users
     ]

@@ -30,7 +30,7 @@ export const UsersChatItem = ({
       }`}
       onClick={handleUserChatClick}
     >
-      <div className={`flex items-end p-1 ${isActive ? "mr-1" : "mr-2"} `}>
+      <div className={"flex items-end p-1 mr-1"}>
         {!friend.avatarUrl ? (
           <AvatarIcon width="40px" height="40px" />
         ) : (
@@ -38,7 +38,7 @@ export const UsersChatItem = ({
         )}
         <span
           className={`w-3 h-3 rounded-full -ml-2 border-slate-200 border-2 ${
-            isActive ? "bg-green-500" : "bg-red-400 opacity-80"
+            isActive ? "bg-green-500" : "bg-gray-400 opacity-90"
           }`}
         />
       </div>
